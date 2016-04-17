@@ -1,0 +1,18 @@
+name := """server"""
+
+version := "1.0-SNAPSHOT"
+
+
+lazy val root = (project in file(".")).enablePlugins(PlayJava)
+
+val mysqlConnectorVersion = "5.1.32"
+
+scalaVersion := "2.11.1"
+
+libraryDependencies ++= Seq(
+  javaJdbc,
+  javaEbean,
+  cache,
+  javaWs,
+  "mysql" % "mysql-connector-java" % mysqlConnectorVersion
+)
