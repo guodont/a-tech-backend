@@ -6,6 +6,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.Admin;
 import models.BlogPost;
 import models.User;
 import play.data.Form;
@@ -26,14 +27,16 @@ public class Application extends Controller {
       return badRequest(signUpForm.errorsAsJson());
     }
     SignUp newUser =  signUpForm.get();
-    User existingUser = User.findByEmail(newUser.email);
-    if(existingUser != null) {
+    Admin existingAdmin = Admin.findByEmail(newUser.email);
+    if(existingAdmin != null) {
       return badRequest(buildJsonResponse("error", "User exists"));
     } else {
-      User user = new User();
-      user.setEmail(newUser.email);
-      user.setPassword(newUser.password);
-      user.save();
+      Admin admin = new Admin();
+      admin.setEmail(newUser.email);
+      admin.setPassword(newUser.password);
+      admin.phone = newUser.phone;
+      admin.lastIp = "127.0.0.1";
+      admin.save();
       session().clear();
       session("username", newUser.email);
 
@@ -47,8 +50,8 @@ public class Application extends Controller {
       return badRequest(loginForm.errorsAsJson());
     }
     Login loggingInUser = loginForm.get();
-    User user = User.findByEmailAndPassword(loggingInUser.email, loggingInUser.password);
-    if(user == null) {
+    Admin admin = Admin.findByEmailAndPassword(loggingInUser.email, loggingInUser.password);
+    if(admin == null) {
       return badRequest(buildJsonResponse("error", "Incorrect email or password"));
     } else {
       session().clear();
@@ -103,6 +106,9 @@ public class Application extends Controller {
     @Constraints.Required
     @Constraints.MinLength(6)
     public String password;
+
+    @Constraints.Required
+    public String phone;
   }
 
   public static class Login extends UserForm {

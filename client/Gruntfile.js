@@ -77,6 +77,7 @@ module.exports = function (grunt) {
           host: 'localhost', // wherever the data service is running
           port: 9000, // the port that the data service is running on
           changeOrigin: true
+          // rewrite: proxyRewrite
         }
       ],
       livereload: {

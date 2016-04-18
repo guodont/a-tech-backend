@@ -18,7 +18,8 @@ angular.module('clientApp')
       $scope.signup = function() {
         var payload = {
           email : $scope.email,
-          password : $scope.password
+          password : $scope.password,
+          phone : $scope.phone
         };
 
         $http.post('app/signup', payload)

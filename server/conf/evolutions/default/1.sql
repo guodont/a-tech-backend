@@ -67,6 +67,7 @@ create table article (
   sort                      integer,
   user_id                   bigint,
   click_count               bigint,
+  comment_count             bigint,
   image                     varchar(255) not null,
   article_type              varchar(10),
   article_state             varchar(14),

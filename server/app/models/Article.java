@@ -2,14 +2,10 @@ package models;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
-import com.avaje.ebean.Page;
 import com.avaje.ebean.PagingList;
 import models.enums.ArticleState;
 import models.enums.ArticleType;
-import org.joda.time.DateTime;
 import play.data.validation.Constraints;
-import play.db.ebean.Model;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -61,6 +57,10 @@ public class Article extends BaseModel {
      * 点击次数
      */
     public Long clickCount;
+    /**
+     * 评论数
+     */
+    public Long commentCount;
     /**
      * 图片
      */
@@ -119,22 +119,23 @@ public class Article extends BaseModel {
                 .findUnique();
     }
 
-    public static final EbeanServer ebeanServer = Ebean.getServer("default");
+//    public static final EbeanServer ebeanServer = Ebean.getServer("default");
+//
+//    public static List<ArticleController> findArticlesByCategory(Category category , String articleType) {
+//
+//        PagingList<ArticleController> pagingList
+//                = ebeanServer.find(ArticleController.class)
+//                .where().eq("articleType", articleType)
+//                .where().eq("category", category)
+//                .order().asc("id")
+//                .setFirstRow(0)
+//                .findPagingList(20);
+//
+//        pagingList.getPage(1).hasPrev();
+//
+//        List<ArticleController> orders = pagingList.getAsList();
+//
+//        return orders;
+//    }
 
-    public static List<Article> findArticlesByCategory(Category category , String articleType) {
-
-        PagingList<Article> pagingList
-                = ebeanServer.find(Article.class)
-                .where().eq("articleType", articleType)
-                .where().eq("category", category)
-                .order().asc("id")
-                .setFirstRow(0)
-                .findPagingList(20);
-
-        pagingList.getPage(1).hasPrev();
-
-        List<Article> orders = pagingList.getAsList();
-
-        return orders;
-    }
 }
