@@ -33,39 +33,7 @@
     <link rel="stylesheet" href="styles/ace.min.css" />
     <link rel="stylesheet" href="styles/ace-rtl.min.css" />
     <link rel="stylesheet" href="styles/ace-skins.min.css" />
-    <link rel="stylesheet" href="styles/jquery-ui-1.10.3.full.min.css"/>
-    <link rel="stylesheet" href="styles/jquery-ui-1.10.3.custom.min.css" />
 
-    <!--[if lte IE 8]>
-    <link rel="stylesheet" href="styles/ace-ie.min.css" />
-    <![endif]-->
-
-    <!-- inline styles related to this page -->
-
-    <link rel="stylesheet" href="styles/bootstrap-datetimepicker.min.css" />
-
-    <!-- ace settings handler -->
-
-    <script src="styles/ace-extra.min.js"></script>
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-
-    <!--[if lt IE 9]>
-    <script src="styles/html5shiv.js"></script>
-    <script src="styles/respond.min.js"></script>
-    <![endif]-->
-
-    <!--[if !IE]> -->
-    <script type="text/javascript">
-      window.jQuery || document.write("<script src='styles/jquery-2.0.3.min.js'>"+"<"+"/script>");
-    </script>
-    <!-- <![endif]-->
-
-    <!--[if IE]>
-    <script type="text/javascript">
-      window.jQuery || document.write("<script src='styles/js/jquery-1.10.2.min.js">"+"<"+"/script>");
-        </script>
-    <![endif]-->
 
 </head>
 <body ng-app="clientApp">
@@ -73,70 +41,377 @@
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
-<div class="header">
-  <div class="navbar navbar-default" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
+<div class="navbar navbar-default" id="navbar">
+  <script type="text/javascript">try{ace.settings.check('navbar' , 'fixed')}catch(e){}</script>
 
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+  <div class="navbar-container" id="navbar-container">
+    <div class="navbar-header pull-left">
+      <a href="#" class="navbar-brand">
+        <small><i class="icon-leaf"></i>农科110后台管理系统</small>
+      </a><!-- /.brand -->
+    </div><!-- /.navbar-header -->
+
+    <div class="" id="js-navbar-collapse" ng-controller="MenuCtrl">
+
+      <ul class="nav navbar-nav pull-right" ng-hide="isLoggedIn">
+        <li><a ng-href="/#/signup">注册</a></li>
+        <li><a ng-href="/#/login">登录</a></li>
+      </ul>
+      <div class="btn-group pull-right acc-button" ng-show="isLoggedIn">
+        <button type="button" class="btn btn-default">{{ username }}</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
         </button>
-
-        <a class="navbar-brand" href="#/">client</a>
-      </div>
-      <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="MenuCtrl">
-
-        <ul class="nav navbar-nav pull-right" ng-hide="isLoggedIn">
-          <li><a ng-href="/#/signup">Sign up!</a></li>
-          <li><a ng-href="/#/login">Login</a></li>
+        <ul class="dropdown-menu" role="menu">
+          <li><a ng-href="/#/dashboard">控制面板</a></li>
+          <li><a ng-href="/#/addpost">发布文章</a></li>
+          <li class="divider"></li>
+          <li><a href="#" ng-click="logout()">退出</a></li>
         </ul>
-        <div class="btn-group pull-right acc-button" ng-show="isLoggedIn">
-          <button type="button" class="btn btn-default">{{ username }}</button>
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                  aria-expanded="false">
-            <span class="caret"></span>
-            <span class="sr-only">Toggle Dropdown</span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a ng-href="/#/dashboard">Dashboard</a></li>
-            <li><a ng-href="/#/addpost">Add post</a></li>
-            <li class="divider"></li>
-            <li><a href="#" ng-click="logout()">Logout</a></li>
-          </ul>
-        </div>
       </div>
     </div>
-  </div>
+
+    <div class="navbar-header pull-right" role="navigation">
+      <ul class="nav ace-nav">
+
+        <li class="light-blue">
+          <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+            <img class="nav-user-photo" src="images/user.jpg" alt="Admin's Photo" />
+                  <span class="user-info">
+                      <small>欢迎,</small>
+                      Admin
+                  </span>
+
+            <i class="icon-caret-down"></i>
+          </a>
+
+          <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+            <li>
+              <a href="#">
+                <i class="icon-cog"></i>
+                设置
+              </a>
+            </li>
+
+            <li>
+              <a href="#">
+                <i class="icon-user"></i>
+                个人信息
+              </a>
+            </li>
+
+            <li class="divider"></li>
+
+            <li>
+              <a href="">
+                <i class="icon-off"></i>
+                退出
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul><!-- /.ace-nav -->
+    </div><!-- /.navbar-header -->
+  </div><!-- /.container -->
 </div>
 
-<div class="container">
-  <div ng-controller="AlertsCtrl">
-    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
-  </div>
-  <div ng-view=""></div>
-</div>
+<div class="main-container" id="main-container">
+  <script type="text/javascript">try{ace.settings.check('main-container' , 'fixed')}catch(e){}</script>
 
-<div class="footer">
-  <div class="container">
-    <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
-  </div>
-</div>
+  <div class="main-container-inner">
+    <a class="menu-toggler" id="menu-toggler" href="#">
+      <span class="menu-text"></span>
+    </a>
 
+    <div class="sidebar" id="sidebar">
+      <script type="text/javascript">try{ace.settings.check('sidebar' , 'fixed')}catch(e){}</script>
 
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-<script>
-  !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-        (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-      r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-  }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      <ul class="nav nav-list">
+        <li>
+          <a href="index.html">
+            <i class="icon-dashboard"></i>
+            <span class="menu-text"> 网站统计 </span>
+          </a>
+        </li>
 
-  ga('create', 'UA-XXXXX-X');
-  ga('send', 'pageview');
-</script>
+        <li>
+          <a href="typography.html">
+            <i class="icon-text-width"></i>
+            <span class="menu-text"> 用户统计 </span>
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-file-text"></i>
+            <span class="menu-text"> 文章管理 </span>
+
+            <b class="arrow icon-angle-down"></b>
+          </a>
+
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                文章查询
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                发布文章
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text">分类管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                查询分类
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                新增分类
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-youtube-play"></i>
+            <span class="menu-text">视频管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                查询视频
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                视频分类
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                新增视频
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-user"></i>
+            <span class="menu-text">用户管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                用户列表
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                消息通知
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-user-md"></i>
+            <span class="menu-text">专家管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                专家列表
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                新增专家
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-comments"></i>
+            <span class="menu-text">专家信息管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                专家文章
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                专家相册
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                专家成果
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                专家动态
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-question"></i>
+            <span class="menu-text">问题管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                问题列表
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                问题审核
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-cny"></i>
+            <span class="menu-text">交易管理</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                交易审核
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                供应数据
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                需求数据
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle">
+            <i class="icon-gear"></i>
+            <span class="menu-text">网站设置</span>
+            <b class="arrow icon-angle-down"></b>
+          </a>
+          <ul class="submenu">
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                友情链接管理
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                系统设置
+              </a>
+            </li>
+            <li menu-container="true">
+              <a href="">
+                <i class="icon-double-angle-right"></i>
+                管理员权限设置
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul><!-- /.nav-categoryPVlist -->
+
+      <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+      </div>
+
+      <script>try{ace.settings.check('sidebarexi' , 'collapsed')}catch(e){}</script>
+      <script>
+        //加载页面的时候根据url选中左边的菜单
+        (function() {
+          var uri = "@{requestHeader.uri}";
+
+          if(uri != "/") {
+            var selectedA = $("li[menu-container='true'] > a").filter(function(index) {
+              return $(this).attr("href") == uri;
+            });
+            selectedA.parent("li").addClass("active");
+            selectedA.parentsUntil("ul[class='nav nav-list']", "li").last().addClass("active open");
+          }
+        })();
+      </script>
+
+    </div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>
+          页面标题
+          <small>
+            <i class="icon-double-angle-right"></i>副标题
+          </small>
+        </h1>
+      </div>
+        <div class="container">
+          <div ng-controller="AlertsCtrl">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
+          </div>
+          <div ng-view=""></div>
+        </div>
+    </div>
+  </div><!-- /.main-container-inner -->
+
+  <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="icon-double-angle-up icon-only bigger-110"></i>
+  </a>
+</div><!-- /.main-container -->
+
 
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
@@ -166,5 +441,26 @@
 <script src="scripts/controllers/addpost.js"></script>
 <script src="scripts/controllers/viewpost.js"></script>
 <!-- endbuild -->
+
+
+<script src="styles/js/typeahead-bs2.min.js"></script>
+
+<!-- page specific plugin scripts -->
+<!--[if lte IE 8]>
+<script src="styles/js/excanvas.min.js"></script>
+<![endif]-->
+
+<script src="styles/js/jquery-ui-1.10.3.full.min.js"></script>
+<script src="styles/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="styles/js/jquery.ui.touch-punch.min.js"></script>
+<script src="styles/js/jquery.slimscroll.min.js"></script>
+<script src="styles/js/date-time/moment.min.js"></script>
+<script src="styles/js/jquery.validate.min.js"></script>
+<script src="styles/js/bootbox.min.js"></script>
+
+<!-- ace scripts -->
+
+<script src="styles/js/ace-elements.min.js"></script>
+<script src="styles/js/ace.min.js"></script>
 </body>
 </html>
