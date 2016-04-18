@@ -19,10 +19,7 @@ import play.db.ebean.Model;
  * Model representing Blog Post
  */
 @Entity
-public class BlogPost extends Model {
-
-  @Id
-  public Long id;
+public class BlogPost extends BaseModel {
 
   @Column(length = 255, nullable = false)
   @Constraints.MaxLength(255)

@@ -10,31 +10,73 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
+import models.enums.UserType;
 import play.data.validation.Constraints;
-import play.db.ebean.Model;
 
 /**
  * Model representing a Blog user
  */
 @Entity
-public class User extends Model {
+public class User extends BaseModel {
 
-  @Id
-  public Long id;
-
+  /**
+   * 用户邮箱
+   */
   @Column(length = 255, unique = true, nullable = false)
   @Constraints.MaxLength(255)
   @Constraints.Required
   @Constraints.Email
   public String email;
 
+  /**
+   * 用户密码
+   */
   @Column(length = 64, nullable = false)
   private byte[] shaPassword;
+  /**
+   * 用户类型
+   */
+  @Column(length = 20, nullable = false)
+  @Enumerated(EnumType.STRING)
+  private UserType userType;
+  /**
+   * 用户地址
+   */
+  @Column(length = 255)
+  @Constraints.MaxLength(255)
+  private String address;
+  /**
+   * 用户真实姓名
+   */
+  @Column(length = 45)
+  private String realName;
+  /**
+   * 用户电话
+   */
+  @Column(length = 11, unique = true, nullable = false)
+  private String phone;
+  /**
+   * 用户名
+   */
+  @Column(length = 45, unique = true, nullable = false)
+  private String name;
+  /**
+   * 用户头像
+   */
+  @Column(length = 45)
+  private String avatar;
+  /**
+   * 用户经营的产业
+   */
+  @Column(length = 45)
+  private String industry;
+  /**
+   * 用户产业规模
+   */
+  @Column(length = 45)
+  private String scale;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JsonIgnore
