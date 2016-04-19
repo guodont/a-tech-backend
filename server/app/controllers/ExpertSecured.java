@@ -12,13 +12,18 @@ import play.mvc.Security;
 /**
  * Implements basic authentication
  *
- * 普通用户权限控制
+ * 专家用户权限控制
  */
-public class Secured extends Security.Authenticator {
+public class ExpertSecured extends Security.Authenticator {
 
   @Override
   public String getUsername(Context ctx) {
-    return ctx.session().get("username");
+    // 判断是否是专家
+    if (ctx.session().get("isExpert").equals("true")) {
+      return ctx.session().get("username");
+    } else {
+      return null;
+    }
   }
 
   @Override

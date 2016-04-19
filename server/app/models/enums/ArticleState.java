@@ -11,7 +11,8 @@ public enum  ArticleState implements ViewEnum {
             审
     核AUDITED：审核成功FAILED_AUDITED：未通过*/
     NOT_AUDITED("未审核"),
-    AUDITED("待审核"),
+    WAIT_AUDITED("待审核"),
+    AUDITED("已审核"),
     FAILED_AUDITED("未通过");
     private  String value;
 

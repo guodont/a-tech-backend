@@ -24,9 +24,8 @@ public class User extends BaseModel {
   /**
    * 用户邮箱
    */
-  @Column(length = 255, unique = true, nullable = false)
+  @Column(length = 255, unique = true)
   @Constraints.MaxLength(255)
-  @Constraints.Required
   @Constraints.Email
   public String email;
 
@@ -34,49 +33,57 @@ public class User extends BaseModel {
    * 用户密码
    */
   @Column(length = 64, nullable = false)
-  private byte[] shaPassword;
+  public byte[] shaPassword;
   /**
    * 用户类型
    */
   @Column(length = 20, nullable = false)
   @Enumerated(EnumType.STRING)
-  private UserType userType;
+  public UserType userType;
   /**
    * 用户地址
    */
   @Column(length = 255)
   @Constraints.MaxLength(255)
-  private String address;
+  public String address;
   /**
    * 用户真实姓名
    */
   @Column(length = 45)
-  private String realName;
+  public String realName;
   /**
    * 用户电话
    */
   @Column(length = 11, unique = true, nullable = false)
-  private String phone;
+  @Constraints.Required
+  public String phone;
   /**
    * 用户名
    */
   @Column(length = 45, unique = true, nullable = false)
-  private String name;
+  public String name;
   /**
    * 用户头像
    */
   @Column(length = 45)
-  private String avatar;
+  public String avatar;
   /**
    * 用户经营的产业
    */
   @Column(length = 45)
-  private String industry;
+  public String industry;
   /**
    * 用户产业规模
    */
   @Column(length = 45)
-  private String scale;
+  public String scale;
+
+  /**
+   * 最后登录IP
+   */
+  @Column(length = 45, unique = true, nullable = false)
+  @Constraints.MaxLength(45)
+  public String lastIp;
 
   @OneToMany(cascade = CascadeType.ALL)
   @JsonIgnore
@@ -101,10 +108,25 @@ public class User extends BaseModel {
         .findUnique();
   }
 
+  public static User findByPhoneAndPassword(String phone, String password) {
+    return find
+        .where()
+        .eq("phone", phone.toLowerCase())
+        .eq("shaPassword", getSha512(password))
+        .findUnique();
+  }
+
   public static User findByEmail(String email) {
     return find
         .where()
         .eq("email", email.toLowerCase())
+        .findUnique();
+  }
+
+  public static User findByPhone(String phone) {
+    return find
+        .where()
+        .eq("phone", phone.toLowerCase())
         .findUnique();
   }
 

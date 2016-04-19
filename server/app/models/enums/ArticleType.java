@@ -7,7 +7,7 @@ package models.enums;
 public enum  ArticleType implements ViewEnum {
 
     WEB("网站"),
-    ARTICLE("文章"),
+    ARTICLE("专家文章"),
     ACCOMPLISH("成果");
 
     public  String value;

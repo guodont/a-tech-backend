@@ -9,119 +9,324 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Admin;
 import models.BlogPost;
 import models.User;
+import models.enums.UserType;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.JsonResult;
 
-/*
- * This controller contains Blog app common logic
+import javax.validation.Constraint;
+
+/**
+ * 为前台服务的主控制器,包括用户注册 登录 首页数据 等
  */
-public class Application extends Controller {
+public class Application extends BaseController {
 
-  public static Result signup() {
-    Form<SignUp> signUpForm = Form.form(SignUp.class).bindFromRequest();
+    /**
+     * 用户注册第一步
+     *
+     * @return
+     */
+    public static Result signUpOneStep() {
 
-    if ( signUpForm.hasErrors()) {
-      return badRequest(signUpForm.errorsAsJson());
+        Form<SignUpStepOne> signUpStepOneForm = Form.form(SignUpStepOne.class).bindFromRequest();
+
+        if (signUpStepOneForm.hasErrors()) {
+            return badRequest(signUpStepOneForm.errorsAsJson());
+        }
+
+        SignUpStepOne newUser = signUpStepOneForm.get();
+
+        User existingUser = User.findByPhone(newUser.phone);
+
+        if (existingUser != null) {
+            //  用户已被注册
+            return badRequest(new JsonResult("error", "User exists").toJsonResponse());
+
+        } else {
+
+            //  保存用户信息
+            User user = new User();
+            user.setPassword(newUser.password);
+            user.name = newUser.userName;
+            user.phone = newUser.phone;
+            user.lastIp = request().remoteAddress();
+            user.save();
+
+            //  设置登录会话信息
+            session().clear();
+            session("username", newUser.userName);
+
+            return ok(new JsonResult("success", "User created successfully").toJsonResponse());
+        }
     }
-    SignUp newUser =  signUpForm.get();
-    Admin existingAdmin = Admin.findByEmail(newUser.email);
-    if(existingAdmin != null) {
-      return badRequest(buildJsonResponse("error", "User exists"));
-    } else {
-      Admin admin = new Admin();
-      admin.setEmail(newUser.email);
-      admin.setPassword(newUser.password);
-      admin.phone = newUser.phone;
-      admin.lastIp = "127.0.0.1";
-      admin.save();
-      session().clear();
-      session("username", newUser.email);
 
-      return ok(buildJsonResponse("success", "User created successfully"));
+
+    /**
+     * 用户注册第二步
+     *
+     * @return
+     */
+    public static Result signUpTwoStep() {
+
+        Form<SignUpStepTwo> signUpStepTwoForm = Form.form(SignUpStepTwo.class).bindFromRequest();
+
+        if (signUpStepTwoForm.hasErrors()) {
+            return badRequest(signUpStepTwoForm.errorsAsJson());
+        }
+
+        SignUpStepTwo curUser = signUpStepTwoForm.get();
+
+        User loginUser = getUser(); //  获取当前登录用户
+
+        if (loginUser != null) {
+            //  用户未登录
+            return badRequest(new JsonResult("error", "User not login").toJsonResponse());
+
+        } else {
+            //  保存用户信息
+            loginUser.realName = curUser.realName;
+            loginUser.address = curUser.address;
+            loginUser.industry = curUser.industry;
+            loginUser.scale = curUser.scale;
+            loginUser.update();
+
+            return ok(new JsonResult("success", "User information saved").toJsonResponse());
+        }
+
     }
-  }
 
-  public static Result login() {
-    Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
-    if (loginForm.hasErrors()) {
-      return badRequest(loginForm.errorsAsJson());
+    /**
+     * 管理员注册(TODO 测试用,上线后关闭)
+     *
+     * @return
+     */
+    public static Result signUpAdmin() {
+        Form<SignUp> signUpForm = Form.form(SignUp.class).bindFromRequest();
+
+        if (signUpForm.hasErrors()) {
+            return badRequest(signUpForm.errorsAsJson());
+        }
+
+        SignUp newUser = signUpForm.get();
+        Admin existingAdmin = Admin.findByEmail(newUser.email);
+
+        if (existingAdmin != null) {
+            return badRequest(new JsonResult("error", "User exists").toJsonResponse());
+        } else {
+            //  保存用户信息
+            Admin admin = new Admin();
+            admin.setEmail(newUser.email);
+            admin.setPassword(newUser.password);
+            admin.phone = newUser.phone;
+            admin.lastIp = request().remoteAddress();
+            admin.save();
+
+            //  设置登录会话信息
+            session().clear();
+            session("username", newUser.email);
+            session("isAdmin", "true");
+
+            return ok(new JsonResult("success", "Admin created successfully").toJsonResponse());
+        }
     }
-    Login loggingInUser = loginForm.get();
-    Admin admin = Admin.findByEmailAndPassword(loggingInUser.email, loggingInUser.password);
-    if(admin == null) {
-      return badRequest(buildJsonResponse("error", "Incorrect email or password"));
-    } else {
-      session().clear();
-      session("username", loggingInUser.email);
 
-      ObjectNode wrapper = Json.newObject();
-      ObjectNode msg = Json.newObject();
-      msg.put("message", "Logged in successfully");
-      msg.put("user", loggingInUser.email);
-      wrapper.put("success", msg);
-      return ok(wrapper);
+    /**
+     * 管理员登录
+     *
+     * @return
+     */
+    public static Result loginForAdmin() {
+        Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
+        if (loginForm.hasErrors()) {
+            return badRequest(loginForm.errorsAsJson());
+        }
+
+        Login loggingInUser = loginForm.get();
+        Admin admin = Admin.findByEmailAndPassword(loggingInUser.email, loggingInUser.password);
+
+        if (admin == null) {
+            return badRequest(new JsonResult("error", "Incorrect email or password").toJsonResponse());
+        } else {
+            //  保存最后登录ip
+            admin.lastIp = request().remoteAddress();
+            admin.save();
+
+            //  设置登录会话信息
+            session().clear();
+            session("username", loggingInUser.email);
+            session("isAdmin", "true");
+
+            ObjectNode wrapper = Json.newObject();
+            ObjectNode msg = Json.newObject();
+            msg.put("message", "Logged in successfully");
+            msg.put("user", loggingInUser.email);
+            wrapper.put("success", msg);
+            return ok(wrapper);
+        }
     }
-  }
 
-  public static Result logout() {
-    session().clear();
-    return ok(buildJsonResponse("success", "Logged out successfully"));
-  }
+    /**
+     * 用户登录
+     *
+     * @return
+     */
+    public static Result login() {
 
-  public static Result isAuthenticated() {
-    if(session().get("username") == null) {
-      return unauthorized();
-    } else {
-      ObjectNode wrapper = Json.newObject();
-      ObjectNode msg = Json.newObject();
-      msg.put("message", "User is logged in already");
-      msg.put("user", session().get("username"));
-      wrapper.put("success", msg);
-      return ok(wrapper);
+        Form<UserLogin> userLoginForm = Form.form(UserLogin.class).bindFromRequest();
+        if (userLoginForm.hasErrors()) {
+            return badRequest(userLoginForm.errorsAsJson());
+        }
+
+        UserLogin loggingInUser = userLoginForm.get();
+        User user = User.findByPhoneAndPassword(loggingInUser.phone, loggingInUser.password);
+
+        if (user == null) {
+
+            return badRequest(new JsonResult("error", "Incorrect phone or password").toJsonResponse());
+
+        } else {
+
+            //  保存最后登录ip
+            user.lastIp = request().remoteAddress();
+            user.update();
+
+            //  设置登录会话信息
+            session().clear();
+            session("username", user.name);
+
+            //  判断是否是专家
+            if (user.userType.getValue().equals(UserType.EXPERT)) {
+                session("isExpert", "true");    //  是专家的话设置此session
+            }
+
+            ObjectNode wrapper = Json.newObject();
+            ObjectNode msg = Json.newObject();
+            msg.put("message", "Logged in successfully");
+            msg.put("user", user.name);
+            wrapper.put("success", msg);
+            return ok(wrapper);
+        }
+
     }
-  }
 
-  public static Result getPosts() {
-    return ok(Json.toJson(BlogPost.find.findList()));
-  }
-
-  public static Result getPost(Long id) {
-    BlogPost blogPost = BlogPost.findBlogPostById(id);
-    if(blogPost == null) {
-      return notFound(buildJsonResponse("error", "Post not found"));
+    /**
+     * 退出
+     *
+     * @return
+     */
+    public static Result logout() {
+        session().clear();
+        return ok();
     }
-    return ok(Json.toJson(blogPost));
-  }
 
-  public static class UserForm {
-    @Constraints.Required
-    @Constraints.Email
-    public String email;
-  }
+    /**
+     * 判断是否授权
+     * @return
+     */
+    public static Result isAuthenticated() {
+        if (session().get("username") == null) {
+            return unauthorized();
+        } else {
+            ObjectNode wrapper = Json.newObject();
+            ObjectNode msg = Json.newObject();
+            msg.put("message", "User is logged in already");
+            msg.put("user", session().get("username"));
+            wrapper.put("success", msg);
+            return ok(wrapper);
+        }
+    }
 
-  public static class SignUp extends UserForm {
-    @Constraints.Required
-    @Constraints.MinLength(6)
-    public String password;
+    public static Result getPosts() {
+        return ok(Json.toJson(BlogPost.find.findList()));
+    }
 
-    @Constraints.Required
-    public String phone;
-  }
+    public static Result getPost(Long id) {
+        BlogPost blogPost = BlogPost.findBlogPostById(id);
+        if (blogPost == null) {
+            return notFound(new JsonResult("error", "Post not found").toJsonResponse());
+        }
+        return ok(Json.toJson(blogPost));
+    }
 
-  public static class Login extends UserForm {
-    @Constraints.Required
-    public String password;
-  }
 
-  public static ObjectNode buildJsonResponse(String type, String message) {
-    ObjectNode wrapper = Json.newObject();
-    ObjectNode msg = Json.newObject();
-    msg.put("message", message);
-    wrapper.put(type, msg);
-    return wrapper;
-  }
+    /**
+     * 用户表单数据父类
+     */
+    public static class UserForm {
+        @Constraints.Required
+        @Constraints.Email
+        public String email;   //  邮箱
+    }
 
+    /**
+     * 管理员用户注册表单数据
+     */
+    public static class SignUp extends UserForm {
+        @Constraints.Required
+        @Constraints.MinLength(6)
+        public String password; //  密码
+
+        @Constraints.Required
+        public String phone;    //  手机号
+    }
+
+    /**
+     * 管理员用户登录表单数据
+     */
+    public static class Login extends UserForm {
+        @Constraints.Required
+        public String password;   //  密码
+    }
+
+    /**
+     * 用户注册第一步表单数据
+     */
+    public static class SignUpStepOne {
+
+        @Constraints.Required
+        @Constraints.MinLength(6)
+        public String password; //  密码
+
+        @Constraints.Required
+        @Constraints.MinLength(11)
+        @Constraints.MaxLength(11)
+        public String phone;    //  手机号
+
+        @Constraints.Required
+        @Constraints.MinLength(3)
+        public String userName; //  用户名
+
+    }
+
+    /**
+     * 用户注册第二步表单数据
+     */
+    public static class SignUpStepTwo {
+
+        @Constraints.Required
+        public String realName; //  真实姓名
+
+        @Constraints.Required
+        public String address;  //  地址
+
+        @Constraints.MaxLength(45)
+        public String industry; //  用户经营的产业
+
+        @Constraints.MaxLength(45)
+        public String scale;    //  产业规模
+    }
+
+    /**
+     * 用户登录表单数据
+     */
+    public static class UserLogin {
+        @Constraints.Required
+        public String phone;    //  手机号
+
+        @Constraints.Required
+        public String password; //  密码
+    }
 }
