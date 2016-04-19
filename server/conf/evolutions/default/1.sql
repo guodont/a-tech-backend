@@ -71,11 +71,13 @@ create table article (
   image                     varchar(255) not null,
   article_type              varchar(10),
   article_state             varchar(14),
+  article_push_state        varchar(7),
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
   constraint ck_article_article_type check (article_type in ('WEB','ARTICLE','ACCOMPLISH')),
-  constraint ck_article_article_state check (article_state in ('NOT_AUDITED','AUDITED','FAILED_AUDITED')),
+  constraint ck_article_article_state check (article_state in ('NOT_AUDITED','WAIT_AUDITED','AUDITED','FAILED_AUDITED')),
+  constraint ck_article_article_push_state check (article_push_state in ('IS_PUSH','NO_PUSH')),
   constraint pk_article primary key (id))
 ;
 
@@ -223,7 +225,7 @@ create table trend_image (
 
 create table user (
   id                        bigint auto_increment not null,
-  email                     varchar(255) not null,
+  email                     varchar(255),
   sha_password              varbinary(64) not null,
   user_type                 varchar(20) not null,
   address                   varchar(255),
@@ -233,6 +235,7 @@ create table user (
   avatar                    varchar(45),
   industry                  varchar(45),
   scale                     varchar(45),
+  last_ip                   varchar(45) not null,
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
@@ -240,6 +243,7 @@ create table user (
   constraint uq_user_email unique (email),
   constraint uq_user_phone unique (phone),
   constraint uq_user_name unique (name),
+  constraint uq_user_last_ip unique (last_ip),
   constraint pk_user primary key (id))
 ;
 

@@ -3,6 +3,7 @@ package models;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.PagingList;
+import models.enums.ArticlePushState;
 import models.enums.ArticleState;
 import models.enums.ArticleType;
 import play.data.validation.Constraints;
@@ -78,6 +79,11 @@ public class Article extends BaseModel {
      */
     @Enumerated(EnumType.STRING)
     public ArticleState articleState;
+    /**
+     * 是否推送
+     */
+    @Enumerated(EnumType.STRING)
+    public ArticlePushState articlePushState;
 
     public static final Finder<Long, Article> find = new Finder<Long, Article>(
             Long.class, Article.class);

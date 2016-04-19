@@ -14,6 +14,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.JsonResult;
 
 /*
  * This controller contains Posting and Commenting logic. All methods require user to be
@@ -35,7 +36,7 @@ public class Post extends Controller {
       newBlogPost.user = getUser();
       newBlogPost.save();
     }
-    return ok(Application.buildJsonResponse("success", "Post added successfully"));
+    return ok(new JsonResult("success", "Post added successfully").toJsonResponse());
   }
 
   private static User getUser() {
@@ -45,7 +46,7 @@ public class Post extends Controller {
   public static Result getUserPosts() {
     User user = getUser();
     if(user == null) {
-      return badRequest(Application.buildJsonResponse("error", "No such user"));
+      return badRequest(new JsonResult("error", "No such user").toJsonResponse());
     }
     return ok(Json.toJson(BlogPost.findBlogPostsByUser(user)));
   }
@@ -64,7 +65,7 @@ public class Post extends Controller {
       newComment.user = getUser();
       newComment.content = commentForm.get().comment;
       newComment.save();
-      return ok(Application.buildJsonResponse("success", "Comment added successfully"));
+      return ok(new JsonResult("success", "Comment added successfully").toJsonResponse());
     }
   }
 

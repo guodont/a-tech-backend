@@ -16,17 +16,17 @@ public class Comment extends BaseModel {
      */
     @ManyToOne
     @JsonIgnore
-    private Article article;
+    public Article article;
     /**
      * 用户id
      */
     @ManyToOne
-    private User user;
+    public User user;
     /**
      * 评论内容
      */
     @Column(columnDefinition = "TEXT")
-    private String content;
+    public String content;
 
     public static final Finder<Long, Comment> find = new Finder<Long, Comment>(
             Long.class, Comment.class);
