@@ -21,13 +21,13 @@ import utils.JsonResult;
  * This controller contains Posting and Commenting logic. All methods require user to be
  * authenticated.
  */
-@Security.Authenticated(Secured.class)
 public class ArticleController extends BaseController {
 
   /**
    * 管理员发布文章
    * @return
    */
+  @Security.Authenticated(AdminSecured.class)
   public static Result addArticle() {
     Form<ArticleForm> postForm = Form.form(ArticleForm.class).bindFromRequest();
 
@@ -59,6 +59,7 @@ public class ArticleController extends BaseController {
    * 获取管理员发布的文章
    * @return
    */
+  @Security.Authenticated(AdminSecured.class)
   public static Result getAdminPosts() {
     Admin admin = getAdmin();
     if(admin == null) {
@@ -71,6 +72,7 @@ public class ArticleController extends BaseController {
    * 添加评论
    * @return
    */
+  @Security.Authenticated(Secured.class)
   public static Result addComment() {
 
     Form<CommentForm> commentForm = Form.form(CommentForm.class).bindFromRequest();

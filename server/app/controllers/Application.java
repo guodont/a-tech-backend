@@ -4,7 +4,6 @@
 ////////
 
 package controllers;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Admin;
 import models.BlogPost;
@@ -13,22 +12,31 @@ import models.enums.UserType;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
-import play.mvc.Controller;
+import play.mvc.BodyParser;
 import play.mvc.Result;
 import utils.JsonResult;
-
-import javax.validation.Constraint;
 
 /**
  * 为前台服务的主控制器,包括用户注册 登录 首页数据 等
  */
 public class Application extends BaseController {
 
+
+    /**
+     * 首页
+     *
+     * @return
+     */
+    public static Result index() {
+        return ok("Welcome , there is nongke110 !");
+    }
+
     /**
      * 用户注册第一步
      *
      * @return
      */
+    @BodyParser.Of(BodyParser.Json.class)
     public static Result signUpOneStep() {
 
         Form<SignUpStepOne> signUpStepOneForm = Form.form(SignUpStepOne.class).bindFromRequest();
@@ -53,13 +61,14 @@ public class Application extends BaseController {
             user.name = newUser.userName;
             user.phone = newUser.phone;
             user.lastIp = request().remoteAddress();
+            user.userType = UserType.PUBLIC;
             user.save();
 
             //  设置登录会话信息
             session().clear();
             session("username", newUser.userName);
 
-            return ok(new JsonResult("success", "User created successfully").toJsonResponse());
+            return created(new JsonResult("success", "User created successfully").toJsonResponse());
         }
     }
 
@@ -129,7 +138,7 @@ public class Application extends BaseController {
             session("username", newUser.email);
             session("isAdmin", "true");
 
-            return ok(new JsonResult("success", "Admin created successfully").toJsonResponse());
+            return created(new JsonResult("success", "Admin created successfully").toJsonResponse());
         }
     }
 
@@ -224,6 +233,7 @@ public class Application extends BaseController {
 
     /**
      * 判断是否授权
+     *
      * @return
      */
     public static Result isAuthenticated() {
@@ -250,7 +260,6 @@ public class Application extends BaseController {
         }
         return ok(Json.toJson(blogPost));
     }
-
 
     /**
      * 用户表单数据父类

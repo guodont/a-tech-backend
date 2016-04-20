@@ -103,7 +103,7 @@ create table category (
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
-  constraint ck_category_category_type check (category_type in ('ARTICLE','EXPERT','TRADE','QUESTION')),
+  constraint ck_category_category_type check (category_type in ('ARTICLE','EXPERT','QUESTION')),
   constraint pk_category primary key (id))
 ;
 
