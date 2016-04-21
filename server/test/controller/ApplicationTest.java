@@ -3,6 +3,7 @@ package controller;
 import controllers.Application;
 import org.junit.Before;
 import org.junit.Test;
+import play.api.libs.json.Json;
 import play.mvc.Result;
 import play.test.FakeRequest;
 import utils.JsonUtils;
@@ -69,12 +70,11 @@ public class ApplicationTest {
 
             // Arrange
             FakeRequest request = new FakeRequest("POST", "/api/v1/signup/one");
-            request.withHeader("Content-Type","application/json;charset=UTF-8");
-//            request.withFormUrlEncodedBody(data);
+            request.withHeader("Content-Type","application/json");
             request.withJsonBody(JsonUtils.object2Node(ss));
-
             // Act
-            Result result = route(request);
+            System.out.println(JsonUtils.object2Node(ss).toString());
+            Result result = route(request,JsonUtils.object2Node(ss).toString().getBytes());
 
             System.out.print(contentAsString(result));
             System.out.print(request.getWrappedRequest());

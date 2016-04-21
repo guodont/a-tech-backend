@@ -17,6 +17,8 @@ import play.mvc.Result;
 import utils.JsonResult;
 
 /**
+ * @author guodont
+ *
  * 为前台服务的主控制器,包括用户注册 登录 首页数据 等
  */
 public class Application extends BaseController {
@@ -130,12 +132,13 @@ public class Application extends BaseController {
             admin.setEmail(newUser.email);
             admin.setPassword(newUser.password);
             admin.phone = newUser.phone;
+            admin.name = newUser.name;
             admin.lastIp = request().remoteAddress();
             admin.save();
 
             //  设置登录会话信息
             session().clear();
-            session("username", newUser.email);
+            session("username", newUser.name);
             session("isAdmin", "true");
 
             return created(new JsonResult("success", "Admin created successfully").toJsonResponse());
@@ -171,7 +174,7 @@ public class Application extends BaseController {
             ObjectNode wrapper = Json.newObject();
             ObjectNode msg = Json.newObject();
             msg.put("message", "Logged in successfully");
-            msg.put("user", loggingInUser.email);
+            msg.put("user", admin.name);
             wrapper.put("success", msg);
             return ok(wrapper);
         }
@@ -280,6 +283,9 @@ public class Application extends BaseController {
 
         @Constraints.Required
         public String phone;    //  手机号
+
+        @Constraints.Required
+        public String name;     //  用户名
     }
 
     /**

@@ -19,10 +19,11 @@ angular.module('clientApp')
         var payload = {
           email : $scope.email,
           password : $scope.password,
-          phone : $scope.phone
+          phone : $scope.phone,
+          name : $scope.name
         };
 
-        $http.post('app/signup', payload)
+        $http.post('api/v1/admin/signup', payload)
             .error(function(data, status) {
               if(status === 400) {
                 angular.forEach(data, function(value, key) {

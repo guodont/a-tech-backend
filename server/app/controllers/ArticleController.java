@@ -5,21 +5,24 @@
 
 package controllers;
 
+import controllers.secured.AdminSecured;
+import controllers.secured.Secured;
 import models.*;
 import models.enums.ArticlePushState;
 import models.enums.ArticleState;
 import models.enums.ArticleType;
+import play.api.Logger;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
-/*
- * This controller contains Posting and Commenting logic. All methods require user to be
- * authenticated.
+/**
+ * @author guodont
+ *
+ * 文章控制器
  */
 public class ArticleController extends BaseController {
 
@@ -36,6 +39,7 @@ public class ArticleController extends BaseController {
     } else {
       //  保存文章
       Category category = Category.find.byId(postForm.get().categoryId);
+
       Article article = new Article();
       article.clickCount = 0L;
       article.commentCount = 0L;
@@ -90,6 +94,35 @@ public class ArticleController extends BaseController {
       newComment.save();
       return ok(new JsonResult("success", "Comment added successfully").toJsonResponse());
     }
+  }
+
+  public static Result getArticle(long id) {
+    return play.mvc.Results.TODO;
+  }
+
+  /**
+   * 获取所有网站文章
+   * @return
+   */
+  public static Result getArticles() {
+    Article article = new Article();
+    return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName())));
+  }
+
+  public static Result getArticlesByExpert(long expertId) {
+    return play.mvc.Results.TODO;
+  }
+
+  public static Result getArticlesByCategory(long cateId) {
+    return play.mvc.Results.TODO;
+  }
+
+  public static Result deleteArticle(long id) {
+    return play.mvc.Results.TODO;
+  }
+
+  public static Result updateArticle(long id) {
+    return play.mvc.Results.TODO;
   }
 
   /**

@@ -20,20 +20,55 @@ GET         /assets/*file               controllers.Assets.at(path="/public", fi
 # 身份认证
 
 # 管理员注册
-POST        /app/signup                 controllers.Application.signUpAdmin
+POST        /api/v1/admin/signup                 controllers.Application.signUpAdmin
 # 管理员登录
-POST        /app/login                  controllers.Application.loginForAdmin
+POST        /api/v1/admin/login                  controllers.Application.loginForAdmin
 # 管理员退出
-GET         /app/logout                 controllers.Application.logout
+GET         /api/v1/admin/logout                 controllers.Application.logout
 # 是否登录
-GET         /app/isauthenticated        controllers.Application.isAuthenticated
+GET         /api/isauthenticated                 controllers.Application.isAuthenticated
 
 # 分类
 
 # 添加分类
-POST        /api/v1/categories/:type/:pid          controllers.CategoryController.addCategory(type: String, pid: Long)
+POST        /api/v1/category/:type/:pid             controllers.CategoryController.addCategory(type: String, pid: Long)
 # 获取分类
-GET         /api/v1/categories/:type               controllers.CategoryController.getCategories(type: String)
+GET         /api/v1/categories/:type                controllers.CategoryController.getCategories(type: String)
+# 删除分类
+DELETE      /api/v1/category/:id                    controllers.CategoryController.deleteCategory(id: Long)
+
+# 文章
+
+# 获取所有文章
+GET         /api/v1/articles                        controllers.ArticleController.getArticles
+# 获取某分类下的所有文章
+GET         /api/v1/articles/:cateId                controllers.ArticleController.getArticlesByCategory(cateId: Long)
+# 发布一篇文章
+POST        /api/v1/article                         controllers.ArticleController.addArticle
+# 查看一篇文章
+GET         /api/v1/article/:id                     controllers.ArticleController.getArticle(id: Long)
+# 更新一篇文章
+PUT         /api/v1/article/:id                     controllers.ArticleController.updateArticle(id: Long)
+# 删除文章
+DELETE      /api/v1/article/:id                     controllers.ArticleController.deleteArticle(id: Long)
+# 获取专家的所有文章
+GET         /api/v1/expert/:expertId/articles       controllers.ArticleController.getArticlesByExpert(expertId: Long)
+
+
+# 用户管理
+
+# 获取所有用户
+GET         /api/v1/users                           controllers.UserController.getAllUsers
+# 根据用户类型获取用户(普通/专家)
+GET         /api/v1/users/:userType                 controllers.UserController.getUsersByType(userType: String)
+# 查看用户详细信息
+GET         /api/v1/user/:id                        controllers.UserController.getUser(id: Long)
+# 更新用户资料
+PUT         /api/v1/user/:id                        controllers.UserController.updateUser(id: Long)
+# 删除用户
+DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
+
+
 
 # 前台api接口
 

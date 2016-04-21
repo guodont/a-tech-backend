@@ -45,7 +45,7 @@ public class Admin extends BaseModel {
     /**
      * 最后登录IP
      */
-    @Column(length = 45, unique = true, nullable = false)
+    @Column(length = 45, nullable = false)
     @Constraints.MaxLength(45)
     public String lastIp;
 

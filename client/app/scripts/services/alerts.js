@@ -15,7 +15,7 @@
 angular.module('clientApp')
     .factory('alertService', function($timeout) {
 
-      var ALERT_TIMEOUT = 5000;
+      var ALERT_TIMEOUT = 3000;
 
       function add(type, msg, timeout) {
 

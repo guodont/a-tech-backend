@@ -15,7 +15,6 @@ create table admin (
   when_updated              datetime not null,
   constraint uq_admin_email unique (email),
   constraint uq_admin_phone unique (phone),
-  constraint uq_admin_last_ip unique (last_ip),
   constraint pk_admin primary key (id))
 ;
 
@@ -68,7 +67,7 @@ create table article (
   user_id                   bigint,
   click_count               bigint,
   comment_count             bigint,
-  image                     varchar(255) not null,
+  image                     varchar(255),
   article_type              varchar(10),
   article_state             varchar(14),
   article_push_state        varchar(7),

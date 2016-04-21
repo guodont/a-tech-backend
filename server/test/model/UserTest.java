@@ -5,8 +5,7 @@ import models.enums.UserType;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
+import static play.test.Helpers.*;
 
 /**
  * Created by guodont on 16/4/20.
@@ -15,7 +14,7 @@ public class UserTest {
 
     @Test
     public void saveUser() {
-        running(fakeApplication(), () -> {
+        running(fakeApplication(fakeGlobal()), () -> {
 
             User user = new User();
             user.realName = "realName01";
