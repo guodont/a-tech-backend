@@ -3,7 +3,7 @@
 // Visit www.toptal.com/blog and subscribe to our newsletter to read great posts
 ////////
 
-package controllers;
+package controllers.secured;
 
 import play.mvc.Http.Context;
 import play.mvc.Result;

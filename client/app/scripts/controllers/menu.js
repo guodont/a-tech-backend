@@ -17,9 +17,10 @@ angular.module('clientApp')
       $scope.user = userService;
 
       $scope.logout = function() {
-        $http.get('/app/logout')
+        $http.get('/api/v1/admin/logout')
             .success(function(data) {
               if(data.hasOwnProperty('success')) {
+                $cookies.isLoggedIn = false;
                 userService.username = '';
                 $location.path('/login');
               }

@@ -14,42 +14,58 @@
  * Main module of the application.
  */
 angular
-    .module('clientApp', [
-      'ngAnimate',
-      'ngCookies',
-      'ngResource',
-      'ngRoute',
-      'ngSanitize',
-      'ngTouch',
-      'ui.bootstrap'
-    ])
-    .config(function ($routeProvider) {
-      $routeProvider
-          .when('/', {
-            templateUrl: 'views/welcome.html',
-            controller: 'MainCtrl'
-          })
-          .when('/signup', {
-            templateUrl: 'views/signup.html',
-            controller: 'SignupCtrl'
-          })
-          .when('/dashboard', {
-            templateUrl: 'views/dashboard.html',
-            controller: 'DashboardCtrl'
-          })
-          .when('/login', {
-            templateUrl: 'views/login.html',
-            controller: 'LoginCtrl'
-          })
-          .when('/addpost', {
-            templateUrl: 'views/addpost.html',
-            controller: 'AddpostCtrl'
-          })
-          .when('/viewpost/:postId', {
-            templateUrl: 'views/viewpost.html',
-            controller: 'ViewpostCtrl'
-          })
-          .otherwise({
-            redirectTo: '/'
-          });
-    });
+  .module('clientApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'ui.bootstrap'
+  ])
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/welcome.html',
+        controller: 'MainCtrl'
+      })
+      .when('/signup', {
+        templateUrl: 'views/signup.html',
+        controller: 'SignupCtrl'
+      })
+      .when('/dashboard', {
+        templateUrl: 'views/dashboard.html',
+        controller: 'DashboardCtrl'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/addpost', {
+        templateUrl: 'views/addpost.html',
+        controller: 'AddpostCtrl'
+      })
+      .when('/viewpost/:postId', {
+        templateUrl: 'views/viewpost.html',
+        controller: 'ViewpostCtrl'
+      })
+      .when('/article/add', {
+        templateUrl: 'views/article/add.html',
+        controller: 'ArticleCtrl'
+      })
+      .when('/article/list', {
+        templateUrl: 'views/article/list.html',
+        controller: 'ArticleCtrl'
+      })
+      .when('/category/add', {
+        templateUrl: 'views/category/add.html',
+        controller: 'CategoryCtrl'
+      })
+      .when('/category/list', {
+        templateUrl: 'views/category/list.html',
+        controller: 'CategoryCtrl'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+  });

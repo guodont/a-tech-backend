@@ -1,21 +1,27 @@
 <form name="signupForm" ng-submit="signup()" novalidate>
   <div>
-    <label for="email">Email</label>
+    <label for="name">用户名</label>
+    <input name="name" class="form-control" type="text" id="name" placeholder="userName"
+           ng-model="name">
+    </div>
+  <div>
+    <div>
+    <label for="email">邮箱</label>
     <input name="email" class="form-control" type="email" id="email" placeholder="Email"
            ng-model="email">
     </div>
   <div>
-    <label for="password">Password</label>
+    <label for="password">密码</label>
     <input name="password" class="form-control" type="password" id="password"
            placeholder="Password" ng-model="password">
 
   </div>
   <div>
-    <label for="phone">Phone</label>
+    <label for="phone">手机号</label>
     <input name="phone" class="form-control" type="text" id="phone"
            placeholder="Phone" ng-model="phone">
 
   </div>
-  <button type="submit" class="btn btn-primary">Sign up!</button>
+  <button type="submit" class="btn btn-primary">完成注册</button>
 </form>
 

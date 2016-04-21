@@ -65,9 +65,8 @@ public class Article extends BaseModel {
     /**
      * 图片
      */
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     @Constraints.MaxLength(255)
-    @Constraints.Required
     public String image;
     /**
      * 文章类型
@@ -98,6 +97,13 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("admin", admin)
+                .findList();
+    }
+
+    public static List<Article> findArticlesByType(String articleType) {
+        return find
+                .where()
+                .eq("articleType", articleType)
                 .findList();
     }
 

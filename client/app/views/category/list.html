@@ -1,0 +1,31 @@
+<div class="table-responsive">
+  <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>名称</th>
+      <th>添加时间</th>
+      <th>排序</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="category in categories">
+      <td>{{ category.id }}</td>
+      <td>{{ category.name }}</td>
+      <td>{{ category.whenCreated | date }}</td>
+      <td>{{ category.sort }}</td>
+      <td>
+        <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+          <button class="btn btn-xs btn-info" onclick="">
+            <i class="icon-edit bigger-120"></i>
+          </button>
+          <button class="btn btn-xs btn-danger" onclick="">
+            <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

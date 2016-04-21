@@ -17,30 +17,30 @@ public class Category extends BaseModel {
     /**
      * 分类表父编号
      */
-    private Long pid;
+    public Long pid;
     /**
      * 分类名称
      */
     @Column(length = 45, nullable = false)
     @Constraints.MaxLength(45)
     @Constraints.Required
-    private String name;
+    public String name;
     /**
      * 分类表类型
      */
     @Enumerated(EnumType.STRING)
-    private CategoryType categoryType;
+    public CategoryType categoryType;
     /**
      * 分类表图片
      */
     @Column(length = 255, nullable = false)
     @Constraints.MaxLength(255)
     @Constraints.Required
-    private String image;
+    public String image;
     /**
      * 分类表排序
      */
-    private Integer sort;
+    public Integer sort;
 
 
     public static final Finder<Long, Category> find = new Finder<Long, Category>(

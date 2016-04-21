@@ -15,6 +15,7 @@ create table admin (
   when_updated              datetime not null,
   constraint uq_admin_email unique (email),
   constraint uq_admin_phone unique (phone),
+  constraint uq_admin_last_ip unique (last_ip),
   constraint pk_admin primary key (id))
 ;
 
@@ -67,7 +68,7 @@ create table article (
   user_id                   bigint,
   click_count               bigint,
   comment_count             bigint,
-  image                     varchar(255),
+  image                     varchar(255) not null,
   article_type              varchar(10),
   article_state             varchar(14),
   article_push_state        varchar(7),
@@ -102,7 +103,7 @@ create table category (
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
-  constraint ck_category_category_type check (category_type in ('ARTICLE','EXPERT','TRADE','QUESTION')),
+  constraint ck_category_category_type check (category_type in ('ARTICLE','EXPERT','QUESTION')),
   constraint pk_category primary key (id))
 ;
 

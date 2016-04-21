@@ -5,6 +5,7 @@
 
 package controllers;
 
+import controllers.secured.Secured;
 import models.BlogPost;
 import models.PostComment;
 import models.User;

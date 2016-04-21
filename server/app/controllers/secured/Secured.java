@@ -3,7 +3,7 @@
 // Visit www.toptal.com/blog and subscribe to our newsletter to read great posts
 ////////
 
-package controllers;
+package controllers.secured;
 
 import play.mvc.Http.Context;
 import play.mvc.Result;
@@ -12,18 +12,13 @@ import play.mvc.Security;
 /**
  * Implements basic authentication
  *
- * 专家用户权限控制
+ * 普通用户权限控制
  */
-public class ExpertSecured extends Security.Authenticator {
+public class Secured extends Security.Authenticator {
 
   @Override
   public String getUsername(Context ctx) {
-    // 判断是否是专家
-    if (ctx.session().get("isExpert").equals("true")) {
-      return ctx.session().get("username");
-    } else {
-      return null;
-    }
+    return ctx.session().get("username");
   }
 
   @Override
