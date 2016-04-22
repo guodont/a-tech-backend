@@ -15,76 +15,73 @@ POST        /app/comment                controllers.Post.addComment
 GET         /assets/*file               controllers.Assets.at(path="/public", file)
 
 
-# 后台api接口
+# banckend api
 
-# 身份认证
+# authentication
 
-# 管理员注册
+# admin register
 POST        /api/v1/admin/signup                 controllers.Application.signUpAdmin
-# 管理员登录
+# admin login
 POST        /api/v1/admin/login                  controllers.Application.loginForAdmin
-# 管理员退出
+# admin logout
 GET         /api/v1/admin/logout                 controllers.Application.logout
-# 是否登录
+# islogin
 GET         /api/isauthenticated                 controllers.Application.isAuthenticated
 
-# 分类
+# category
 
-# 添加分类
+# add category
 POST        /api/v1/category/:type/:pid             controllers.CategoryController.addCategory(type: String, pid: Long)
-# 获取分类
+# get category
 GET         /api/v1/categories/:type                controllers.CategoryController.getCategories(type: String)
-# 删除分类
+# delete category
 DELETE      /api/v1/category/:id                    controllers.CategoryController.deleteCategory(id: Long)
 
-# 文章
+# article
 
-# 获取所有文章
+# get all articles
 GET         /api/v1/articles                        controllers.ArticleController.getArticles
-# 获取某分类下的所有文章
+# get article by category
 GET         /api/v1/articles/:cateId                controllers.ArticleController.getArticlesByCategory(cateId: Long)
-# 发布一篇文章
+# post article
 POST        /api/v1/article                         controllers.ArticleController.addArticle
-# 查看一篇文章
+# view article
 GET         /api/v1/article/:id                     controllers.ArticleController.getArticle(id: Long)
-# 更新一篇文章
+# update article
 PUT         /api/v1/article/:id                     controllers.ArticleController.updateArticle(id: Long)
-# 删除文章
+# delete article
 DELETE      /api/v1/article/:id                     controllers.ArticleController.deleteArticle(id: Long)
-# 获取专家的所有文章
+# get expert's articles
 GET         /api/v1/expert/:expertId/articles       controllers.ArticleController.getArticlesByExpert(expertId: Long)
 
 
-# 用户管理
+# user manage
 
-# 获取所有用户
+# get all users
 GET         /api/v1/users                           controllers.UserController.getAllUsers
-# 根据用户类型获取用户(普通/专家)
+# get users by type
 GET         /api/v1/users/:userType                 controllers.UserController.getUsersByType(userType: String)
-# 查看用户详细信息
+# view user details
 GET         /api/v1/user/:id                        controllers.UserController.getUser(id: Long)
-# 更新用户资料
+# update user
 PUT         /api/v1/user/:id                        controllers.UserController.updateUser(id: Long)
-# 删除用户
+# delete user
 DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
 
 
 
-# 前台api接口
+# client api
 
-# 身份认证
+# authentication
 
-# 用户注册第一步
+# user register first
 POST         /api/v1/signup/one         controllers.Application.signUpOneStep
-# 用户注册第二步
+# user register second
 POST         /api/v1/signup/two         controllers.Application.signUpTwoStep
-# 用户登录
+# user login
 POST         /api/v1/login              controllers.Application.login
-# 用户退出
+# user logout
 GET          /api/v1/logout             controllers.Application.logout
-# 是否登录
+# islogin
 GET          /api/v1/isauthenticated    controllers.Application.isAuthenticated
 
-# 文章
-
-#GET          /api/v1/posts
