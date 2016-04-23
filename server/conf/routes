@@ -85,3 +85,15 @@ GET          /api/v1/logout             controllers.Application.logout
 # islogin
 GET          /api/v1/isauthenticated    controllers.Application.isAuthenticated
 
+# video
+
+# add video
+POST        /api/v1/video                   controllers.VideoController.addVideo
+# get videoById
+GET         /api/v1/video/:id               controllers.VideoController.getVideoById(id: Long)
+# get  all video
+GET         /api/v1/videos                  controllers.VideoController.getVideos
+# update video
+GET         /api/v1/video/:id               controllers.VideoController.updateVideo(id: Long)
+# delete video
+DELETE      /api/v1/video/:id               controllers.VideoController.deleteVideo(id: Long)

@@ -1,0 +1,25 @@
+<form name="postForm" ng-submit="addVideo()" novalidate>
+  <div>
+    <label for="name">名称</label>
+    <input name="name" class="form-control" type="subject" id="name" placeholder="输入视频名称,不超过24字"
+           ng-model="name">
+  </div>
+  <div>
+    <label for="description">描述</label>
+    <input name="description" class="form-control" type="subject" id="description" placeholder="输入视频描述"
+           ng-model="description">
+  </div>
+  <div>
+    <label for="path">路径</label>
+    <input name="path" class="form-control" type="subject" id="path" placeholder="输入视频路径"
+           ng-model="path">
+  </div>
+  <div>
+    <label for="path">分类id</label>
+    <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="视频分类id"
+           ng-model="categoryId">
+  </div>
+
+  <br>
+  <button type="submit" class="btn btn-primary">提交此视频</button>
+</form>

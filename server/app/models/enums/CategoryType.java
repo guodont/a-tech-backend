@@ -8,6 +8,7 @@ public enum CategoryType implements ViewEnum {
 
     ARTICLE("文章"),
     EXPERT("专家"),
+    VIDEO("视频"),
     TRADE("交易"),
     QUESTION("问题");
 

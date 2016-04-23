@@ -79,7 +79,13 @@ public class CategoryController extends BaseController {
    */
   @Security.Authenticated(AdminSecured.class)
   public static Result deleteCategory(long id) {
-    return play.mvc.Results.TODO;
+    Category category = Category.findCategoryById(id);
+    if(category==null){
+      return status(404, new JsonResult("error", "Category not found").toJsonResponse());
+    }else{
+      category.delete();
+      return ok(new JsonResult("success", "Category deleted successfully").toJsonResponse());
+    }
   }
 
   /**

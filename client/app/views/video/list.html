@@ -1,0 +1,37 @@
+<div class="table-responsive">
+  <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>名称</th>
+      <th>描述</th>
+      <th>文件路径</th>
+      <th>管理员</th>
+      <th>分类</th>
+      <th>点击量</th>
+      <th>操作th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="video in videos">
+      <td>{{ video.id }}</td>
+      <td>{{ video.name }}</td>
+      <td>{{ video.description}}</td>
+      <td>{{ video.path }}</td>
+      <td>{{ video.admin.name }}</td>
+      <td>{{ video.category.name }}</td>
+      <td>{{ video.clickCount }}</td>
+      <td>
+        <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+          <button class="btn btn-xs btn-info">
+           <a ><i class="icon-edit bigger-120"></i></a>
+          </button>
+          <button class="btn btn-xs btn-danger" ng-click="deleteVideo(video.id)">
+            <a ><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

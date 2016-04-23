@@ -65,6 +65,14 @@ angular
         templateUrl: 'views/category/list.html',
         controller: 'CategoryCtrl'
       })
+      .when('/video/add', {
+        templateUrl: 'views/video/add.html',
+        controller: 'VideoCtrl'
+      })
+      .when('/video/list', {
+        templateUrl: 'views/video/list.html',
+        controller: 'VideoCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

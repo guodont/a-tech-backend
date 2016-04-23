@@ -1,8 +1,8 @@
 package models;
 
 import play.data.validation.Constraints;
-
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by llz on 2016/4/13.
@@ -45,5 +45,27 @@ public class Video extends BaseModel {
      */
     public Long clickCount;
 
+    public static final Finder<Long, Video> find = new Finder<Long, Video>(
+            Long.class, Video.class);
 
+    /**
+     * 查找全部视频
+     * @param
+     * @return
+     */
+    public static List<Video> findVideos() {
+        return find.findList();
+    }
+
+    /**
+     * 通过视频ID查找视频
+     * @param id
+     * @return
+     */
+    public static Video findVideoById(final Long id) {
+        return find
+                .where()
+                .eq("id", id)
+                .findUnique();
+    }
 }

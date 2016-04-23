@@ -58,4 +58,10 @@ public class Category extends BaseModel {
                 .findList();
     }
 
+    public static Category findCategoryById(final long id) {
+        return find
+                .where()
+                .eq("id", id)
+                .findUnique();
+    }
 }
