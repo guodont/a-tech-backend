@@ -78,5 +78,23 @@ angular.module('clientApp')
         });
     };
 
+    // 删除文章
+    self.deleteArticle = function (params, success, error) {
+      $http({
+        method: 'DELETE',
+        url: '/api/v1/article/' + params.id,
+        headers: {authenticate: $cookies.token}
+      })
+        .then(function (res) {
+          if (typeof (success) === 'function') {
+            success(res);
+          }
+        }, function (res) {
+          if (typeof (error) === 'function') {
+            error(res);
+          }
+        });
+    };
+    
     return self;
   }]);

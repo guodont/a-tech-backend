@@ -9,11 +9,11 @@
  */
 angular.module('clientApp')
   .controller('CategoryCtrl', function ($scope, $http, alertService, $location, categoryService) {
-
-    $scope.getCategories = function () {
+    $scope.selectType = '';
+    $scope.getCategories = function (type) {
       categoryService.getCategories(
         {
-          type: 'ARTICLE'
+          type: type
         },
         function (res) {
           console.log(res.data);
@@ -25,7 +25,7 @@ angular.module('clientApp')
       );
     };
 
-    $scope.getCategories();
+    $scope.getCategories('');
 
     $scope.addCategory = function (parentId) {
       categoryService.addCategory(
@@ -61,5 +61,23 @@ angular.module('clientApp')
         }
       );
     };
+
+    $scope.deleteCategory = function (id) {
+      categoryService.deleteCategory({
+          id: id
+        },
+        function (res) {
+          alertService.add('success', res.data.success.message);
+          $scope.getCategories('');
+        }, function (res) {
+          alertService.add('success', res.data.error.message);
+        });
+    };
+
+    $scope.$watch($scope.selectType,$scope.getCategories($scope.selectType))
+
+    function changeType() {
+      console.log("123");
+    }
 
   });

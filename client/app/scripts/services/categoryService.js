@@ -34,14 +34,15 @@ angular.module('clientApp')
     // 更新分类
     self.updateCategory = function (params, success, error) {
       $http({
-        method: 'PUT',
-        url: '/api/v1/category/' + params.categoryId,
-        headers: {authenticate: $cookies.token},
         data: {
           name: params.name,
           sort: params.sort,
           image: params.image
-        }
+        },
+        method: 'PUT',
+        url: '/api/v1/category/' + params.categoryId,
+        headers: {authenticate: $cookies.token},
+
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
@@ -58,7 +59,28 @@ angular.module('clientApp')
     self.getCategories = function (params, success, error) {
       $http({
         method: 'GET',
-        url: '/api/v1/categories/' + params.type,
+        url: '/api/v1/categories?type='+params.type,
+        data:{
+          type:params.type
+        },
+        headers: {authenticate: $cookies.token}
+      })
+        .then(function (res) {
+          if (typeof (success) === 'function') {
+            success(res);
+          }
+        }, function (res) {
+          if (typeof (error) === 'function') {
+            error(res);
+          }
+        });
+    };
+
+    // 删除分类
+    self.deleteCategory = function (params, success, error) {
+      $http({
+        method: 'DELETE',
+        url: '/api/v1/category/' + params.id,
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {

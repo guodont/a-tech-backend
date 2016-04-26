@@ -62,4 +62,16 @@ angular.module('clientApp')
       );
     };
 
+    $scope.deleteArticle = function (id) {
+      articleService.deleteArticle({
+          id: id
+        },
+        function (res) {
+          alertService.add('success', res.data.success.message);
+          $scope.getArticles();
+        }, function (res) {
+          alertService.add('success', res.data.error.message);
+        });
+    };
+
   });
