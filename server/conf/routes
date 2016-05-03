@@ -85,3 +85,14 @@ GET          /api/v1/logout             controllers.Application.logout
 # islogin
 GET          /api/v1/isauthenticated    controllers.Application.isAuthenticated
 
+# add link
+POST        /api/v1/link                   controllers.LinkController.addLink
+# get linkByid
+GET         /api/v1/link/:id               controllers.LinkController.getVideoById(id: Long)
+# get  all link
+GET         /api/v1/link                  controllers.LinkController.getAllLink
+# update link
+GET         /api/v1/link/:id               controllers.LinkController.updateLink(id: Long)
+# delete link
+DELETE      /api/v1/link/:id               controllers.LinkController.deleteLink(id: Long)
+

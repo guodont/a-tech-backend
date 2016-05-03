@@ -58,4 +58,6 @@ public abstract class BaseModel extends Model{
     public void setWhenUpdated(Timestamp whenUpdated) {
         this.whenUpdated = whenUpdated;
     }
+
+
 }
