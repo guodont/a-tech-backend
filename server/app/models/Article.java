@@ -7,6 +7,7 @@ import models.enums.ArticlePushState;
 import models.enums.ArticleState;
 import models.enums.ArticleType;
 import play.data.validation.Constraints;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -43,8 +44,8 @@ public class Article extends BaseModel {
     @ManyToOne
     public Admin admin;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    public List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Comment> comments;
     /**
      * 排序
      */
@@ -89,7 +90,6 @@ public class Article extends BaseModel {
 
 
     /**
-     *
      * @param admin
      * @return
      */
@@ -100,15 +100,27 @@ public class Article extends BaseModel {
                 .findList();
     }
 
-    public static List<Article> findArticlesByType(String articleType) {
+    public static List<Article> findArticlesByType(String articleType, int page, int pageSize) {
         return find
                 .where()
                 .eq("articleType", articleType)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<Article> findArticlesByCategory(Long categoryId, int page, int pageSize) {
+        return find
+                .where()
+                .eq("categoryId", categoryId)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
     /**
      * 通过用户查找文章
+     *
      * @param user
      * @return
      */
@@ -121,6 +133,7 @@ public class Article extends BaseModel {
 
     /**
      * 通过id查找文章
+     *
      * @param id
      * @return
      */

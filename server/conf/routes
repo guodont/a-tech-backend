@@ -31,16 +31,16 @@ GET         /api/isauthenticated                 controllers.Application.isAuthe
 # category
 
 # add category
-POST        /api/v1/category/:type/:pid             controllers.CategoryController.addCategory(type: String, pid: Long)
+POST        /api/v1/category                     controllers.CategoryController.addCategory()
 # get category
-GET         /api/v1/categories/:type                controllers.CategoryController.getCategories(type: String)
+GET         /api/v1/categories                   controllers.CategoryController.getCategories()
 # delete category
-DELETE      /api/v1/category/:id                    controllers.CategoryController.deleteCategory(id: Long)
+DELETE      /api/v1/category/:id               controllers.CategoryController.deleteCategory(id: Long)
 
 # article
 
 # get all articles
-GET         /api/v1/articles                        controllers.ArticleController.getArticles
+GET         /api/v1/articles                        controllers.ArticleController.getArticles()
 # get article by category
 GET         /api/v1/articles/:cateId                controllers.ArticleController.getArticlesByCategory(cateId: Long)
 # post article

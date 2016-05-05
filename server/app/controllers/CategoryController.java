@@ -29,16 +29,25 @@ public class CategoryController extends BaseController {
    * @return
    */
   @Security.Authenticated(AdminSecured.class)
-  public static Result addCategory(String categoryType, Long parentId) {
+  public static Result addCategory() {
+
+    String categoryType = CategoryType.ARTICLE.getName();
+    Long parentId = 0L;
+
+    if (request().getQueryString("categoryType")!=null && request().getQueryString("parentId")!=null) {
+      categoryType = request().getQueryString("categoryType");
+      parentId = Long.valueOf(request().getQueryString("parentId"));
+    }
 
     Form<CategoryForm> postForm = Form.form(CategoryForm.class).bindFromRequest();
 
+    System.out.print(postForm.toString());
     if (postForm.hasErrors()) {
 
       return badRequest(postForm.errorsAsJson());
 
     } else {
-      //  保存文章
+      //  保存分类
       Category category = new Category();
 
       //  判断分类类型
@@ -64,10 +73,13 @@ public class CategoryController extends BaseController {
 
   /**
    * 根据分类类型获取分类
-   * @param categoryType
    * @return
    */
-  public static Result getCategories(String categoryType) {
+  public static Result getCategories() {
+    String categoryType = CategoryType.ARTICLE.getName();
+    if (request().getQueryString("categoryType")!=null) {
+      categoryType = request().getQueryString("categoryType");
+    }
     List<Category> categories =  Category.findCategoriesByType(categoryType);
     return ok(Json.toJson(categories));
   }

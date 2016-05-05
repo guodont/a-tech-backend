@@ -242,7 +242,6 @@ create table user (
   constraint uq_user_email unique (email),
   constraint uq_user_phone unique (phone),
   constraint uq_user_name unique (name),
-  constraint uq_user_last_ip unique (last_ip),
   constraint pk_user primary key (id))
 ;
 
