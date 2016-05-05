@@ -12,7 +12,7 @@ angular.module('clientApp')
     self.addCategory = function (params, success, error) {
       $http({
         method: 'POST',
-        url: '/api/v1/category/'+params.type +'/' + params.parentId,
+        url: '/api/v1/category?categoryType='+params.type +'&parentId=' + params.parentId,
         headers: {authenticate: $cookies.token},
         data: {
           name: params.name,
@@ -59,9 +59,9 @@ angular.module('clientApp')
     self.getCategories = function (params, success, error) {
       $http({
         method: 'GET',
-        url: '/api/v1/categories?type='+params.type,
+        url: '/api/v1/categories',
         data:{
-          type:params.type
+          categoryType:params.type
         },
         headers: {authenticate: $cookies.token}
       })

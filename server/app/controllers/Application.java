@@ -61,8 +61,8 @@ public class Application extends BaseController {
             User user = new User();
             user.setPassword(newUser.password);
             user.name = newUser.userName;
-            user.phone = newUser.phone;
-            user.lastIp = request().remoteAddress();
+            user.setPhone(newUser.phone);
+            user.setLastIp(request().remoteAddress());
             user.userType = UserType.PUBLIC;
             user.save();
 
@@ -98,7 +98,7 @@ public class Application extends BaseController {
 
         } else {
             //  保存用户信息
-            loginUser.realName = curUser.realName;
+            loginUser.setRealName(curUser.realName);
             loginUser.address = curUser.address;
             loginUser.industry = curUser.industry;
             loginUser.scale = curUser.scale;
@@ -202,7 +202,7 @@ public class Application extends BaseController {
         } else {
 
             //  保存最后登录ip
-            user.lastIp = request().remoteAddress();
+            user.setLastIp(request().remoteAddress());
             user.update();
 
             //  设置登录会话信息

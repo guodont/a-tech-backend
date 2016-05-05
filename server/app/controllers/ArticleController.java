@@ -105,8 +105,9 @@ public class ArticleController extends BaseController {
    * @return
    */
   public static Result getArticles() {
+    initPageing();
     Article article = new Article();
-    return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName())));
+    return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName(),page,pageSize)));
   }
 
   public static Result getArticlesByExpert(long expertId) {
@@ -114,7 +115,9 @@ public class ArticleController extends BaseController {
   }
 
   public static Result getArticlesByCategory(long cateId) {
-    return play.mvc.Results.TODO;
+    initPageing();
+    Article article = new Article();
+    return ok(Json.toJson(article.findArticlesByCategory(cateId ,page,pageSize)));
   }
 
   public static Result deleteArticle(long id) {

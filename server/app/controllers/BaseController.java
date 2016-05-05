@@ -10,6 +10,19 @@ import play.mvc.Security;
  */
 public class BaseController extends Controller{
 
+    public static int page;
+    public static int pageSize;
+
+    public static void initPageing() {
+
+        if (request().getQueryString("page")!=null && request().getQueryString("pageSize")!=null) {
+            page = Integer.valueOf(request().getQueryString("page"));
+            pageSize = Integer.valueOf(request().getQueryString("pageSize"));
+        } else {
+            page = 1;
+            pageSize = 20;
+        }
+    }
 
     /**
      * 获取当前会话管理员

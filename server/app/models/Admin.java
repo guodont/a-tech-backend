@@ -28,12 +28,12 @@ public class Admin extends BaseModel {
     @Constraints.MaxLength(255)
     @Constraints.Required
     @Constraints.Email
-    public String email;
+    private String email;
     /**
      * 管理员密码
      */
     @Column(length = 64, nullable = false)
-    public byte[] shaPassword;
+    private byte[] shaPassword;
     /**
      * 管理员电话
      */
