@@ -1,4 +1,13 @@
 # 农科110项目 后台管理端
+
+## 项目文档
+
+1. api 文档 [docs/swagger-atech-api.yaml](docs/swagger-atech-api.yaml) (使用[SwaggerUI](http://swagger.io)打开)
+2. 已部署文档访问地址[http://sxnk110.workerhub.cn:3000](http://sxnk110.workerhub.cn:3000)
+3. 已部署前端访问地址[http://sxnk110.workerhub.cn](http://sxnk110.workerhub.cn)
+4. 已部署管理员后台访问地址[http://sxnk110.workerhub.cn:9080](http://sxnk110.workerhub.cn:9080)
+5. 已部署后端api访问地址[http://sxnk110.workerhub.cn:9000](http://sxnk110.workerhub.cn:9000)
+
 ## 项目开发部署
 ### 项目中 client 文件夹是前端项目
 #### 部署方法：
