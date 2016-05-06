@@ -13,11 +13,11 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-    .controller('MenuCtrl', function ($scope, $http, userService, $location) {
+    .controller('MenuCtrl', function ($scope, $http, userService, $location, apiUrl) {
       $scope.user = userService;
 
       $scope.logout = function() {
-        $http.get('/api/v1/admin/logout')
+        $http.get(apiUrl + '/admin/logout')
             .success(function(data) {
               if(data.hasOwnProperty('success')) {
                 $cookies.isLoggedIn = false;

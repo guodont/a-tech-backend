@@ -4,6 +4,7 @@
 
 # Home page
 GET         /                           controllers.Application.index
+OPTIONS     /*all                       controllers.Application.preflight(all)
 # Posts
 GET         /app/posts                  controllers.Application.getPosts
 POST        /app/post                   controllers.Post.addPost
