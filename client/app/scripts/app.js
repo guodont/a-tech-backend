@@ -23,6 +23,8 @@ angular
     'ngTouch',
     'ui.bootstrap'
   ])
+  .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
+  .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

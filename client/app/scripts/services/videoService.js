@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('videoService', ['$http', '$cookies', function ( $http, $cookies) {
+  .service('videoService', ['$http', '$cookies', 'apiUrl', function ( $http, $cookies, apiUrl) {
 
     var self = this;
 
@@ -12,7 +12,7 @@ angular.module('clientApp')
     self.addVideo = function (params, success, error) {
       $http({
         method: 'POST',
-        url: '/api/v1/video',
+        url: apiUrl + '/video',
         headers: {authenticate: $cookies.token},
         data: {
           name: params.name,
@@ -35,7 +35,7 @@ angular.module('clientApp')
     self.deleteVideo = function (params, success, error) {
       $http({
         method: 'DELETE',
-        url: '/api/v1/video/' + params.videoId,
+        url: apiUrl +'/video/' + params.videoId,
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {
@@ -53,7 +53,7 @@ angular.module('clientApp')
     self.updateVideo = function (params, success, error) {
       $http({
         method: 'PUT',
-        url: '/api/v1/video/' + params.videoId,
+        url: apiUrl + '/video/' + params.videoId,
         headers: {authenticate: $cookies.token},
         data: {
           name: params.name,
@@ -77,7 +77,7 @@ angular.module('clientApp')
     self.getVideos = function (params, success, error) {
       $http({
         method: 'GET',
-        url: '/api/v1/videos',
+        url: apiUrl + '/videos',
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {

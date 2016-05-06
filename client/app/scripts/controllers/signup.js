@@ -13,7 +13,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-    .controller('SignupCtrl', function ($scope, $http, $log, alertService, $location, userService) {
+    .controller('SignupCtrl', function ($scope, $http, $log, alertService, $location, userService, apiUrl) {
 
       $scope.signup = function() {
         var payload = {
@@ -23,7 +23,7 @@ angular.module('clientApp')
           name : $scope.name
         };
 
-        $http.post('api/v1/admin/signup', payload)
+        $http.post(apiUrl + '/admin/signup', payload)
             .error(function(data, status) {
               if(status === 400) {
                 angular.forEach(data, function(value, key) {

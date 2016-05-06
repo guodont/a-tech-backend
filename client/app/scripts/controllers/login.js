@@ -13,14 +13,14 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('LoginCtrl', function ($scope, userService, $cookies,$cookieStore, $location, $log, $http, alertService) {
+  .controller('LoginCtrl', function ($scope, userService, $cookies,$cookieStore, $location, $log, $http, alertService, apiUrl, hostUrl) {
 
     $scope.isAuthenticated = function () {
       if (userService.username) {
         $log.debug(userService.username);
         $location.path('/dashboard');
       } else {
-        $http.get('/api/isauthenticated')
+        $http.get(hostUrl + '/api/isauthenticated')
           .error(function () {
             $location.path('/login');
           })
@@ -43,7 +43,7 @@ angular.module('clientApp')
         password: this.password
       };
 
-      $http.post('api/v1/admin/login', payload)
+      $http.post(apiUrl + '/admin/login', payload)
         .error(function (data, status) {
           if (status === 400) {
             angular.forEach(data, function (value, key) {
