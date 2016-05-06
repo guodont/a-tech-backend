@@ -1,0 +1,486 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 农科110API接口文档
+  description: 这里是农科110网站的API接口文档
+  contact:
+    name: 山西农业大学软件学院
+    email: guodont@163.com
+    url: http://workerhub.cn
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost:9000
+basePath: /api/v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /users:
+    get:
+      description: 获取所有的用户
+      operationId: findUsers
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: query
+          description: 通过用户名搜索用户
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: 页码（1+）
+          required: false
+          type: integer
+          format: int32
+        - name: pageSize
+          in: query
+          description: 每页数据长度（默认20）
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: 成功返回用户集合
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /user/{id}:
+    get:
+      description: 获取某用户的信息
+      operationId: findUserById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 要获取的用户id
+          required: true
+          type: integer
+          format: int11
+      responses:
+        '200':
+          description: 成功返回用户信息
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: 更新某用户的信息
+      operationId: updageUserById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 要获取的用户id
+          required: true
+          type: integer
+          format: int11
+        - name: user
+          in: body
+          description: 用户更新数据
+          required: true
+          schema:
+            $ref: '#/definitions/userProfile'
+      responses:
+        '200':
+          description: 用户信息更新成功
+          schema:
+            $ref: '#/definitions/successModel'
+        '401':
+          description: 没有权限
+          schema:
+            $ref: '#/definitions/errorModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+    delete:
+      description: 删除一个用户(需要有管理员权限)
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: 要删除的用户id
+          required: true
+          type: integer
+          format: int11
+      responses:
+        '204':
+          description: 用户成功删除
+          schema:
+            $ref: '#/definitions/successModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+        
+  /articles:
+    get:
+      description: 获取所有的文章
+      operationId: findArticles
+      produces:
+        - application/json
+      parameters:
+        - name: keyWord
+          in: query
+          description: 通过关键字搜索文章
+          required: false
+          type: string
+        - name: page
+          in: query
+          description: 页码（1+）
+          required: false
+          type: integer
+          format: int32
+        - name: pageSize
+          in: query
+          description: 每页数据长度（默认20）
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: 成功返回文章数据
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/article'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /articles/{cateId}:
+    get:
+      description: 根据分类获取所有的文章
+      operationId: findArticlesByCategory
+      produces:
+        - application/json
+      parameters:
+        - name: cateId
+          in: path
+          description: 文章分类id
+          required: true
+          type: integer
+          format: int11
+        - name: page
+          in: query
+          description: 页码（1+）
+          required: false
+          type: integer
+          format: int32
+        - name: pageSize
+          in: query
+          description: 每页数据长度（默认20）
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: 成功返回文章数据
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/article'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /article:
+    post:
+      description: 创建一篇文章
+      operationId: addArticle
+      produces:
+        - application/json
+      parameters:
+        - name: article
+          in: body
+          description: 文章数据
+          required: true
+          schema:
+            $ref: '#/definitions/newArticle'
+      responses:
+        '200':
+          description: pet response
+          schema:
+            $ref: '#/definitions/successModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+  /article/{id}:
+    get:
+      description: 获取某文章的信息
+      operationId: findArticleById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 要获取的文章id
+          required: true
+          type: integer
+          format: int11
+      responses:
+        '200':
+          description: 成功返回文章信息
+          schema:
+            $ref: '#/definitions/article'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: 更新某文章的信息
+      operationId: updageArticleById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: 要更新的文章id
+          required: true
+          type: integer
+          format: int11
+        - name: article
+          in: body
+          description: 文章数据
+          required: true
+          schema:
+            $ref: '#/definitions/newArticle'
+      responses:
+        '200':
+          description: 文章信息更新成功
+          schema:
+            $ref: '#/definitions/successModel'
+        '401':
+          description: 没有权限
+          schema:
+            $ref: '#/definitions/errorModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+            
+    delete:
+      description: 删除一篇文章
+      operationId: deleteArticle
+      parameters:
+        - name: id
+          in: path
+          description: 要删除的用户id
+          required: true
+          type: integer
+          format: int11
+      responses:
+        '204':
+          description: 用户成功删除
+          schema:
+            $ref: '#/definitions/successModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'        
+definitions:
+     
+  errorModel:
+    type: object
+    required:
+      - error
+    properties:
+      error:
+        type: object
+        properties:
+          message:
+            type: string
+
+  successModel:
+    type: object
+    required:
+      - success
+    properties:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+      
+  user:
+    type: object
+    required:
+      - id
+      - userType
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      address:
+        type: string
+      avatar:
+        type: string
+      industry:
+        type: string
+      scale:
+        type: string
+      userType:
+        type: string
+      whenCreated:
+        type: integer
+        format: int32
+      whenUpdated:
+        type: integer
+        format: int32
+        
+  userProfile:
+    type: object
+    properties:
+      realName:
+        type: string
+      address:
+        type: string
+      avatar:
+        type: string
+      industry:
+        type: string
+      scale:
+        type: string
+    
+  admin:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+      phone:
+        type: string
+      lastIp:
+        type: string
+      whenCreated:
+        type: integer
+        format: int32
+      whenUpdated:
+        type: integer
+        format: int32
+  category:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+      pid:
+        type: integer
+        format: int64
+      name:
+        type: string
+      categoryType:
+        type: string
+      image:
+        type: string
+      sort:
+        type: integer
+        format: int3
+      whenCreated:
+        type: integer
+        format: int32
+      whenUpdated:
+        type: integer
+        format: int32
+    
+  article:
+    type: object
+    required:
+      - id
+      - title
+    properties:
+      id:
+        type: integer
+        format: int64
+      title:
+        type: string
+      content:
+        type: string
+      tag:
+        type: string
+      image:
+        type: string
+      articleType:
+        type: string
+      articleState:
+        type: string
+      articlePushState:
+        type: string
+      sort:
+        type: integer
+        format: int3
+      clickCount:
+        type: integer
+        format: int32
+      commentCount:
+        type: integer
+        format: int32
+      whenCreated:
+        type: integer
+        format: int32
+      whenUpdated:
+        type: integer
+        format: int32
+      user:
+        $ref: '#/definitions/user'
+      category:
+        $ref: '#/definitions/category'
+      admin:
+        $ref: '#/definitions/admin'
+        
+  newArticle:
+    type: object
+    required:
+      - id
+      - categoryId
+      - title
+      - content
+    properties:
+      id:
+        type: integer
+        format: int64
+      categoryId:
+        type: integer
+        format: int64
+      title:
+        type: string
+      content:
+        type: string
+      tag:
+        type: string
+      image:
+        type: string
+      articlePushState:
+        type: string
+      sort:
+        type: integer
+        format: int3
+  
