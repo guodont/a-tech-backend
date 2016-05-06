@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('articleService', ['$http', '$cookies', function ( $http, $cookies) {
+  .service('articleService', ['$http', '$cookies', 'apiUrl', function ( $http, $cookies, apiUrl) {
 
     var self = this;
 
@@ -12,7 +12,7 @@ angular.module('clientApp')
     self.addArticle = function (params, success, error) {
       $http({
         method: 'POST',
-        url: '/api/v1/article',
+        url: apiUrl + '/article',
         headers: {authenticate: $cookies.token},
         data: {
           title: params.title,
@@ -38,7 +38,7 @@ angular.module('clientApp')
     self.updateArticle = function (params, success, error) {
       $http({
         method: 'PUT',
-        url: '/api/v1/article/' + params.articleId,
+        url: apiUrl + '/article/' + params.articleId,
         headers: {authenticate: $cookies.token},
         data: {
           title: params.title,
@@ -59,12 +59,12 @@ angular.module('clientApp')
           }
         });
     };
-    
+
     // 获取所有文章
     self.getArticles = function (params, success, error) {
       $http({
         method: 'GET',
-        url: '/api/v1/articles',
+        url: apiUrl + '/articles',
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {
@@ -82,7 +82,7 @@ angular.module('clientApp')
     self.deleteArticle = function (params, success, error) {
       $http({
         method: 'DELETE',
-        url: '/api/v1/article/' + params.id,
+        url: apiUrl + '/article/' + params.id,
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {
@@ -95,6 +95,6 @@ angular.module('clientApp')
           }
         });
     };
-    
+
     return self;
   }]);

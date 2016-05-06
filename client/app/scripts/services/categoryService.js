@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('categoryService', ['$http', '$cookies', function ( $http, $cookies) {
+  .service('categoryService', ['$http', '$cookies', 'apiUrl', function ($http, $cookies, apiUrl) {
 
     var self = this;
 
@@ -12,7 +12,7 @@ angular.module('clientApp')
     self.addCategory = function (params, success, error) {
       $http({
         method: 'POST',
-        url: '/api/v1/category?categoryType='+params.type +'&parentId=' + params.parentId,
+        url: apiUrl + '/category?categoryType=' + params.type + '&parentId=' + params.parentId,
         headers: {authenticate: $cookies.token},
         data: {
           name: params.name,
@@ -40,7 +40,7 @@ angular.module('clientApp')
           image: params.image
         },
         method: 'PUT',
-        url: '/api/v1/category/' + params.categoryId,
+        url: apiUrl + '/category/' + params.categoryId,
         headers: {authenticate: $cookies.token},
 
       })
@@ -59,9 +59,9 @@ angular.module('clientApp')
     self.getCategories = function (params, success, error) {
       $http({
         method: 'GET',
-        url: '/api/v1/categories',
-        data:{
-          categoryType:params.type
+        url: apiUrl + '/categories',
+        data: {
+          categoryType: params.type
         },
         headers: {authenticate: $cookies.token}
       })
@@ -80,7 +80,7 @@ angular.module('clientApp')
     self.deleteCategory = function (params, success, error) {
       $http({
         method: 'DELETE',
-        url: '/api/v1/category/' + params.id,
+        url: apiUrl + '/category/' + params.id,
         headers: {authenticate: $cookies.token}
       })
         .then(function (res) {
