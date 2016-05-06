@@ -71,15 +71,15 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
-      proxies: [
-        {
-          context: '/api', // the context of the data service
-          host: 'localhost', // wherever the data service is running
-          port: 9000, // the port that the data service is running on
-          changeOrigin: true
-          // rewrite: proxyRewrite
-        }
-      ],
+      // proxies: [
+      //   {
+      //     context: '/api', // the context of the data service
+      //     host: 'localhost', // wherever the data service is running
+      //     port: 9000, // the port that the data service is running on
+      //     changeOrigin: true
+      //     // rewrite: proxyRewrite
+      //   }
+      // ],
       livereload: {
         options: {
           open: true,
@@ -362,7 +362,7 @@ module.exports = function (grunt) {
             'styles/fonts/{,*/}*.*',
             'styles/js/{,*/}*.*'
           ]
-        }, {  
+        }, {
           expand: true,
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
