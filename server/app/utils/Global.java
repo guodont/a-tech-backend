@@ -29,6 +29,7 @@ public class Global extends GlobalSettings {
             Promise<Result> result = this.delegate.call(ctx);
             Http.Response response = ctx.response();
             response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Headers", "*");
             return result;
         }
     }
@@ -47,7 +48,9 @@ public class Global extends GlobalSettings {
         public CORSResult(Status status) {
             List<Tuple2<String, String>> list = new ArrayList<Tuple2<String, String>>();
             Tuple2<String, String> t = new Tuple2<String, String>("Access-Control-Allow-Origin","*");
+            Tuple2<String, String> t2 = new Tuple2<String, String>("Access-Control-Allow-Headers","*");
             list.add(t);
+            list.add(t2);
             Seq<Tuple2<String, String>> seq = Scala.toSeq(list);
             wrappedResult = status.withHeaders(seq);
         }

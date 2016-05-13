@@ -92,4 +92,11 @@ function runBlock($http) {
     'Content-Type': 'application/json;charset=utf-8',
     'Accept': 'application/json'
   };
+  // $http.defaults.headers.post = {
+  //   "Access-Control-Allow-Origin": "*",
+  //   // "Access-Control-Allow-Headers": "X-Requested-With,Content-Type,Accept",
+  //   // "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+  //   'Content-Type': 'application/json;charset=utf-8',
+  //   'Accept': 'application/json'
+  // };
 }
