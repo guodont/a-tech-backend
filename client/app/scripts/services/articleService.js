@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('articleService', ['$http', '$cookies', 'apiUrl', function ( $http, $cookies, apiUrl) {
+  .service('articleService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
 
     var self = this;
 
@@ -13,7 +13,7 @@ angular.module('clientApp')
       $http({
         method: 'POST',
         url: apiUrl + '/article',
-        headers: {authenticate: $cookies.token},
+        headers: {ToKenHeader: $cookieStore.get("authToken")},
         data: {
           title: params.title,
           content: params.content,
@@ -39,7 +39,7 @@ angular.module('clientApp')
       $http({
         method: 'PUT',
         url: apiUrl + '/article/' + params.articleId,
-        headers: {authenticate: $cookies.token},
+        headers: {ToKenHeader: $cookieStore.get("authToken")},
         data: {
           title: params.title,
           content: params.content,
@@ -65,7 +65,7 @@ angular.module('clientApp')
       $http({
         method: 'GET',
         url: apiUrl + '/articles',
-        headers: {authenticate: $cookies.token}
+        headers: {ToKenHeader: $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
@@ -83,7 +83,7 @@ angular.module('clientApp')
       $http({
         method: 'DELETE',
         url: apiUrl + '/article/' + params.id,
-        headers: {authenticate: $cookies.token}
+        headers: {ToKenHeader: $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {

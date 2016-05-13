@@ -27,6 +27,7 @@ angular
   // .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
   .constant('hostUrl', 'http://localhost:9000')
   // .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -89,6 +90,6 @@ function runBlock($http) {
     // "Access-Control-Allow-Headers": "X-Requested-With,Content-Type,Accept",
     // "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
     'Content-Type': 'application/json;charset=utf-8',
-    'Accept': 'application/json',
+    'Accept': 'application/json'
   };
 }

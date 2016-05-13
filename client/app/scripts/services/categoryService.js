@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('categoryService', ['$http', '$cookies', 'apiUrl', function ($http, $cookies, apiUrl) {
+  .service('categoryService', ['$http', '$cookies','$cookieStore', 'apiUrl', function ($http, $cookies,$cookieStore, apiUrl) {
 
     var self = this;
 
@@ -13,7 +13,7 @@ angular.module('clientApp')
       $http({
         method: 'POST',
         url: apiUrl + '/category?categoryType=' + params.type + '&parentId=' + params.parentId,
-        headers: {authenticate: $cookies.token},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
           sort: params.sort,
@@ -41,7 +41,7 @@ angular.module('clientApp')
         },
         method: 'PUT',
         url: apiUrl + '/category/' + params.categoryId,
-        headers: {authenticate: $cookies.token},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
 
       })
         .then(function (res) {
@@ -63,7 +63,7 @@ angular.module('clientApp')
         data: {
           categoryType: params.type
         },
-        headers: {authenticate: $cookies.token}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
@@ -81,7 +81,7 @@ angular.module('clientApp')
       $http({
         method: 'DELETE',
         url: apiUrl + '/category/' + params.id,
-        headers: {authenticate: $cookies.token}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
