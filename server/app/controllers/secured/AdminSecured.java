@@ -19,11 +19,11 @@ public class AdminSecured extends Security.Authenticator {
   @Override
   public String getUsername(Context ctx) {
     // 判断是否是管理员
-    if (ctx.session().get("isAdmin").equals("true")) {
+//    if (ctx.session().get("isAdmin").equals("true")) {
       return ctx.session().get("username");
-    } else {
-      return null;
-    }
+//    } else {
+//      return null;
+//    }
   }
 
   @Override

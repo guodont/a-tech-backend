@@ -10,17 +10,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.*;
 
 import models.enums.UserType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import play.data.validation.Constraints;
 
 /**
  * Model representing a Blog user
  */
 @Entity
-public class User extends BaseModel {
+public class User extends BaseModel implements UserDetails {
 
     /**
      * 用户邮箱
@@ -129,6 +134,21 @@ public class User extends BaseModel {
                 .findUnique();
     }
 
+    public static User findByUserNameAndPassword(String userName, String password) {
+        return find
+                .where()
+                .eq("name", userName.toLowerCase())
+                .eq("shaPassword", getSha512(password))
+                .findUnique();
+    }
+
+    public static User findByUserName(String userName) {
+        return find
+                .where()
+                .eq("name", userName.toLowerCase())
+                .findUnique();
+    }
+
     public static User findByEmail(String email) {
         return find
                 .where()
@@ -151,5 +171,40 @@ public class User extends BaseModel {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return String.valueOf(shaPassword);
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

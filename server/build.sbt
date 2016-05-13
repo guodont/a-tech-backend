@@ -14,7 +14,13 @@ libraryDependencies ++= Seq(
   javaEbean,
   cache,
   javaWs,
-  "mysql" % "mysql-connector-java" % mysqlConnectorVersion
+  "mysql" % "mysql-connector-java" % mysqlConnectorVersion,
+  "org.springframework" % "spring-aop" % "4.0.3.RELEASE",
+  "org.springframework" % "spring-expression" % "4.0.3.RELEASE",
+  "org.springframework" % "spring-test" % "4.0.3.RELEASE",
+  "org.springframework.security" % "spring-security-config" % "3.2.3.RELEASE",
+  "org.springframework.security" % "spring-security-core" % "3.2.3.RELEASE",
+  "org.springframework.security.oauth" % "spring-security-oauth2" % "2.0.2.RELEASE"
 )
 
 javaOptions in Test ++= Seq(

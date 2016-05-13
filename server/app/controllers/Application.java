@@ -5,12 +5,16 @@
 
 package controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.ImmutableMap;
 import models.Admin;
 import models.BlogPost;
 import models.User;
 import models.enums.UserType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import play.data.Form;
 import play.data.validation.Constraints;
+import play.libs.F;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Result;
@@ -23,6 +27,22 @@ import utils.JsonResult;
  */
 public class Application extends BaseController {
 
+    /**
+     * 测试OAuth用
+     * @return
+     */
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public static Result userDetails() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = User.findByUserName(username);
+
+        ObjectNode json = Json.newObject();
+        json.setAll(ImmutableMap.of(
+                "username", json.textNode(username),
+                "phone", json.textNode(user.getPassword()),
+                "isActive", json.booleanNode(true)));
+        return ok(json);
+    }
 
     /**
      * 首页
