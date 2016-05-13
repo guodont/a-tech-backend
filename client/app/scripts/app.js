@@ -23,10 +23,10 @@ angular
     'ngTouch',
     'ui.bootstrap'
   ])
-  .constant('apiUrl', 'http://localhost:9000/api/v1')
-  // .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
-  .constant('hostUrl', 'http://localhost:9000')
-  // .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  // .constant('apiUrl', 'http://localhost:9000/api/v1')
+  .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
+  // .constant('hostUrl', 'http://localhost:9000')
+  .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider) {
     $routeProvider
