@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('videoService', ['$http', '$cookies', 'apiUrl', function ( $http, $cookies, apiUrl) {
+  .service('videoService', ['$http', '$cookies', '$cookieStore','apiUrl', function ( $http, $cookies,$cookieStore, apiUrl) {
 
     var self = this;
 
@@ -13,7 +13,7 @@ angular.module('clientApp')
       $http({
         method: 'POST',
         url: apiUrl + '/video',
-        headers: {authenticate: $cookies.token},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
           description: params.description,
@@ -36,7 +36,7 @@ angular.module('clientApp')
       $http({
         method: 'DELETE',
         url: apiUrl +'/video/' + params.videoId,
-        headers: {authenticate: $cookies.token}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
@@ -54,7 +54,7 @@ angular.module('clientApp')
       $http({
         method: 'PUT',
         url: apiUrl + '/video/' + params.videoId,
-        headers: {authenticate: $cookies.token},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
           description: params.description,
@@ -78,7 +78,7 @@ angular.module('clientApp')
       $http({
         method: 'GET',
         url: apiUrl + '/videos',
-        headers: {authenticate: $cookies.token}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {

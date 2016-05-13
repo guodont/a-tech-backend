@@ -13,24 +13,26 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('LoginCtrl', function ($scope, userService, $cookies,$cookieStore, $location, $log, $http, alertService, apiUrl, hostUrl) {
+  .controller('LoginCtrl', function ($scope, userService, signupService, $cookies,$cookieStore, $location, $log, $http, alertService, apiUrl, hostUrl) {
 
     $scope.isAuthenticated = function () {
       if (userService.username) {
         $log.debug(userService.username);
         $location.path('/dashboard');
       } else {
-        $http.get(hostUrl + '/api/isauthenticated')
-          .error(function () {
-            $location.path('/login');
-          })
-          .success(function (data) {
-            console.log(data.success);
-            if (data.hasOwnProperty('success')) {
-              userService.username = data.success.user;
+        signupService.isAuthenticated(
+          {},
+          function (res) {
+            console.log(res.data);
+            if (res.data.hasOwnProperty('success')) {
+              userService.username = res.data.success.user;
               $location.path('/dashboard');
             }
-          });
+          },
+          function (res) {
+            $location.path('/login');
+          }
+        );
       }
     };
 
@@ -62,13 +64,16 @@ angular.module('clientApp')
           }
         })
         .success(function (data) {
-          $log.debug(data);
-          if (data.hasOwnProperty('success')) {
+          console.log("登录成功");
+          console.log(data);
+          if (data.hasOwnProperty('authToken')) {
             $cookies.isLoggedIn = true;
             $cookieStore.put('isLoggedIn', 1);
-            userService.username = data.success.user;
+            $cookieStore.put('authToken', data.authToken);
+            // userService.username = data.success.user;
             $location.path('/dashboard');
           }
+          console.log($cookieStore.get("authToken"));
         });
     };
   });
