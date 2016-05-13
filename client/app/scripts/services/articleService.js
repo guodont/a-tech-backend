@@ -13,7 +13,7 @@ angular.module('clientApp')
       $http({
         method: 'POST',
         url: apiUrl + '/article',
-        headers: {ToKenHeader: $cookieStore.get("authToken")},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           title: params.title,
           content: params.content,
@@ -39,7 +39,7 @@ angular.module('clientApp')
       $http({
         method: 'PUT',
         url: apiUrl + '/article/' + params.articleId,
-        headers: {ToKenHeader: $cookieStore.get("authToken")},
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           title: params.title,
           content: params.content,
@@ -65,7 +65,7 @@ angular.module('clientApp')
       $http({
         method: 'GET',
         url: apiUrl + '/articles',
-        headers: {ToKenHeader: $cookieStore.get("authToken")}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
@@ -83,7 +83,7 @@ angular.module('clientApp')
       $http({
         method: 'DELETE',
         url: apiUrl + '/article/' + params.id,
-        headers: {ToKenHeader: $cookieStore.get("authToken")}
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
           if (typeof (success) === 'function') {
