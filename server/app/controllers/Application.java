@@ -4,7 +4,9 @@
 ////////
 
 package controllers;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import controllers.secured.AdminSecured;
 import models.Admin;
 import models.BlogPost;
 import models.User;
@@ -14,15 +16,18 @@ import play.data.validation.Constraints;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Result;
+import play.mvc.Security;
 import utils.JsonResult;
 
 /**
  * @author guodont
- *
- * 为前台服务的主控制器,包括用户注册 登录 首页数据 等
+ *         <p>
+ *         为前台服务的主控制器,包括用户注册 登录 首页数据 等
  */
 public class Application extends BaseController {
 
+    public final static String AUTH_TOKEN_HEADER = "X-AUTH-TOKEN";
+    public static final String AUTH_TOKEN = "authToken";
 
     /**
      * 首页
@@ -66,11 +71,13 @@ public class Application extends BaseController {
             user.userType = UserType.PUBLIC;
             user.save();
 
-            //  设置登录会话信息
-            session().clear();
-            session("username", newUser.userName);
+            //  设置ToKen
+            String authToken = user.createToken();
+            ObjectNode authTokenJson = Json.newObject();
+            authTokenJson.put(AUTH_TOKEN, authToken);
+            response().setCookie(AUTH_TOKEN, authToken);
 
-            return created(new JsonResult("success", "User created successfully").toJsonResponse());
+            return status(201, authTokenJson);
         }
     }
 
@@ -80,6 +87,7 @@ public class Application extends BaseController {
      *
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result signUpTwoStep() {
 
         Form<SignUpStepTwo> signUpStepTwoForm = Form.form(SignUpStepTwo.class).bindFromRequest();
@@ -136,12 +144,13 @@ public class Application extends BaseController {
             admin.lastIp = request().remoteAddress();
             admin.save();
 
-            //  设置登录会话信息
-            session().clear();
-            session("username", newUser.name);
-            session("isAdmin", "true");
+            //  设置ToKen
+            String authToken = admin.createToken();
+            ObjectNode authTokenJson = Json.newObject();
+            authTokenJson.put(AUTH_TOKEN, authToken);
+            response().setCookie(AUTH_TOKEN, authToken);
 
-            return created(new JsonResult("success", "Admin created successfully").toJsonResponse());
+            return status(201, authTokenJson);
         }
     }
 
@@ -166,17 +175,11 @@ public class Application extends BaseController {
             admin.lastIp = request().remoteAddress();
             admin.save();
 
-            //  设置登录会话信息
-            session().clear();
-            session("username", loggingInUser.email);
-            session("isAdmin", "true");
-
-            ObjectNode wrapper = Json.newObject();
-            ObjectNode msg = Json.newObject();
-            msg.put("message", "Logged in successfully");
-            msg.put("user", admin.name);
-            wrapper.put("success", msg);
-            return ok(wrapper);
+            String authToken = admin.createToken();
+            ObjectNode authTokenJson = Json.newObject();
+            authTokenJson.put(AUTH_TOKEN, authToken);
+            response().setCookie(AUTH_TOKEN, authToken);
+            return ok(authTokenJson);
         }
     }
 
@@ -205,23 +208,31 @@ public class Application extends BaseController {
             user.setLastIp(request().remoteAddress());
             user.update();
 
-            //  设置登录会话信息
-            session().clear();
-            session("username", user.name);
-
-            //  判断是否是专家
-            if (user.userType.getValue().equals(UserType.EXPERT)) {
-                session("isExpert", "true");    //  是专家的话设置此session
-            }
-
-            ObjectNode wrapper = Json.newObject();
-            ObjectNode msg = Json.newObject();
-            msg.put("message", "Logged in successfully");
-            msg.put("user", user.name);
-            wrapper.put("success", msg);
-            return ok(wrapper);
+            String authToken = user.createToken();
+            ObjectNode authTokenJson = Json.newObject();
+            authTokenJson.put(AUTH_TOKEN, authToken);
+            response().setCookie(AUTH_TOKEN, authToken);
+            return ok(authTokenJson);
         }
 
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result getCurUser() {
+        return ok(Json.toJson(getUser()));
+    }
+
+    /**
+     * 获取当前登录管理员信息
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getCurAdmin() {
+        return ok(Json.toJson(getAdmin()));
     }
 
     /**
@@ -229,9 +240,33 @@ public class Application extends BaseController {
      *
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result logout() {
-        session().clear();
-        return ok();
+        response().discardCookie(AUTH_TOKEN);
+        getUser().deleteAuthToken();
+
+        ObjectNode wrapper = Json.newObject();
+        ObjectNode msg = Json.newObject();
+        msg.put("message", "Logout success");
+        wrapper.put("success", msg);
+        return ok(wrapper);
+    }
+
+    /**
+     * 退出管理员帐号
+     *
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result logoutForAdmin() {
+        response().discardCookie(AUTH_TOKEN);
+        getAdmin().deleteAuthToken();
+
+        ObjectNode wrapper = Json.newObject();
+        ObjectNode msg = Json.newObject();
+        msg.put("message", "Logout success");
+        wrapper.put("success", msg);
+        return ok(wrapper);
     }
 
     /**
@@ -239,14 +274,34 @@ public class Application extends BaseController {
      *
      * @return
      */
+    @Security.Authenticated(Secured.class)
     public static Result isAuthenticated() {
-        if (session().get("username") == null) {
+        if (getUser() == null) {
             return unauthorized();
         } else {
             ObjectNode wrapper = Json.newObject();
             ObjectNode msg = Json.newObject();
             msg.put("message", "User is logged in already");
-            msg.put("user", session().get("username"));
+            msg.put("user", getUser().name);
+            wrapper.put("success", msg);
+            return ok(wrapper);
+        }
+    }
+
+    /**
+     * 判断是否授权
+     *
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result isAuthenticatedForAdmin() {
+        if (getAdmin() == null) {
+            return unauthorized();
+        } else {
+            ObjectNode wrapper = Json.newObject();
+            ObjectNode msg = Json.newObject();
+            msg.put("message", "User is logged in already");
+            msg.put("user", getAdmin().name);
             wrapper.put("success", msg);
             return ok(wrapper);
         }
@@ -264,6 +319,12 @@ public class Application extends BaseController {
         return ok(Json.toJson(blogPost));
     }
 
+    /**
+     * for CORS
+     *
+     * @param all
+     * @return
+     */
     public static Result preflight(String all) {
         response().setHeader("Access-Control-Allow-Origin", "*");
         response().setHeader("Allow", "*");

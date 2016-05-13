@@ -18,6 +18,11 @@ GET         /assets/*file               controllers.Assets.at(path="/public", fi
 
 # banckend api
 
+#test
+
+POST    /login                          controllers.SecurityController.login
+POST    /logout                         controllers.SecurityController.logout
+
 # authentication
 
 # admin register
@@ -25,9 +30,11 @@ POST        /api/v1/admin/signup                 controllers.Application.signUpA
 # admin login
 POST        /api/v1/admin/login                  controllers.Application.loginForAdmin
 # admin logout
-GET         /api/v1/admin/logout                 controllers.Application.logout
+GET         /api/v1/admin/logout                 controllers.Application.logoutForAdmin
 # islogin
-GET         /api/isauthenticated                 controllers.Application.isAuthenticated
+GET         /api/v1/admin/isauthenticated        controllers.Application.isAuthenticatedForAdmin
+# curAdmin
+GET          /api/v1/curadmin                    controllers.Application.getCurAdmin
 
 # category
 
@@ -85,6 +92,8 @@ POST         /api/v1/login              controllers.Application.login
 GET          /api/v1/logout             controllers.Application.logout
 # islogin
 GET          /api/v1/isauthenticated    controllers.Application.isAuthenticated
+# curinfo
+GET          /api/v1/curuser            controllers.Application.getCurUser
 
 # video
 

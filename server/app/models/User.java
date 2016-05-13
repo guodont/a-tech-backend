@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.*;
 
 import models.enums.UserType;
@@ -89,6 +90,46 @@ public class User extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     public List<BlogPost> posts;
+
+    private String authToken;
+
+    public String createToken() {
+        authToken = UUID.randomUUID().toString();
+        save();
+        return authToken;
+    }
+
+    public void deleteAuthToken() {
+        authToken = null;
+        save();
+    }
+
+    public static User findByAuthToken(String authToken) {
+        if (authToken == null) {
+            return null;
+        }
+        try  {
+            return find.where().eq("authToken", authToken).findUnique();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static User findExpertByAuthToken(String authToken) {
+        if (authToken == null) {
+            return null;
+        }
+        try  {
+            return find.where()
+                    .eq("authToken", authToken)
+                    .eq("userType", UserType.EXPERT.getName())
+                    .findUnique();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 
     public void setRealName(String realName) {
         this.realName = realName;

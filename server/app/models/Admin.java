@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 /**
  * Created by llz on 2016/4/12.
@@ -104,6 +105,33 @@ public class Admin extends BaseModel {
         }
         catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    private String authToken;
+
+    public String createToken() {
+        authToken = UUID.randomUUID().toString();
+        save();
+        return authToken;
+    }
+
+    public void deleteAuthToken() {
+        authToken = null;
+        save();
+    }
+
+    public static Admin findByAuthToken(String authToken) {
+        if (authToken == null) {
+            return null;
+        }
+
+        try  {
+            return find.where().eq("authToken", authToken).findUnique();
+        }
+        catch (Exception e) {
+            return null;
         }
     }
 

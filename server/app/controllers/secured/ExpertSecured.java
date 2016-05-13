@@ -5,6 +5,9 @@
 
 package controllers.secured;
 
+import controllers.SecurityController;
+import models.Admin;
+import models.User;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;
@@ -18,12 +21,16 @@ public class ExpertSecured extends Security.Authenticator {
 
   @Override
   public String getUsername(Context ctx) {
-    // 判断是否是专家
-    if (ctx.session().get("isExpert").equals("true")) {
-      return ctx.session().get("username");
-    } else {
-      return null;
+    String[] authTokenHeaderValues = ctx.request().headers().get(SecurityController.AUTH_TOKEN_HEADER);
+    if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
+      User user = models.User.findExpertByAuthToken(authTokenHeaderValues[0]);
+      if (user != null) {
+        ctx.args.put("user", user);
+        return user.name;
+      }
     }
+
+    return null;
   }
 
   @Override
