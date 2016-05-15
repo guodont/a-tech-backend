@@ -184,6 +184,13 @@ public class User extends BaseModel {
                 .findUnique();
     }
 
+    public static User findById(Long userId) {
+        return find
+                .where()
+                .eq("id", userId)
+                .findUnique();
+    }
+
     public static byte[] getSha512(String value) {
         try {
             return MessageDigest.getInstance("SHA-512").digest(value.getBytes("UTF-8"));

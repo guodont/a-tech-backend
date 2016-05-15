@@ -6,6 +6,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.jar.Pack200;
 
 /**
  * Created by j on 2016/4/13.
@@ -44,7 +45,7 @@ public class Question extends BaseModel {
      * 指定专家
      */
     @ManyToOne
-    public Expert expert;
+    public User expert;
     /**
      * 提问用户
      */
@@ -67,38 +68,85 @@ public class Question extends BaseModel {
 
     /**
      * 查找用户的所有问题
+     *
      * @param user
      * @return
      */
-    public static List<Question> findQuestionsByUser(final User user) {
+    public static List<Question> findQuestionsByUser(final User user, int page, int pageSize) {
         return find
                 .where()
                 .eq("user", user)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
     /**
      * 查找指派给专家的问题
+     *
      * @param expert
      * @return
      */
-    public static List<Question> findQuestionsByExpertAndStatus(final Expert expert, String questionResolveState) {
-        return find
-                .where()
-                .eq("expert", expert)
-                .eq("questionResolveState", questionResolveState)
-                .findList();
+    public static List<Question> findQuestionsByExpertAndStatus(final User expert, String questionResolveState, int page, int pageSize) {
+
+        if(questionResolveState!=null) {
+            return find
+                    .where()
+                    .eq("user", expert)
+                    .eq("questionResolveState", questionResolveState)
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .eq("user", expert)
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
+
     }
 
     /**
      * 查找分类下的所有问题
+     *
      * @param category
      * @return
      */
-    public static List<Question> findQuestionsByCategory(final Category category) {
+    public static List<Question> findQuestionsByCategory(final Category category, int page, int pageSize) {
         return find
                 .where()
                 .eq("category", category)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
+    }
+
+    /**
+     * 获取所有问题
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public static List<Question> findQuestions(int page, int pageSize) {
+        return find
+                .where()
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    /**
+     * 通过Id查找问题
+     *
+     * @param id
+     * @return
+     */
+    public static Question findQuestionById(final Long id) {
+        return find
+                .where()
+                .eq("id", id)
+                .findUnique();
     }
 }
