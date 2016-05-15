@@ -143,24 +143,4 @@ public class Article extends BaseModel {
                 .eq("id", id)
                 .findUnique();
     }
-
-//    public static final EbeanServer ebeanServer = Ebean.getServer("default");
-//
-//    public static List<ArticleController> findArticlesByCategory(Category category , String articleType) {
-//
-//        PagingList<ArticleController> pagingList
-//                = ebeanServer.find(ArticleController.class)
-//                .where().eq("articleType", articleType)
-//                .where().eq("category", category)
-//                .order().asc("id")
-//                .setFirstRow(0)
-//                .findPagingList(20);
-//
-//        pagingList.getPage(1).hasPrev();
-//
-//        List<ArticleController> orders = pagingList.getAsList();
-//
-//        return orders;
-//    }
-
 }

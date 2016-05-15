@@ -107,3 +107,25 @@ GET         /api/v1/videos                  controllers.VideoController.getVideo
 GET         /api/v1/video/:id               controllers.VideoController.updateVideo(id: Long)
 # delete video
 DELETE      /api/v1/video/:id               controllers.VideoController.deleteVideo(id: Long)
+
+# question
+GET         /api/v1/questions                       controllers.QuestionController.getQuestions
+# post question
+POST        /api/v1/question                        controllers.QuestionController.addQuestion
+# view question
+GET         /api/v1/question/:id                    controllers.QuestionController.getQuesion(id: Long)
+# update question
+PUT         /api/v1/question/:id                    controllers.QuestionController.updateQuestion(id: Long)
+# delete question
+DELETE      /api/v1/question/:id                    controllers.QuestionController.deleteQuestion(id: Long)
+# get expert's question
+GET         /api/v1/expert/:expertId/questions      controllers.QuestionController.getQuestionsByExpert(expertId: Long)
+# get User's question
+GET         /api/v1/user/questions                  controllers.QuestionController.getUserQuestions
+# add a answer
+POST        /api/v1/question/answer                 controllers.QuestionController.addAnswer
+# fav question
+POST        /api/v1/question/:id/fav                controllers.QuestionController.favQuestion(id: Long)
+# unFav question
+PUT         /api/v1/question/:id/unFav              controllers.QuestionController.unFavQuestion(id: Long)
+

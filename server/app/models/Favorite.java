@@ -47,4 +47,12 @@ public class Favorite extends BaseModel {
                 .findList();
     }
 
+    public static Favorite findFavoriteByBeFavIdAndUSer(final User user,long beFavid) {
+        return find
+                .where()
+                .eq("beFavId", beFavid)
+                .eq("user", user)
+                .findUnique();
+    }
+
 }
