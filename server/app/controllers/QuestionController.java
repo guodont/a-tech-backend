@@ -55,6 +55,32 @@ public class QuestionController extends BaseController {
     }
 
     /**
+     * 审核问题-通过审核
+     * @param questionId
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result auditQuestionWithAudited(long questionId) {
+        Question question = Question.findQuestionById(questionId);
+        question.questionAuditState = QuestionAuditState.AUDITED;   // 已通过审核
+        question.save();
+        return ok(new JsonResult("success", "handl success").toJsonResponse());
+    }
+
+    /**
+     * 审核问题-审核失败
+     * @param questionId
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result auditQuestionWithAuditFailed(long questionId) {
+        Question question = Question.findQuestionById(questionId);
+        question.questionAuditState = QuestionAuditState.FAILED;   // 审核失败
+        question.save();
+        return ok(new JsonResult("success", "handl success").toJsonResponse());
+    }
+
+    /**
      * 获取某用户发布的问题
      *
      * @return
@@ -138,6 +164,11 @@ public class QuestionController extends BaseController {
         }
     }
 
+    /**
+     * 删除问题
+     * @param id
+     * @return
+     */
     @Security.Authenticated(AdminSecured.class)
     public static Result deleteQuestion(long id) {
         Question question = Question.findQuestionById(id);

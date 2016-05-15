@@ -116,6 +116,9 @@ POST        /api/v1/question                        controllers.QuestionControll
 GET         /api/v1/question/:id                    controllers.QuestionController.getQuesion(id: Long)
 # update question
 PUT         /api/v1/question/:id                    controllers.QuestionController.updateQuestion(id: Long)
+# auditQuestionWithAudited
+PUT         /api/v1/question/:id/auditpass          controllers.QuestionController.auditQuestionWithAudited(id: Long)
+PUT         /api/v1/question/:id/auditfail          controllers.QuestionController.auditQuestionWithAuditFailed(id: Long)
 # delete question
 DELETE      /api/v1/question/:id                    controllers.QuestionController.deleteQuestion(id: Long)
 # get expert's question

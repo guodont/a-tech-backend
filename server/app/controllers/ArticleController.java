@@ -98,7 +98,10 @@ public class ArticleController extends BaseController {
     }
 
     public static Result getArticle(long id) {
-        return play.mvc.Results.TODO;
+        Article article = Article.findArticleById(id);
+        article.clickCount += 1;
+        article.save();
+        return ok(Json.toJson(article));
     }
 
     /**
@@ -112,23 +115,65 @@ public class ArticleController extends BaseController {
         return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName(), page, pageSize)));
     }
 
+    /**
+     * 获取某专家的文章数据
+     * @param expertId
+     * @return
+     */
     public static Result getArticlesByExpert(long expertId) {
-        return play.mvc.Results.TODO;
+        initPageing();
+        Article article = new Article();
+        return ok(Json.toJson(article.findArticlesByUser(User.findById(expertId), page, pageSize)));
     }
 
+    /**
+     * 通过分类获取文章数据
+     * @param cateId
+     * @return
+     */
     public static Result getArticlesByCategory(long cateId) {
         initPageing();
         Article article = new Article();
         return ok(Json.toJson(article.findArticlesByCategory(cateId, page, pageSize)));
     }
 
+    /**
+     * 删除一篇文章
+     * @param id
+     * @return
+     */
     @Security.Authenticated(AdminSecured.class)
     public static Result deleteArticle(long id) {
-        return play.mvc.Results.TODO;
+        Article article = Article.findArticleById(id);
+        article.delete();
+        return ok(new JsonResult("success","article deleted").toJsonResponse());
     }
 
+    /**
+     * 更新一篇文章
+     * @param id
+     * @return
+     */
     public static Result updateArticle(long id) {
-        return play.mvc.Results.TODO;
+        Form<ArticleForm> postForm = Form.form(ArticleForm.class).bindFromRequest();
+
+        if (postForm.hasErrors()) {
+            return badRequest(postForm.errorsAsJson());
+        } else {
+            //  保存文章
+            Category category = Category.find.byId(postForm.get().categoryId);
+
+            Article article = Article.findArticleById(id);
+            article.title = postForm.get().title;
+            article.category = category;
+            article.tag = postForm.get().tag;
+            article.sort = postForm.get().sort;
+            article.image = postForm.get().image;
+            article.content = postForm.get().content;
+
+            article.save();
+        }
+        return ok(new JsonResult("success", "Article updated").toJsonResponse());
     }
 
     /**
