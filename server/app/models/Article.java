@@ -124,10 +124,12 @@ public class Article extends BaseModel {
      * @param user
      * @return
      */
-    public static List<Article> findArticlesByUser(final User user) {
+    public static List<Article> findArticlesByUser(final User user, int page, int pageSize) {
         return find
                 .where()
                 .eq("user", user)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
