@@ -133,6 +133,16 @@ public class QuestionController extends BaseController {
     }
 
     /**
+     * 获取问题的回答
+     * @param id
+     * @return
+     */
+    public static Result getAnswer(long id) {
+        Question question = Question.findQuestionById(id);
+        return ok(Json.toJson(Answer.findAllAnswersByQuestion(question)));
+    }
+
+    /**
      * 获取所有问题
      *
      * @return

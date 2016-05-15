@@ -26,24 +26,24 @@ POST    /logout                         controllers.SecurityController.logout
 # authentication
 
 # admin register
-POST        /api/v1/admin/signup                 controllers.Application.signUpAdmin
+POST        /api/v1/admin/signup                    controllers.Application.signUpAdmin
 # admin login
-POST        /api/v1/admin/login                  controllers.Application.loginForAdmin
+POST        /api/v1/admin/login                     controllers.Application.loginForAdmin
 # admin logout
-GET         /api/v1/admin/logout                 controllers.Application.logoutForAdmin
+GET         /api/v1/admin/logout                    controllers.Application.logoutForAdmin
 # islogin
-GET         /api/v1/admin/isauthenticated        controllers.Application.isAuthenticatedForAdmin
+GET         /api/v1/admin/isauthenticated           controllers.Application.isAuthenticatedForAdmin
 # curAdmin
-GET          /api/v1/curadmin                    controllers.Application.getCurAdmin
+GET          /api/v1/curadmin                       controllers.Application.getCurAdmin
 
 # category
 
 # add category
-POST        /api/v1/category                     controllers.CategoryController.addCategory()
+POST        /api/v1/category                        controllers.CategoryController.addCategory()
 # get category
-GET         /api/v1/categories                   controllers.CategoryController.getCategories()
+GET         /api/v1/categories                      controllers.CategoryController.getCategories()
 # delete category
-DELETE      /api/v1/category/:id               controllers.CategoryController.deleteCategory(id: Long)
+DELETE      /api/v1/category/:id                    controllers.CategoryController.deleteCategory(id: Long)
 
 # article
 
@@ -61,6 +61,8 @@ PUT         /api/v1/article/:id                     controllers.ArticleControlle
 DELETE      /api/v1/article/:id                     controllers.ArticleController.deleteArticle(id: Long)
 # get expert's articles
 GET         /api/v1/expert/:expertId/articles       controllers.ArticleController.getArticlesByExpert(expertId: Long)
+# add article for expert
+POST        /api/v1/expert/article                  controllers.ArticleController.addArticleForExpert()
 
 
 # user manage
@@ -114,6 +116,8 @@ GET         /api/v1/questions                       controllers.QuestionControll
 POST        /api/v1/question                        controllers.QuestionController.addQuestion
 # view question
 GET         /api/v1/question/:id                    controllers.QuestionController.getQuesion(id: Long)
+# answer
+GET         /api/v1/question/:id/answer             controllers.QuestionController.getAnswer(id: Long)
 # update question
 PUT         /api/v1/question/:id                    controllers.QuestionController.updateQuestion(id: Long)
 # auditQuestionWithAudited

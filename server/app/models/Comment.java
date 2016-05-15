@@ -36,10 +36,12 @@ public class Comment extends BaseModel {
      * @param article
      * @return
      */
-    public static List<Comment> findAllCommentsByArticle(final Article article) {
+    public static List<Comment> findAllCommentsByArticle(final Article article, int page, int pageSize) {
         return find
                 .where()
                 .eq("article", article)
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
