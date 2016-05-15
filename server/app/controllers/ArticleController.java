@@ -6,6 +6,7 @@
 package controllers;
 
 import controllers.secured.AdminSecured;
+import controllers.secured.ExpertSecured;
 import models.*;
 import models.enums.ArticlePushState;
 import models.enums.ArticleState;
@@ -59,6 +60,41 @@ public class ArticleController extends BaseController {
     }
 
     /**
+     * 专家发布文章
+     *
+     * @return
+     */
+    @Security.Authenticated(ExpertSecured.class)
+    public static Result addArticleForExpert() {
+        Form<ArticleForm> postForm = Form.form(ArticleForm.class).bindFromRequest();
+
+        if (postForm.hasErrors()) {
+            return badRequest(postForm.errorsAsJson());
+        } else {
+            //  保存文章
+            Category category = Category.find.byId(postForm.get().categoryId);
+
+            Article article = new Article();
+            article.clickCount = 0L;
+            article.commentCount = 0L;
+            article.title = postForm.get().title;
+            article.category = category;
+            article.tag = postForm.get().tag;
+            article.sort = postForm.get().sort;
+            article.image = postForm.get().image;
+            article.content = postForm.get().content;
+            article.user = getUser();
+            article.articleState = ArticleState.WAIT_AUDITED;   // 管理员发布的文章状态直接为已审核
+            article.articleType = ArticleType.WEB;              // 默认为网站文章
+            article.articlePushState = ArticlePushState.NO_PUSH;// 默认不推送到app
+
+            article.save();
+        }
+        return ok(new JsonResult("success", "Article added successfully").toJsonResponse());
+
+    }
+
+    /**
      * 获取管理员发布的文章
      *
      * @return
@@ -97,11 +133,28 @@ public class ArticleController extends BaseController {
         }
     }
 
+    /**
+     * 获取一篇文章
+     *
+     * @param id
+     * @return
+     */
     public static Result getArticle(long id) {
         Article article = Article.findArticleById(id);
         article.clickCount += 1;
         article.save();
         return ok(Json.toJson(article));
+    }
+
+    /**
+     * 获取文章的评论
+     * @param articleId
+     * @return
+     */
+    public static Result getComments(long articleId) {
+        Article article = Article.findArticleById(articleId);
+        initPageing();
+        return ok(Json.toJson(Comment.findAllCommentsByArticle(article, page, pageSize)));
     }
 
     /**
@@ -117,6 +170,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 获取某专家的文章数据
+     *
      * @param expertId
      * @return
      */
@@ -128,6 +182,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 通过分类获取文章数据
+     *
      * @param cateId
      * @return
      */
@@ -139,6 +194,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 删除一篇文章
+     *
      * @param id
      * @return
      */
@@ -146,11 +202,12 @@ public class ArticleController extends BaseController {
     public static Result deleteArticle(long id) {
         Article article = Article.findArticleById(id);
         article.delete();
-        return ok(new JsonResult("success","article deleted").toJsonResponse());
+        return ok(new JsonResult("success", "article deleted").toJsonResponse());
     }
 
     /**
      * 更新一篇文章
+     *
      * @param id
      * @return
      */
