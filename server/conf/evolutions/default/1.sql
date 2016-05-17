@@ -291,7 +291,7 @@ alter table post_comment add constraint fk_post_comment_user_14 foreign key (use
 create index ix_post_comment_user_14 on post_comment (user_id);
 alter table question add constraint fk_question_category_15 foreign key (category_id) references category (id) on delete restrict on update restrict;
 create index ix_question_category_15 on question (category_id);
-alter table question add constraint fk_question_expert_16 foreign key (expert_id) references expert (id) on delete restrict on update restrict;
+alter table question add constraint fk_question_expert_16 foreign key (expert_id) references user (id) on delete restrict on update restrict;
 create index ix_question_expert_16 on question (expert_id);
 alter table question add constraint fk_question_user_17 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_question_user_17 on question (user_id);
