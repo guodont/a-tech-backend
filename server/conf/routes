@@ -132,7 +132,7 @@ GET         /api/v1/user/questions                  controllers.QuestionControll
 # add a answer
 POST        /api/v1/question/answer                 controllers.QuestionController.addAnswer
 # fav question
-POST        /api/v1/question/:id/fav                controllers.QuestionController.favQuestion(id: Long)
+PUT         /api/v1/question/:id/fav                controllers.QuestionController.favQuestion(id: Long)
 # unFav question
 PUT         /api/v1/question/:id/unFav              controllers.QuestionController.unFavQuestion(id: Long)
 

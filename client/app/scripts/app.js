@@ -58,6 +58,10 @@ angular
         templateUrl: 'views/article/add.html',
         controller: 'ArticleCtrl'
       })
+      .when('/article/:id/update', {
+        templateUrl: 'views/article/update.html',
+        controller: 'ArticleCtrl'
+      })
       .when('/article/list', {
         templateUrl: 'views/article/list.html',
         controller: 'ArticleCtrl'
@@ -78,6 +82,10 @@ angular
         templateUrl: 'views/video/list.html',
         controller: 'VideoCtrl'
       })
+      .when('/question/list', {
+        templateUrl: 'views/question/list.html',
+        controller: 'QuestionCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -92,11 +100,12 @@ function runBlock($http) {
     'Content-Type': 'application/json;charset=utf-8',
     'Accept': 'application/json'
   };
-  // $http.defaults.headers.post = {
-  //   "Access-Control-Allow-Origin": "*",
-  //   // "Access-Control-Allow-Headers": "X-Requested-With,Content-Type,Accept",
-  //   // "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
-  //   'Content-Type': 'application/json;charset=utf-8',
-  //   'Accept': 'application/json'
-  // };
+  $http.defaults.headers.post = {
+    'Content-Type': 'application/json;charset=utf-8',
+    'Accept': 'application/json'
+  };
+  $http.defaults.headers.put = {
+    'Content-Type': 'application/json;charset=utf-8',
+    'Accept': 'application/json'
+  };
 }
