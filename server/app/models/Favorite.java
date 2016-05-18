@@ -35,6 +35,7 @@ public class Favorite extends BaseModel {
 
     /**
      * 根据用户和类型查找收藏
+     *
      * @param user
      * @param favoriteType
      * @return
@@ -47,7 +48,26 @@ public class Favorite extends BaseModel {
                 .findList();
     }
 
-    public static Favorite findFavoriteByBeFavIdAndUSer(final User user,long beFavid) {
+    public static List<Favorite> findAllFavoritesTradeByUser(final User user) {
+        return find
+                .where()
+                .eq("user", user)
+                .eq("favoriteType", FavoriteType.TRADE)
+                .eq("beFavId", "trade.id")
+                .join("trade")
+                .findList();
+    }
+
+    public static List<Favorite> findAllFavoritesTrade() {
+        return find
+                .where()
+                .eq("favoriteType", FavoriteType.TRADE)
+                .eq("trade.id", "beFavId")
+//                .join("trade")
+                .findList();
+    }
+
+    public static Favorite findFavoriteByBeFavIdAndUSer(final User user, long beFavid) {
         return find
                 .where()
                 .eq("beFavId", beFavid)

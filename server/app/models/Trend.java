@@ -28,7 +28,7 @@ public class Trend extends BaseModel {
     /**
      * 配图
      */
-    @OneToMany(cascade = CascadeType.ALL)
-    public List<TrendImage> images;
+    @Constraints.MaxLength(255)
+    public String images;
 
 }

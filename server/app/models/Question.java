@@ -62,6 +62,14 @@ public class Question extends BaseModel {
     @Enumerated(EnumType.STRING)
     public QuestionResolveState questionResolveState;
 
+    @Constraints.MaxLength(255)
+    public String images;
+
+    /**
+     * 问题图片
+     */
+//    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+//    public List<QuestionImage> questionImages;
 
     public static final Finder<Long, Question> find = new Finder<Long, Question>(
             Long.class, Question.class);

@@ -12,6 +12,8 @@ GET         /app/post/:id               controllers.Application.getPost(id: Long
 GET         /app/userposts              controllers.Post.getUserPosts
 POST        /app/comment                controllers.Post.addComment
 
+POST        /api/v1/uploadImage         controllers.Application.uploadImage
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file               controllers.Assets.at(path="/public", file)
 
@@ -59,10 +61,12 @@ GET         /api/v1/article/:id                     controllers.ArticleControlle
 PUT         /api/v1/article/:id                     controllers.ArticleController.updateArticle(id: Long)
 # delete article
 DELETE      /api/v1/article/:id                     controllers.ArticleController.deleteArticle(id: Long)
-# get expert's articles
-GET         /api/v1/expert/:expertId/articles       controllers.ArticleController.getArticlesByExpert(expertId: Long)
-# add article for expert
-POST        /api/v1/expert/article                  controllers.ArticleController.addArticleForExpert()
+# get article comments
+GET         /api/v1/article/:id/comments            controllers.ArticleController.getComments(id: Long)
+# post comment
+POST        /api/v1/article/:id/comments            controllers.ArticleController.addComment(id: Long)
+# get article recommend
+GET         /api/v1/article/:id/recommends          controllers.ArticleController.getRecommends(id: Long)
 
 
 # user manage
@@ -122,11 +126,10 @@ GET         /api/v1/question/:id/answer             controllers.QuestionControll
 PUT         /api/v1/question/:id                    controllers.QuestionController.updateQuestion(id: Long)
 # auditQuestionWithAudited
 PUT         /api/v1/question/:id/auditpass          controllers.QuestionController.auditQuestionWithAudited(id: Long)
+
 PUT         /api/v1/question/:id/auditfail          controllers.QuestionController.auditQuestionWithAuditFailed(id: Long)
 # delete question
 DELETE      /api/v1/question/:id                    controllers.QuestionController.deleteQuestion(id: Long)
-# get expert's question
-GET         /api/v1/expert/:expertId/questions      controllers.QuestionController.getQuestionsByExpert(expertId: Long)
 # get User's question
 GET         /api/v1/user/questions                  controllers.QuestionController.getUserQuestions
 # add a answer
@@ -136,3 +139,45 @@ PUT         /api/v1/question/:id/fav                controllers.QuestionControll
 # unFav question
 PUT         /api/v1/question/:id/unFav              controllers.QuestionController.unFavQuestion(id: Long)
 
+# trade
+GET         /api/v1/trades                          controllers.TradeController.getTrades
+# post trade
+POST        /api/v1/trade                           controllers.TradeController.addTrade
+# view trade
+GET         /api/v1/trade/:id                       controllers.TradeController.getTrade(id: Long)
+# update trade
+PUT         /api/v1/trade/:id                       controllers.TradeController.updateTrade(id: Long)
+# auditTradeWithAudited
+PUT         /api/v1/trade/:id/auditpass             controllers.TradeController.auditTradeWithAudited(id: Long)
+
+PUT         /api/v1/trade/:id/auditfail             controllers.TradeController.auditTradeWithAuditFailed(id: Long)
+# delete trade
+DELETE      /api/v1/trade/:id                       controllers.TradeController.deleteTrade(id: Long)
+# get User's trades
+GET         /api/v1/user/trades                     controllers.TradeController.getUserTrades
+# fav trade
+PUT         /api/v1/trade/:id/fav                   controllers.TradeController.favTrade(id: Long)
+# unFav trade
+PUT         /api/v1/trade/:id/unFav                 controllers.TradeController.unFavTrade(id: Long)
+# get fav trades
+GET         /api/v1/user/favorite/trades            controllers.TradeController.getUserFavoriteTrades
+
+
+# expert
+GET         /api/v1/expert/:id/album                controllers.ExpertController.getAlbumes(id: Long)
+# upload image
+POST        /api/v1/expert/album                    controllers.ExpertController.uploadImage
+# get trends
+GET         /api/v1/expert/:id/trend                controllers.ExpertController.getTrends(id: Long)
+# post trend
+POST        /api/v1/expert/trend                    controllers.ExpertController.addTrend
+# get expert's question
+GET         /api/v1/expert/:id/questions            controllers.QuestionController.getQuestionsByExpert(id: Long)
+# get expert's articles
+GET         /api/v1/expert/:id/articles             controllers.ArticleController.getArticlesByExpert(id: Long)
+# add article for expert
+POST        /api/v1/expert/article                  controllers.ArticleController.addArticleForExpert
+# get expert infomation
+GET         /api/v1/expert/:id                      controllers.ExpertController.getExpertInformation(id: Long)
+# expert profile
+PUT         /api/v1/expert                          controllers.ExpertController.updateExpertProfile

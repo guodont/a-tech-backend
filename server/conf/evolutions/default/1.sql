@@ -145,6 +145,38 @@ create table favorite (
   constraint pk_favorite primary key (id))
 ;
 
+create table favorite_question (
+  id                        bigint auto_increment not null,
+  question_id               bigint,
+  user_id                   bigint,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint pk_favorite_question primary key (id))
+;
+
+create table favorite_trade (
+  id                        bigint auto_increment not null,
+  trade_id                  bigint,
+  user_id                   bigint,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint pk_favorite_trade primary key (id))
+;
+
+create table image (
+  id                        bigint auto_increment not null,
+  name                      varchar(255) not null,
+  old_name                  varchar(255) not null,
+  src                       varchar(255) not null,
+  user_id                   bigint,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint pk_image primary key (id))
+;
+
 create table link (
   id                        bigint auto_increment not null,
   name                      varchar(45) not null,
@@ -175,12 +207,24 @@ create table question (
   user_id                   bigint,
   question_audit_state      varchar(12),
   question_resolve_state    varchar(12),
+  images                    varchar(255),
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
   constraint ck_question_question_audit_state check (question_audit_state in ('WAIT_AUDITED','FAILED','AUDITED')),
   constraint ck_question_question_resolve_state check (question_resolve_state in ('RESOLVED','WAIT_RESOLVE')),
   constraint pk_question primary key (id))
+;
+
+create table question_image (
+  id                        bigint auto_increment not null,
+  name                      varchar(255) not null,
+  src                       varchar(255) not null,
+  question_id               bigint,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint pk_question_image primary key (id))
 ;
 
 create table trade (
@@ -194,12 +238,24 @@ create table trade (
   trade_type                varchar(6),
   category_id               bigint,
   trade_state               varchar(12),
+  images                    varchar(255),
   version                   bigint not null,
   when_created              datetime not null,
   when_updated              datetime not null,
   constraint ck_trade_trade_type check (trade_type in ('SUPPLY','DEMAND')),
   constraint ck_trade_trade_state check (trade_state in ('WAIT_AUDITED','FAILED','AUDITED')),
   constraint pk_trade primary key (id))
+;
+
+create table trade_image (
+  id                        bigint auto_increment not null,
+  name                      varchar(255) not null,
+  src                       varchar(255) not null,
+  trade_id                  bigint,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint pk_trade_image primary key (id))
 ;
 
 create table trend (
@@ -285,28 +341,42 @@ alter table expert add constraint fk_expert_category_11 foreign key (category_id
 create index ix_expert_category_11 on expert (category_id);
 alter table favorite add constraint fk_favorite_user_12 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_favorite_user_12 on favorite (user_id);
-alter table post_comment add constraint fk_post_comment_blogPost_13 foreign key (blog_post_id) references blog_post (id) on delete restrict on update restrict;
-create index ix_post_comment_blogPost_13 on post_comment (blog_post_id);
-alter table post_comment add constraint fk_post_comment_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_post_comment_user_14 on post_comment (user_id);
-alter table question add constraint fk_question_category_15 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_question_category_15 on question (category_id);
-alter table question add constraint fk_question_expert_16 foreign key (expert_id) references user (id) on delete restrict on update restrict;
-create index ix_question_expert_16 on question (expert_id);
-alter table question add constraint fk_question_user_17 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_question_user_17 on question (user_id);
-alter table trade add constraint fk_trade_user_18 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_trade_user_18 on trade (user_id);
-alter table trade add constraint fk_trade_category_19 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_trade_category_19 on trade (category_id);
-alter table trend add constraint fk_trend_user_20 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_trend_user_20 on trend (user_id);
-alter table trend_image add constraint fk_trend_image_trend_21 foreign key (trend_id) references trend (id) on delete restrict on update restrict;
-create index ix_trend_image_trend_21 on trend_image (trend_id);
-alter table video add constraint fk_video_admin_22 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
-create index ix_video_admin_22 on video (admin_id);
-alter table video add constraint fk_video_category_23 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_video_category_23 on video (category_id);
+alter table favorite_question add constraint fk_favorite_question_question_13 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_favorite_question_question_13 on favorite_question (question_id);
+alter table favorite_question add constraint fk_favorite_question_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_favorite_question_user_14 on favorite_question (user_id);
+alter table favorite_trade add constraint fk_favorite_trade_trade_15 foreign key (trade_id) references trade (id) on delete restrict on update restrict;
+create index ix_favorite_trade_trade_15 on favorite_trade (trade_id);
+alter table favorite_trade add constraint fk_favorite_trade_user_16 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_favorite_trade_user_16 on favorite_trade (user_id);
+alter table image add constraint fk_image_user_17 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_image_user_17 on image (user_id);
+alter table post_comment add constraint fk_post_comment_blogPost_18 foreign key (blog_post_id) references blog_post (id) on delete restrict on update restrict;
+create index ix_post_comment_blogPost_18 on post_comment (blog_post_id);
+alter table post_comment add constraint fk_post_comment_user_19 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_post_comment_user_19 on post_comment (user_id);
+alter table question add constraint fk_question_category_20 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_question_category_20 on question (category_id);
+alter table question add constraint fk_question_expert_21 foreign key (expert_id) references user (id) on delete restrict on update restrict;
+create index ix_question_expert_21 on question (expert_id);
+alter table question add constraint fk_question_user_22 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_question_user_22 on question (user_id);
+alter table question_image add constraint fk_question_image_question_23 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_question_image_question_23 on question_image (question_id);
+alter table trade add constraint fk_trade_user_24 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_trade_user_24 on trade (user_id);
+alter table trade add constraint fk_trade_category_25 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_trade_category_25 on trade (category_id);
+alter table trade_image add constraint fk_trade_image_trade_26 foreign key (trade_id) references trade (id) on delete restrict on update restrict;
+create index ix_trade_image_trade_26 on trade_image (trade_id);
+alter table trend add constraint fk_trend_user_27 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_trend_user_27 on trend (user_id);
+alter table trend_image add constraint fk_trend_image_trend_28 foreign key (trend_id) references trend (id) on delete restrict on update restrict;
+create index ix_trend_image_trend_28 on trend_image (trend_id);
+alter table video add constraint fk_video_admin_29 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
+create index ix_video_admin_29 on video (admin_id);
+alter table video add constraint fk_video_category_30 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_video_category_30 on video (category_id);
 
 
 
@@ -334,13 +404,23 @@ drop table expert;
 
 drop table favorite;
 
+drop table favorite_question;
+
+drop table favorite_trade;
+
+drop table image;
+
 drop table link;
 
 drop table post_comment;
 
 drop table question;
 
+drop table question_image;
+
 drop table trade;
+
+drop table trade_image;
 
 drop table trend;
 
