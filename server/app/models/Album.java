@@ -15,7 +15,7 @@ import java.util.List;
 public class Album extends BaseModel {
 
     /**
-     * 相册名
+     * 照片名
      */
     @Column(length = 45, nullable = false)
     @Constraints.MaxLength(45)

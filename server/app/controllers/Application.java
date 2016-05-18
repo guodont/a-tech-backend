@@ -7,17 +7,20 @@ package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.secured.AdminSecured;
-import models.Admin;
-import models.BlogPost;
-import models.User;
+import models.*;
 import models.enums.UserType;
+import play.Play;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
 import play.mvc.BodyParser;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
+
+import java.io.File;
+import java.util.UUID;
 
 /**
  * @author guodont
@@ -219,6 +222,7 @@ public class Application extends BaseController {
 
     /**
      * 获取当前登录用户信息
+     *
      * @return
      */
     @Security.Authenticated(Secured.class)
@@ -228,6 +232,7 @@ public class Application extends BaseController {
 
     /**
      * 获取当前登录管理员信息
+     *
      * @return
      */
     @Security.Authenticated(AdminSecured.class)
@@ -331,6 +336,45 @@ public class Application extends BaseController {
         response().setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
         response().setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Referer, User-Agent");
         return ok();
+    }
+
+    /**
+     * 上传图片
+     *
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result uploadImage() {
+
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart image = body.getFile("image");
+
+        if (image != null) {
+
+            String fileName = image.getFilename();
+            String ext = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+            String accessName = UUID.randomUUID().toString() + ext;
+
+            // 判断文件类型
+            if ( !ext.equals(".gif") && !ext.equals(".jpg") && !ext.equals(".jpeg") && !ext.equals(".bmp") && !ext.equals(".png")) {
+                return badRequest(new JsonResult("error", "格式不支持").toJsonResponse());
+            } else {
+                File file = image.getFile();
+                file.renameTo(new File("public/images", accessName));
+
+                // 保存图片信息到数据库
+                Image imageData = new Image();
+                imageData.name = accessName;
+                imageData.oldName = fileName;
+                imageData.src = accessName;
+                imageData.save();
+
+                return ok(new JsonResult("success", request().host() + "/assets/images/" + accessName).toJsonResponse());
+            }
+
+        } else {
+            return badRequest(new JsonResult("error", "没有文件数据").toJsonResponse());
+        }
     }
 
     /**

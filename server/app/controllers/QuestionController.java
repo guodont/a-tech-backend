@@ -9,12 +9,16 @@ import controllers.secured.AdminSecured;
 import controllers.secured.ExpertSecured;
 import models.*;
 import models.enums.*;
+import play.Play;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
+
+import java.io.File;
 
 /**
  * @author guodont
@@ -35,6 +39,7 @@ public class QuestionController extends BaseController {
         if (postForm.hasErrors()) {
             return badRequest(postForm.errorsAsJson());
         } else {
+
             //  保存问题
             Category category = Category.find.byId(postForm.get().categoryId);
             Question question = new Question();
@@ -46,7 +51,7 @@ public class QuestionController extends BaseController {
             question.category = category;
             question.user = getUser();
             // TODO 保存图片路径 逗号隔开
-//            article.image = postForm.get().image;
+            question.images = postForm.get().image;
             question.content = postForm.get().content;
             question.save();
         }
@@ -56,6 +61,7 @@ public class QuestionController extends BaseController {
 
     /**
      * 审核问题-通过审核
+     *
      * @param questionId
      * @return
      */
@@ -69,6 +75,7 @@ public class QuestionController extends BaseController {
 
     /**
      * 审核问题-审核失败
+     *
      * @param questionId
      * @return
      */
@@ -92,7 +99,7 @@ public class QuestionController extends BaseController {
             return badRequest(new JsonResult("error", "No such user").toJsonResponse());
         }
         initPageing();
-        return ok(Json.toJson(Question.findQuestionsByUser(user,page, pageSize)));
+        return ok(Json.toJson(Question.findQuestionsByUser(user, page, pageSize)));
     }
 
     /**
@@ -134,6 +141,7 @@ public class QuestionController extends BaseController {
 
     /**
      * 获取问题的回答
+     *
      * @param id
      * @return
      */
@@ -176,6 +184,7 @@ public class QuestionController extends BaseController {
 
     /**
      * 删除问题
+     *
      * @param id
      * @return
      */
@@ -183,7 +192,7 @@ public class QuestionController extends BaseController {
     public static Result deleteQuestion(long id) {
         Question question = Question.findQuestionById(id);
         question.delete();
-        return ok(new JsonResult("success","question deleted").toJsonResponse());
+        return ok(new JsonResult("success", "question deleted").toJsonResponse());
     }
 
     public static Result updateQuestion(long id) {
@@ -192,38 +201,40 @@ public class QuestionController extends BaseController {
 
     /**
      * 用户收藏问题
+     *
      * @return
      */
     @Security.Authenticated(Secured.class)
     public static Result favQuestion(long questionId) {
         Question question = Question.findQuestionById(questionId);
 
-        Favorite favorite = new Favorite();
-        favorite.beFavId = questionId;
-        favorite.user = getUser();
-        favorite.favoriteType = FavoriteType.QUESTION;
-        favorite.save();            // 保存收藏记录表
+        FavoriteQuestion favoriteQuestion = new FavoriteQuestion();
+        favoriteQuestion.question = question;
+        favoriteQuestion.user = getUser();
+        favoriteQuestion.save();            // 保存收藏记录表
 
         question.likeCount += 1;    // 收藏数+1
         question.save();
 
-        return ok(new JsonResult("success","fav question success").toJsonResponse());
+        return ok(new JsonResult("success", "fav question success").toJsonResponse());
     }
 
     /**
      * 用户取消收藏问题
+     *
      * @return
      */
     @Security.Authenticated(Secured.class)
     public static Result unFavQuestion(long questionId) {
+
         Question question = Question.findQuestionById(questionId);
 
-        Favorite.findFavoriteByBeFavIdAndUSer(getUser(),questionId).delete();   // 删除记录
+        FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(), question).delete();   // 删除记录
 
         question.likeCount -= 1;    // 收藏数-1
         question.save();
 
-        return ok(new JsonResult("success","cancel fav question success").toJsonResponse());
+        return ok(new JsonResult("success", "cancel fav question success").toJsonResponse());
     }
 
     /**
@@ -242,7 +253,7 @@ public class QuestionController extends BaseController {
         public String content;      //  内容
 
 
-//        public String image;        //  配图
+        public String image;        //  配图
 
     }
 

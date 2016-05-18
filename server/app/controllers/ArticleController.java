@@ -114,7 +114,7 @@ public class ArticleController extends BaseController {
      * @return
      */
     @Security.Authenticated(Secured.class)
-    public static Result addComment() {
+    public static Result addComment(long id) {
 
         Form<CommentForm> commentForm = Form.form(CommentForm.class).bindFromRequest();
 
@@ -122,7 +122,7 @@ public class ArticleController extends BaseController {
             return badRequest(commentForm.errorsAsJson());
         } else {
             Comment newComment = new Comment();
-            Article article = Article.findArticleById(commentForm.get().articleId);
+            Article article = Article.findArticleById(id);
             article.commentCount++;
             article.save();
             newComment.article = article;
@@ -234,6 +234,15 @@ public class ArticleController extends BaseController {
     }
 
     /**
+     * 获取相关联的推荐文章 TODO
+     * @param id
+     * @return
+     */
+    public static Result getRecommends(long id) {
+        return play.mvc.Results.TODO;
+    }
+
+    /**
      * 发布文章表单数据
      */
     public static class ArticleForm {
@@ -261,9 +270,6 @@ public class ArticleController extends BaseController {
      * 发送评论表单数据
      */
     public static class CommentForm {
-
-        @Constraints.Required
-        public Long articleId;      //  文章id
 
         @Constraints.Required
         public String comment;      //  评论内容
