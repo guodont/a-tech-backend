@@ -84,6 +84,7 @@ public class Question extends BaseModel {
         return find
                 .where()
                 .eq("user", user)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -102,6 +103,7 @@ public class Question extends BaseModel {
                     .where()
                     .eq("user", expert)
                     .eq("questionResolveState", questionResolveState)
+                    .setOrderBy("whenCreated desc")
                     .setFirstRow((page - 1) * pageSize)
                     .setMaxRows(pageSize)
                     .findList();
@@ -109,6 +111,7 @@ public class Question extends BaseModel {
             return find
                     .where()
                     .eq("user", expert)
+                    .setOrderBy("whenCreated desc")
                     .setFirstRow((page - 1) * pageSize)
                     .setMaxRows(pageSize)
                     .findList();
@@ -126,6 +129,7 @@ public class Question extends BaseModel {
         return find
                 .where()
                 .eq("category", category)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -140,6 +144,7 @@ public class Question extends BaseModel {
     public static List<Question> findQuestions(int page, int pageSize) {
         return find
                 .where()
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();

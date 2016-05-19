@@ -40,6 +40,7 @@ public class Comment extends BaseModel {
         return find
                 .where()
                 .eq("article", article)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -54,6 +55,7 @@ public class Comment extends BaseModel {
         return find
                 .where()
                 .eq("user", user)
+                .setOrderBy("whenCreated desc")
                 .findList();
     }
 }

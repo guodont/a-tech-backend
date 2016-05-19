@@ -82,6 +82,7 @@ public class Trade extends BaseModel {
                 .where()
                 .eq("category", category)
                 .eq("tradeState", state)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -91,6 +92,7 @@ public class Trade extends BaseModel {
         return find
                 .where()
                 .eq("category", category)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -100,6 +102,7 @@ public class Trade extends BaseModel {
         return find
                 .where()
                 .eq("tradeState", TradeState.AUDITED.getName())
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -109,6 +112,7 @@ public class Trade extends BaseModel {
         return find
                 .where()
                 .eq("tradeState", TradeState.AUDITED.getName())
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -131,6 +135,7 @@ public class Trade extends BaseModel {
         return find
                 .where()
                 .eq("user", user)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();

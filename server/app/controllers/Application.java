@@ -17,9 +17,17 @@ import play.mvc.BodyParser;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.CommenUtils;
 import utils.JsonResult;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -356,7 +364,7 @@ public class Application extends BaseController {
             String accessName = UUID.randomUUID().toString() + ext;
 
             // 判断文件类型
-            if ( !ext.equals(".gif") && !ext.equals(".jpg") && !ext.equals(".jpeg") && !ext.equals(".bmp") && !ext.equals(".png")) {
+            if (!ext.equals(".gif") && !ext.equals(".jpg") && !ext.equals(".jpeg") && !ext.equals(".bmp") && !ext.equals(".png")) {
                 return badRequest(new JsonResult("error", "格式不支持").toJsonResponse());
             } else {
                 File file = image.getFile();
@@ -375,6 +383,33 @@ public class Application extends BaseController {
         } else {
             return badRequest(new JsonResult("error", "没有文件数据").toJsonResponse());
         }
+    }
+
+    public static Result sendMessage() {
+
+        Form<SendMessage> sendMessageForm = Form.form(SendMessage.class).bindFromRequest();
+        if (sendMessageForm.hasErrors()) {
+            return badRequest(sendMessageForm.errorsAsJson());
+        }
+
+        String testUsername = "13065542026"; //在短信宝注册的用户名
+        String testPassword = "abcd1234.0."; //在短信宝注册的密码
+
+        String testPhone = sendMessageForm.get().phone;
+        String code = CommenUtils.createRandomVcode();
+        String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
+
+        String httpUrl = "http://api.smsbao.com/sms";
+
+        StringBuffer httpArg = new StringBuffer();
+        httpArg.append("u=").append(testUsername).append("&");
+        httpArg.append("p=").append(CommenUtils.md5(testPassword)).append("&");
+        httpArg.append("m=").append(testPhone).append("&");
+        httpArg.append("c=").append(CommenUtils.encodeUrlString(testContent, "UTF-8"));
+
+        String result = CommenUtils.request(httpUrl, httpArg.toString());
+
+        return ok(Json.toJson(result));
     }
 
     /**
@@ -456,5 +491,15 @@ public class Application extends BaseController {
 
         @Constraints.Required
         public String password; //  密码
+    }
+
+    /**
+     * 用户发送验证码数据
+     */
+    public static class SendMessage {
+        @Constraints.Required
+        @Constraints.MaxLength(11)
+        @Constraints.MinLength(11)
+        public String phone;    //  手机号
     }
 }

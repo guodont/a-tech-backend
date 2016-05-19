@@ -97,6 +97,7 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("admin", admin)
+                .setOrderBy("whenCreated desc , sort desc")
                 .findList();
     }
 
@@ -104,6 +105,7 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("articleType", articleType)
+                .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -113,6 +115,7 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("categoryId", categoryId)
+                .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -128,6 +131,7 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("user", user)
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();

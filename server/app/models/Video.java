@@ -1,8 +1,11 @@
 package models;
 
 import play.data.validation.Constraints;
+
 import javax.persistence.*;
 import java.util.List;
+
+import static sun.misc.MessageUtils.where;
 
 /**
  * Created by llz on 2016/4/13.
@@ -50,15 +53,20 @@ public class Video extends BaseModel {
 
     /**
      * 查找全部视频
+     *
      * @param
      * @return
      */
     public static List<Video> findVideos() {
-        return find.findList();
+        return find
+                .where()
+                .setOrderBy("whenCreated desc")
+                .findList();
     }
 
     /**
      * 通过视频ID查找视频
+     *
      * @param id
      * @return
      */
