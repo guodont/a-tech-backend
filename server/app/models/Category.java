@@ -55,6 +55,15 @@ public class Category extends BaseModel {
         return find
                 .where()
                 .eq("categoryType", type)
+                .setOrderBy("sort desc")
+                .findList();
+    }
+
+    public static List<Category> findCategoriesByParent(final long pid) {
+        return find
+                .where()
+                .eq("pid", pid)
+                .setOrderBy("sort desc")
                 .findList();
     }
 

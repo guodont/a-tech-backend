@@ -165,6 +165,9 @@ public class ArticleController extends BaseController {
     public static Result getArticles() {
         initPageing();
         Article article = new Article();
+        response().setHeader("TOTAL_SIZE", String.valueOf(Article.find.findRowCount()));
+        response().setHeader("CUR_PAGE", String.valueOf(page));
+        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
         return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName(), page, pageSize)));
     }
 
@@ -177,7 +180,11 @@ public class ArticleController extends BaseController {
     public static Result getArticlesByExpert(long expertId) {
         initPageing();
         Article article = new Article();
-        return ok(Json.toJson(article.findArticlesByUser(User.findById(expertId), page, pageSize)));
+        User user = User.findById(expertId);
+        response().setHeader("TOTAL_SIZE", String.valueOf(Article.find.where().eq("user", user).findRowCount()));
+        response().setHeader("CUR_PAGE", String.valueOf(page));
+        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
+        return ok(Json.toJson(article.findArticlesByUser(user, page, pageSize)));
     }
 
     /**
