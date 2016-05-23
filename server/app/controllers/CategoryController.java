@@ -42,7 +42,6 @@ public class CategoryController extends BaseController {
 
         Form<CategoryForm> postForm = Form.form(CategoryForm.class).bindFromRequest();
 
-        System.out.print(postForm.toString());
         if (postForm.hasErrors()) {
 
             return badRequest(postForm.errorsAsJson());
@@ -84,6 +83,7 @@ public class CategoryController extends BaseController {
         if (request().getQueryString("categoryType") != null) {
             categoryType = request().getQueryString("categoryType");
         }
+
         if (request().getQueryString("parentId") != null) {
             if(Category.findCategoryById(Long.parseLong(request().getQueryString("parentId"))) != null) {
                 categories = Category.findCategoriesByParent(Long.parseLong(request().getQueryString("parentId")));

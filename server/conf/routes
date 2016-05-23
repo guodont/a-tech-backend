@@ -81,6 +81,8 @@ GET         /api/v1/users/:userType                 controllers.UserController.g
 GET         /api/v1/user/:id                        controllers.UserController.getUser(id: Long)
 # update user
 PUT         /api/v1/user/:id                        controllers.UserController.updateUser(id: Long)
+# update password
+PUT         /api/v1/user/password                   controllers.UserController.updateUserPassword
 # delete user
 DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
 

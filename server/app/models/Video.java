@@ -5,7 +5,6 @@ import play.data.validation.Constraints;
 import javax.persistence.*;
 import java.util.List;
 
-import static sun.misc.MessageUtils.where;
 
 /**
  * Created by llz on 2016/4/13.
@@ -57,10 +56,12 @@ public class Video extends BaseModel {
      * @param
      * @return
      */
-    public static List<Video> findVideos() {
+    public static List<Video> findVideos( int page, int pageSize) {
         return find
                 .where()
                 .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 

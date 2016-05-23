@@ -94,7 +94,8 @@ public class VideoController extends BaseController {
      * @return Video
      */
     public static Result getVideos() {
-        List<Video> videos = Video.findVideos();
+        initPageing();
+        List<Video> videos = Video.findVideos(page, pageSize);
         return ok(Json.toJson(videos));
     }
 
