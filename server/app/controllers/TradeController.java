@@ -181,15 +181,19 @@ public class TradeController extends BaseController {
     public static Result favTrade(long tradeId) {
         Trade trade = Trade.findTradeById(tradeId);
 
-        FavoriteTrade favoriteTrade = new FavoriteTrade();
-        favoriteTrade.trade = trade;
-        favoriteTrade.user = getUser();
-        favoriteTrade.save();            // 保存收藏记录表
+        if (trade != null) {
+            FavoriteTrade favoriteTrade = new FavoriteTrade();
+            favoriteTrade.trade = trade;
+            favoriteTrade.user = getUser();
+            favoriteTrade.save();            // 保存收藏记录表
 
-        trade.likeCount += 1;    // 收藏数+1
-        trade.save();
+            trade.likeCount += 1;    // 收藏数+1
+            trade.save();
 
-        return ok(new JsonResult("success", "fav trade success").toJsonResponse());
+            return ok(new JsonResult("success", "fav trade success").toJsonResponse());
+        } else {
+            return badRequest(new JsonResult("error", "such trade not exits").toJsonResponse());
+        }
     }
 
     /**

@@ -18,10 +18,13 @@ public class FavoriteTrade extends BaseModel {
     /**
      * 被收藏的交易
      */
-    @OneToOne
-    @JsonIgnore
+    @ManyToOne
     @Constraints.Required
     public Trade trade;
+
+    public Trade getTrade() {
+        return trade;
+    }
 
     /**
      * 所属用户
