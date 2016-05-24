@@ -44,10 +44,13 @@ public class Album extends BaseModel {
     public static final Finder<Long, Album> find = new Finder<Long, Album>(
             Long.class, Album.class);
 
-    public static List<Album> findAlbumsByUser(final User user) {
+    public static List<Album> findAlbumsByUser(final User user, int page, int pageSize) {
         return find
                 .where()
                 .eq("user", user)
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 

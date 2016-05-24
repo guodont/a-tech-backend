@@ -170,6 +170,14 @@ public class User extends BaseModel {
                 .findUnique();
     }
 
+    public static User findByNameAndPassword(String name, String password) {
+        return find
+                .where()
+                .eq("name", name.toLowerCase())
+                .eq("shaPassword", getSha512(password))
+                .findUnique();
+    }
+
     public static User findByEmail(String email) {
         return find
                 .where()
@@ -199,5 +207,24 @@ public class User extends BaseModel {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<User> findUsers(int page, int pageSize) {
+        return find
+                .where()
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<User> findUsersByType(String userType, int page, int pageSize) {
+        return find
+                .where()
+                .eq("userType", userType)
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
     }
 }

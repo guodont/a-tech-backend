@@ -228,8 +228,8 @@ public class TradeController extends BaseController {
         @Constraints.Required
         public Long categoryId;     //  分类id
 
-        // @Constraints.Required
-        public Long tradeType;     //  交易类型
+        @Constraints.Required
+        public String tradeType;     //  交易类型
 
         @Constraints.Required
         @Constraints.MaxLength(45)
