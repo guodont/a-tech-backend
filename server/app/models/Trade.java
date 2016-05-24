@@ -101,7 +101,7 @@ public class Trade extends BaseModel {
     public static List<Trade> findTrades(int page, int pageSize) {
         return find
                 .where()
-                .eq("tradeState", TradeState.AUDITED.getName())
+//                .eq("tradeState", TradeState.AUDITED.getName())
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
@@ -111,7 +111,7 @@ public class Trade extends BaseModel {
     public static List<Trade> findTradesForAdmin(int page, int pageSize) {
         return find
                 .where()
-                .eq("tradeState", TradeState.AUDITED.getName())
+//                .eq("tradeState", TradeState.AUDITED.getName())
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)

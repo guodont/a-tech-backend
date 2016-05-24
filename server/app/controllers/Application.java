@@ -49,6 +49,40 @@ public class Application extends BaseController {
         return ok("Welcome , there is nongke110 !");
     }
 
+
+    /**
+     * 获取首页聚合数据
+     * @return
+     */
+    public static Result getIndexData() {
+
+        // TODO 获取聚合数据,按最新发布时间 和 sort desc 排序
+
+        // 获取广告数据
+
+        // 获取公告通知
+
+        // 获取新闻板块数据
+
+        // 获取文章板块分类数据
+
+        // 获取文章板块数据
+
+        // 获取问答板块数据
+
+        // 获取专家板块数据
+
+        // 获取交易板块数据
+
+        // 获取视频分类数据
+
+        // 获取视频板块数据
+
+        // 获取友情链接数据
+
+        return ok();
+    }
+
     /**
      * 用户注册第一步
      *
