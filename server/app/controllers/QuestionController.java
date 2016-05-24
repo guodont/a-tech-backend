@@ -19,6 +19,7 @@ import play.mvc.Security;
 import utils.JsonResult;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author guodont
@@ -102,6 +103,18 @@ public class QuestionController extends BaseController {
         return ok(Json.toJson(Question.findQuestionsByUser(user, page, pageSize)));
     }
 
+
+    /**
+     * 获取用户收藏的问题
+     *
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result getUserFavoriteQuestions() {
+        initPageing();
+        return ok(Json.toJson(FavoriteQuestion.findAllFavoritesQuestionByUser(getUser(), page, pageSize)));
+    }
+
     /**
      * 添加回答
      *
@@ -157,10 +170,16 @@ public class QuestionController extends BaseController {
      */
     public static Result getQuestions() {
         initPageing();
+        List<Question> questions = null;
         if (request().getQueryString("category") != null) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            return ok(Json.toJson(Question.findQuestionsByCategory(category, page, pageSize)));
+            questions = Question.findQuestionsByCategory(category, page, pageSize);
+            for ( Question question : questions) {
+                // 判断用户的收藏状态
+
+            }
+            return ok(Json.toJson(questions));
         } else {
             return ok(Json.toJson(Question.findQuestions(page, pageSize)));
         }
@@ -208,15 +227,20 @@ public class QuestionController extends BaseController {
     public static Result favQuestion(long questionId) {
         Question question = Question.findQuestionById(questionId);
 
-        FavoriteQuestion favoriteQuestion = new FavoriteQuestion();
-        favoriteQuestion.question = question;
-        favoriteQuestion.user = getUser();
-        favoriteQuestion.save();            // 保存收藏记录表
+        if (question !=null) {
+            FavoriteQuestion favoriteQuestion = new FavoriteQuestion();
+            favoriteQuestion.question = question;
+            favoriteQuestion.user = getUser();
+            favoriteQuestion.save();            // 保存收藏记录表
 
-        question.likeCount += 1;    // 收藏数+1
-        question.save();
+            question.likeCount += 1;    // 收藏数+1
+            question.save();
 
-        return ok(new JsonResult("success", "fav question success").toJsonResponse());
+            return ok(new JsonResult("success", "fav question success").toJsonResponse());
+        } else {
+            return badRequest(new JsonResult("error", "such question not exits").toJsonResponse());
+        }
+
     }
 
     /**

@@ -19,9 +19,7 @@ public class FavoriteQuestion extends BaseModel {
     /**
      * 被收藏的问题
      */
-    @OneToOne
-    @JsonIgnore
-    @Constraints.Required
+    @ManyToOne
     public Question question;
 
     /**

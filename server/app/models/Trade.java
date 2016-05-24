@@ -127,7 +127,7 @@ public class Trade extends BaseModel {
         return find
                 .where()
                 .eq("id", tradeId)
-                .eq("tradeState", TradeState.AUDITED.getName())
+//                .eq("tradeState", TradeState.AUDITED.getName())
                 .findUnique();
     }
 

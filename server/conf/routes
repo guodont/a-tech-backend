@@ -143,6 +143,8 @@ PUT         /api/v1/question/:id/fav                controllers.QuestionControll
 # unFav question
 PUT         /api/v1/question/:id/unFav              controllers.QuestionController.unFavQuestion(id: Long)
 
+GET         /api/v1/user/favorite/questions         controllers.QuestionController.getUserFavoriteQuestions
+
 # trade
 GET         /api/v1/trades                          controllers.TradeController.getTrades
 # post trade
