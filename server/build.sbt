@@ -14,7 +14,9 @@ libraryDependencies ++= Seq(
   javaEbean,
   cache,
   javaWs,
-  "mysql" % "mysql-connector-java" % mysqlConnectorVersion
+  "mysql" % "mysql-connector-java" % mysqlConnectorVersion,
+  "cn.jpush.api" % "jpush-client" % "3.2.9",
+  "com.qiniu" % "qiniu-java-sdk" % "7.0.0"
 )
 
 javaOptions in Test ++= Seq(
@@ -23,4 +25,8 @@ javaOptions in Test ++= Seq(
   "-Xmx1536M",
   "-Xss1M",
   "-XX:MaxPermSize=384M"
+)
+
+resolvers ++= Seq(
+  "Primefaces" at "http://mvnrepository.com"
 )
