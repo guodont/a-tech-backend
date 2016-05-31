@@ -446,7 +446,7 @@ public class Application extends BaseController {
         response().setHeader("VERIFY_UUID", codeUuid);
 
         // 保存code到Cache
-        Cache.set(codeUuid, code, 5*60*1000);
+        Cache.set(codeUuid, code, 5*60);
 
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
 
