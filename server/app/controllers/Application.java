@@ -6,10 +6,11 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.qiniu.util.Auth;
 import controllers.secured.AdminSecured;
 import models.*;
 import models.enums.UserType;
-import play.Play;
+import play.cache.Cache;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
@@ -20,14 +21,7 @@ import play.mvc.Security;
 import utils.CommenUtils;
 import utils.JsonResult;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 /**
@@ -39,6 +33,10 @@ public class Application extends BaseController {
 
     public final static String AUTH_TOKEN_HEADER = "X-AUTH-TOKEN";
     public static final String AUTH_TOKEN = "authToken";
+
+    //设置好账号的ACCESS_KEY和SECRET_KEY
+    public final static String ACCESS_KEY = "K8eqr1qikcsa2OXUkg_gMxIX16cCPR9U8yULRKDr";
+    public final static String SECRET_KEY = "CmJ1IpR_n-LrOHmPbhfD0VvQNIjFS6yTRTKZ_Gnj";
 
     /**
      * 首页
@@ -52,6 +50,7 @@ public class Application extends BaseController {
 
     /**
      * 获取首页聚合数据
+     *
      * @return
      */
     public static Result getIndexData() {
@@ -107,22 +106,31 @@ public class Application extends BaseController {
 
         } else {
 
-            //  保存用户信息
-            User user = new User();
-            user.setPassword(newUser.password);
-            user.name = newUser.userName;
-            user.setPhone(newUser.phone);
-            user.setLastIp(request().remoteAddress());
-            user.userType = UserType.PUBLIC;
-            user.save();
+            //判断cache code
+            String verifyUuid = request().getHeader("VERIFY_UUID");
 
-            //  设置ToKen
-            String authToken = user.createToken();
-            ObjectNode authTokenJson = Json.newObject();
-            authTokenJson.put(AUTH_TOKEN, authToken);
-            response().setCookie(AUTH_TOKEN, authToken);
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).equals(newUser.verifyCode)) {
 
-            return status(201, authTokenJson);
+                //  保存用户信息
+                User user = new User();
+                user.setPassword(newUser.password);
+                user.name = newUser.userName;
+                user.setPhone(newUser.phone);
+                user.setLastIp(request().remoteAddress());
+                user.userType = UserType.PUBLIC;
+                user.save();
+
+                //  设置ToKen
+                String authToken = user.createToken();
+                ObjectNode authTokenJson = Json.newObject();
+                authTokenJson.put(AUTH_TOKEN, authToken);
+                response().setCookie(AUTH_TOKEN, authToken);
+
+                return status(201, authTokenJson);
+
+            } else {
+                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+            }
         }
     }
 
@@ -419,19 +427,32 @@ public class Application extends BaseController {
         }
     }
 
-    public static Result sendMessage() {
+    /**
+     * 发送短信验证码
+     * @return
+     */
+    public static Result sendSMSVerifyCode() {
 
         Form<SendMessage> sendMessageForm = Form.form(SendMessage.class).bindFromRequest();
         if (sendMessageForm.hasErrors()) {
             return badRequest(sendMessageForm.errorsAsJson());
         }
 
-        String testUsername = "13065542026"; //在短信宝注册的用户名
-        String testPassword = "abcd1234.0."; //在短信宝注册的密码
 
         String testPhone = sendMessageForm.get().phone;
         String code = CommenUtils.createRandomVcode();
+
+        String codeUuid = UUID.randomUUID().toString();
+        response().setHeader("VERIFY_UUID", codeUuid);
+
+        // 保存code到Cache
+        Cache.set(codeUuid, code, 5*60*1000);
+
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
+
+        // ====TODO  需要封装一下
+        String testUsername = "13065542026"; //在短信宝注册的用户名
+        String testPassword = "abcd1234.0."; //在短信宝注册的密码
 
         String httpUrl = "http://api.smsbao.com/sms";
 
@@ -442,9 +463,57 @@ public class Application extends BaseController {
         httpArg.append("c=").append(CommenUtils.encodeUrlString(testContent, "UTF-8"));
 
         String result = CommenUtils.request(httpUrl, httpArg.toString());
+        // TODO=========
 
-        return ok(Json.toJson(result));
+        if(result.equals("0")) {
+            return ok(new JsonResult("success", "验证短信发送成功").toJsonResponse());
+        } else {
+            return ok(new JsonResult("error", "验证短信发送失败").toJsonResponse());
+        }
     }
+
+
+    /**
+     * 普通用户获取上传token
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result getUploadTokenForUser() {
+
+        //要上传的空间
+        String bucketname = "nk110-images";
+
+        //密钥配置
+        Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+
+        return ok(Json.toJson(new JsonResult("success", auth.uploadToken(bucketname)).toJsonResponse()));
+    }
+
+    /**
+     * 管理员用户获取上传token
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getUploadTokenForAdmin() {
+
+        //要上传的空间
+        String bucketname = "nk110-images";
+
+        //密钥配置
+        Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+
+        return ok(Json.toJson(new JsonResult("success", auth.uploadToken(bucketname)).toJsonResponse()));
+    }
+
+    /**
+     * 图形验证码
+     * @return
+     */
+    public static Result captcha() {
+        // TODO 生成图形验证码  http://www.oschina.net/p/cage
+        return ok();
+    }
+
 
     /**
      * 用户表单数据父类
@@ -495,6 +564,9 @@ public class Application extends BaseController {
         @Constraints.Required
         @Constraints.MinLength(3)
         public String userName; //  用户名
+
+        @Constraints.Required
+        public String verifyCode; //  验证码
 
     }
 
