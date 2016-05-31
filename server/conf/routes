@@ -14,7 +14,13 @@ POST        /app/comment                controllers.Post.addComment
 
 POST        /api/v1/uploadImage         controllers.Application.uploadImage
 
-POST        /api/v1/sendMessage         controllers.Application.sendMessage
+POST        /api/v1/smsVerifyCode       controllers.Application.sendSMSVerifyCode
+
+GET         /api/v1/captcha             controllers.Application.captcha
+
+GET         /api/v1/user/uploadToken    controllers.Application.getUploadTokenForUser
+
+GET         /api/v1/admin/uploadToken   controllers.Application.getUploadTokenForAdmin
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file               controllers.Assets.at(path="/public", file)
@@ -114,7 +120,7 @@ GET         /api/v1/video/:id               controllers.VideoController.getVideo
 # get  all video
 GET         /api/v1/videos                  controllers.VideoController.getVideos
 # update video
-GET         /api/v1/video/:id               controllers.VideoController.updateVideo(id: Long)
+PUT         /api/v1/video/:id               controllers.VideoController.updateVideo(id: Long)
 # delete video
 DELETE      /api/v1/video/:id               controllers.VideoController.deleteVideo(id: Long)
 
@@ -187,3 +193,15 @@ POST        /api/v1/expert/article                  controllers.ArticleControlle
 GET         /api/v1/expert/:id                      controllers.ExpertController.getExpertInformation(id: Long)
 # expert profile
 PUT         /api/v1/expert                          controllers.ExpertController.updateExpertProfile
+
+
+# add adv
+POST        /api/v1/advertisement                   controllers.AdvController.addAdv
+# get advById
+GET         /api/v1/advertisement/:id               controllers.AdvController.getAdvById(id: Long)
+# get  all adv
+GET         /api/v1/advertisements                  controllers.AdvController.getAdvs
+# update adv
+PUT         /api/v1/advertisement/:id               controllers.AdvController.updateAdv(id: Long)
+# delete adv
+DELETE      /api/v1/advertisement/:id               controllers.AdvController.deleteAdv(id: Long)

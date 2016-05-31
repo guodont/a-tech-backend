@@ -66,6 +66,12 @@ public class Question extends BaseModel {
     public String images;
 
     /**
+     * 问题的回答
+     */
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    public List<Answer> answers;
+
+    /**
      * 问题图片
      */
 //    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
