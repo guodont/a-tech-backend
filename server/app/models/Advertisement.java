@@ -80,4 +80,15 @@ public class Advertisement extends BaseModel {
                 .findUnique();
     }
 
+    /**
+     * 查找所有广告
+     */
+    public static List<Advertisement> findAlladvs(int page, int pageSize){
+        return find
+                .where()
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
 }
