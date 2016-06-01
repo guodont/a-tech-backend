@@ -59,6 +59,8 @@ public class CategoryController extends BaseController {
                 category.categoryType = CategoryType.QUESTION;
             } else if (categoryType.equals(CategoryType.TRADE.getName())) {
                 category.categoryType = CategoryType.TRADE;
+            } else if (categoryType.equals(CategoryType.VIDEO.getName())) {
+                category.categoryType = CategoryType.VIDEO;
             }
 
             category.name = postForm.get().name;

@@ -59,7 +59,7 @@ angular.module('clientApp')
           }
         });
     };
-    
+
     // 更新文章
     self.getArticle = function (params, success, error) {
       $http({
@@ -82,7 +82,7 @@ angular.module('clientApp')
     self.getArticles = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/articles',
+        url: apiUrl + '/articles' + '?pageSize=10&page=' + params.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {

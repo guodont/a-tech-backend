@@ -8,11 +8,21 @@
  * 文章管理控制器
  */
 angular.module('clientApp')
-  .controller('ArticleCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, articleService, categoryService) {
+  .controller('ArticleCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, articleService, categoryService, cloudUrl) {
+
+
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+
+    // var editor = new Simditor({
+    //   textarea: $('#editor')
+    //   //optional options
+    // });
 
     $scope.getArticles = function () {
       articleService.getArticles(
-        {},
+        {
+          curPage : $scope.curPage
+        },
         function (res) {
           console.log(res.data);
           $scope.articles = res.data;
@@ -35,10 +45,13 @@ angular.module('clientApp')
           var article = res.data;
           $scope.title = article.title;
           $scope.content = article.content;
+          editor.setValue(article.content);
           $scope.tag = article.tag;
           $scope.sort = article.sort;
-          $scope.image = article.image;
+          $scope.imageData = article.image;
+          $scope.cateImage = cloudUrl + article.image;
           $scope.categoryId = article.category.id;
+          // $scope.$apply();
         },
         function (res) {
           alertService.add('error', res.data.success.message);
@@ -54,10 +67,11 @@ angular.module('clientApp')
       articleService.addArticle(
         {
           title: $scope.title,
-          content: $scope.content,
+          // content: $scope.content,
+          content: editor.getValue(),
           tag: $scope.tag,
           sort: $scope.sort,
-          image: $scope.image,
+          image: $scope.imageData,
           categoryId: $scope.categoryId
         },
         function (res) {
@@ -92,10 +106,10 @@ angular.module('clientApp')
         {
           articleId: $routeParams.id,
           title: $scope.title,
-          content: $scope.content,
+          content: editor.getValue(),
           tag: $scope.tag,
           sort: $scope.sort,
-          image: $scope.image,
+          image: $scope.imageData,
           categoryId: $scope.categoryId
         },
         function (res) {
@@ -200,7 +214,7 @@ angular.module('clientApp')
       // 在初始化时，uptoken, uptoken_url, uptoken_func 三个参数中必须有一个被设置
       // 切如果提供了多个，其优先级为 uptoken > uptoken_url > uptoken_func
       // 其中 uptoken 是直接提供上传凭证，uptoken_url 是提供了获取上传凭证的地址，如果需要定制获取 uptoken 的过程则可以设置 uptoken_func
-      uptoken : 'K8eqr1qikcsa2OXUkg_gMxIX16cCPR9U8yULRKDr:c82JIkIF3VmUHBoNhD69GNP1_8U=:eyJzY29wZSI6Im5rMTEwLWltYWdlcyIsImRlYWRsaW5lIjoxNDY0NzU1ODUyLCJzYXZlS2V5IjoicWluaXVfY2xvdWRfc3RvcmFnZV8xNDY0NzUyMjUyIiwibWltZUxpbWl0IjoiaW1hZ2VcLyoifQ==', // uptoken 是上传凭证，由其他程序生成
+      uptoken: 'K8eqr1qikcsa2OXUkg_gMxIX16cCPR9U8yULRKDr:yo4NJzSnaKKXHeA3LVgcFCcn3uk=:eyJzY29wZSI6Im5rMTEwLWltYWdlcyIsImRlYWRsaW5lIjoxNDY0NzY4NjUzLCJzYXZlS2V5IjoicWluaXVfY2xvdWRfc3RvcmFnZV8xNDY0NzY1MDUzIiwibWltZUxpbWl0IjoiaW1hZ2VcLyoifQ==', // uptoken 是上传凭证，由其他程序生成
       // TODO
       // uptoken_url: 'http://cloud.workerhub.cn//api/quick_start/simple_image_example_token.php',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
       // uptoken_func: function(file){    // 在需要获取 uptoken 时，该方法会被调用
@@ -222,24 +236,24 @@ angular.module('clientApp')
       chunk_size: '4mb',                  // 分块上传时，每块的体积
       auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
       init: {
-        'FilesAdded': function(up, files) {
-          plupload.each(files, function(file) {
+        'FilesAdded': function (up, files) {
+          plupload.each(files, function (file) {
             // 文件添加进队列后,处理相关的事情
           });
         },
-        'BeforeUpload': function(up, file) {
+        'BeforeUpload': function (up, file) {
           // 每个文件上传前,处理相关的事情
           console.log("每个文件上传前,处理相关的事情");
         },
-        'UploadProgress': function(up, file) {
+        'UploadProgress': function (up, file) {
           // 每个文件上传时,处理相关的事情
           console.log("上传中" + up);
         },
-        'FileUploaded': function(up, file, info) {
+        'FileUploaded': function (up, file, info) {
           console.log(info);
           var domain = up.getOption('domain');
           var res = JSON.parse(info);
-          var sourceLink = domain +  res.key; //获取上传成功后的文件的Url
+          var sourceLink = domain + res.key; //获取上传成功后的文件的Url
 
           $scope.images.push(sourceLink);
 
@@ -250,14 +264,14 @@ angular.module('clientApp')
           $scope.$apply();
 
         },
-        'Error': function(up, err, errTip) {
+        'Error': function (up, err, errTip) {
           //上传出错时,处理相关的事情
           console.log(errTip);
         },
-        'UploadComplete': function() {
+        'UploadComplete': function () {
           //队列文件处理完毕后,处理相关的事情
         },
-        'Key': function(up, file) {
+        'Key': function (up, file) {
           // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
           // 该配置必须要在 unique_names: false , save_key: false 时才生效
           var key = "";
