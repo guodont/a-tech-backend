@@ -13,7 +13,8 @@ angular.module('clientApp')
     $scope.getCategories = function (type) {
       categoryService.getCategories(
         {
-          type: type
+          type: type,
+          parentId: 0
         },
         function (res) {
           console.log(res.data);

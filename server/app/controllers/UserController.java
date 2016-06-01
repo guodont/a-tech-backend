@@ -33,14 +33,13 @@ public class UserController extends BaseController {
      *
      * @return
      */
-    @Security.Authenticated(AdminSecured.class)
+//    @Security.Authenticated(AdminSecured.class)
     public static Result getAllUsers() {
         initPageing();
-        User user = new User();
         response().setHeader("TOTAL_SIZE", String.valueOf(User.find.findRowCount()));
         response().setHeader("CUR_PAGE", String.valueOf(page));
         response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(user.findUsers(page, pageSize)));
+        return ok(Json.toJson(User.findUsers(page, pageSize)));
     }
 
     /**
