@@ -209,11 +209,11 @@ DELETE      /api/v1/advertisement/:id               controllers.AdvController.de
 # add link
 POST        /api/v1/link                            controllers.LinkController.addLink
 # get advById
-GET         /api/v1/link/:id                        controllers.LinkController.getAdvById(id: Long)
+GET         /api/v1/link/:id                        controllers.LinkController.getLinkById(id: Long)
 # get  all adv
-GET         /api/v1/links                           controllers.LinkController.getLinks
+GET         /api/v1/links                           controllers.LinkController.getAlllinks
 # update adv
-PUT         /api/v1/link/:id                        controllers.LinkController.updateLink(id: Long)
+PUT         /api/v1/link/:id                        controllers.LinkController.updateLinkById(id: Long)
 # delete adv
 DELETE      /api/v1/link/:id                        controllers.LinkController.deleteLink(id: Long)
 
