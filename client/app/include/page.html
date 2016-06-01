@@ -1,0 +1,7 @@
+<nav>
+  <ul class="pager">
+    <li class="previous"><a  ng-click="provie()" ng-disabled="isFirst()"><span aria-hidden="true">&larr;</span>{{ getText('provie') }}</a></li>
+    <li>当前第{{ getCurPage() }}页</li>
+    <li class="next"><a ng-click="next()" ng-disabled="isLast()">{{ getText('next') }}<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>

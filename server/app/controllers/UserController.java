@@ -33,13 +33,13 @@ public class UserController extends BaseController {
      *
      * @return
      */
-//    @Security.Authenticated(AdminSecured.class)
+    @Security.Authenticated(AdminSecured.class)
     public static Result getAllUsers() {
         initPageing();
         response().setHeader("TOTAL_SIZE", String.valueOf(User.find.findRowCount()));
         response().setHeader("CUR_PAGE", String.valueOf(page));
         response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(User.findUsers(page, pageSize)));
+        return ok(Json.toJson(User.findUsers2(page, pageSize)));
     }
 
     /**
@@ -51,11 +51,10 @@ public class UserController extends BaseController {
     @Security.Authenticated(AdminSecured.class)
     public static Result getUsersByType(String userType) {
         initPageing();
-        User user = new User();
         response().setHeader("TOTAL_SIZE", String.valueOf(User.find.findRowCount()));
         response().setHeader("CUR_PAGE", String.valueOf(page));
         response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(user.findUsersByType(userType, page, pageSize)));
+        return ok(Json.toJson(User.findUsersByType(userType, page, pageSize)));
     }
 
     /**
@@ -86,10 +85,10 @@ public class UserController extends BaseController {
             User user = getUser();
             user.setEmail(userInfoFormForm.get().email);
             user.setRealName(userInfoFormForm.get().realName);
-            user.address = userInfoFormForm.get().address;
-            user.scale = userInfoFormForm.get().scale;
-            user.avatar = userInfoFormForm.get().avatar;
-            user.industry = userInfoFormForm.get().industry;
+//            user.address = userInfoFormForm.get().address;
+//            user.scale = userInfoFormForm.get().scale;
+//            user.avatar = userInfoFormForm.get().avatar;
+//            user.industry = userInfoFormForm.get().industry;
             user.save();
         }
         return ok(new JsonResult("success", "Article updated").toJsonResponse());
@@ -102,33 +101,33 @@ public class UserController extends BaseController {
      */
     @Security.Authenticated(Secured.class)
     public static Result updateUserPassword() {
-        Form<UserChangePasswordForm> userChangePasswordFormForm = Form.form(UserChangePasswordForm.class).bindFromRequest();
-
-        if (userChangePasswordFormForm.hasErrors()) {
-            return badRequest(userChangePasswordFormForm.errorsAsJson());
-        } else {
-
-            User user = User.findByNameAndPassword(getUser().name, userChangePasswordFormForm.get().oldPassword);
-            // 判断旧密码是否正确
-            if ( user != null) {
-
-                //  更新用户密码信息
-                user.setPassword(userChangePasswordFormForm.get().newPassword);
-                //  更新token
-                String authToken = user.createToken();
-                user.update();
-
-                ObjectNode authTokenJson = Json.newObject();
-                authTokenJson.put(AUTH_TOKEN, authToken);
-                response().setCookie(AUTH_TOKEN, authToken);
-
-                return ok(authTokenJson);
-
-            } else {
+//        Form<UserChangePasswordForm> userChangePasswordFormForm = Form.form(UserChangePasswordForm.class).bindFromRequest();
+//
+//        if (userChangePasswordFormForm.hasErrors()) {
+//            return badRequest(userChangePasswordFormForm.errorsAsJson());
+//        } else {
+//
+//            User user = User.findByNameAndPassword(getUser().name, userChangePasswordFormForm.get().oldPassword);
+//            // 判断旧密码是否正确
+//            if ( user != null) {
+//
+//                //  更新用户密码信息
+//                user.setPassword(userChangePasswordFormForm.get().newPassword);
+//                //  更新token
+//                String authToken = user.createToken();
+//                user.update();
+//
+//                ObjectNode authTokenJson = Json.newObject();
+//                authTokenJson.put(AUTH_TOKEN, authToken);
+//                response().setCookie(AUTH_TOKEN, authToken);
+//
+//                return ok(authTokenJson);
+//
+//            } else {
 
                 return badRequest(new JsonResult("error", "User not exist").toJsonResponse());
-            }
-        }
+//            }
+//        }
     }
 
     /**

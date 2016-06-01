@@ -27,6 +27,7 @@ angular
   .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
   // .constant('hostUrl', 'http://localhost:9000')
   .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  .constant('cloudUrl', 'http://storage.workerhub.cn/')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider) {
     $routeProvider
@@ -106,7 +107,65 @@ angular
         redirectTo: '/'
       });
   })
-    .run(runBlock);
+  .directive('observe', function () {
+    return {
+      restrice: 'EA',
+      controller: function ($scope, pagerConfig, $location) {
+        $scope.currentPage = $location.search().currentPage ? parseInt($location.search().currentPage) : 1;
+
+        $scope.selectPage = function (index) {
+          $location.search('currentPage', index);
+        };
+        $scope.getCurPage = function () {
+          return $scope.currentPage;
+        };
+        $scope.next = function () {
+          if ($scope.isLast()) {
+            return;
+          }
+          $scope.selectPage($scope.currentPage + 1);
+        };
+        $scope.provie = function () {
+          if ($scope.isFirst()) return
+          $scope.selectPage($scope.currentPage - 1);
+        }
+        $scope.first = function () {
+          $scope.selectPage(1);
+        }
+        $scope.last = function () {
+          $scope.selectPage($scope.totalPages - 1);
+        }
+        $scope.isFirst = function () {
+          return $scope.currentPage <= 1;
+        };
+        $scope.isLast = function () {
+          return $scope.currentPage >= $scope.totalPages - 1;
+        }
+        $scope.getText = function (key) {
+          return pagerConfig.text[key];
+        };
+
+
+      },
+      link: function (scope, ele, attrs) {
+
+        scope.itemsPerpage = attrs.itemsperpage || 1;
+        scope.listSizes = attrs.listsizes;
+        attrs.$observe('totalitems', function (val) {
+          scope.totalItems = val;
+        })
+      },
+      templateUrl: '../include/page.html'
+    }
+  }).constant('pagerConfig', {
+    text: {
+      'first': '首页',
+      'provie': '上一页',
+      'next': '下一页',
+      'last': '尾页',
+    }
+  })
+  .run(runBlock);
 
 function runBlock($http) {
   $http.defaults.headers.get = {
