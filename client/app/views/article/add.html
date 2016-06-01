@@ -1,13 +1,12 @@
 <form name="postForm" ng-submit="addArticle()" novalidate>
   <div>
     <label for="title">标题</label>
-    <input name="title" class="form-control" type="subject" id="title" placeholder="Subject"
+    <input name="title" class="form-control" type="subject" id="title" placeholder="输入文章标题"
            ng-model="title">
   </div>
   <div>
     <label for="content">内容</label>
-    <textarea name="content" class="form-control" id="content" placeholder="Content"
-              ng-model="content" style="height: 500px"></textarea>
+    <textarea id="editor" ng-model="content" id="content"  placeholder="在此编辑文章" style="width: 100% ;" autofocus></textarea>
   </div>
   <div>
     <label for="tag">标签</label>
@@ -32,3 +31,9 @@
   <br>
   <button type="submit" class="btn btn-primary">发布此文章</button>
 </form>
+<script type="text/javascript">
+  var editor = new Simditor({
+    textarea: $('#editor')
+    //optional options
+  });
+</script>

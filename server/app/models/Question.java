@@ -2,6 +2,7 @@ package models;
 
 import models.enums.QuestionAuditState;
 import models.enums.QuestionResolveState;
+import org.jboss.logging.Field;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
@@ -68,7 +69,7 @@ public class Question extends BaseModel {
     /**
      * 问题的回答
      */
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Answer> answers;
 
     /**
@@ -104,7 +105,7 @@ public class Question extends BaseModel {
      */
     public static List<Question> findQuestionsByExpertAndStatus(final User expert, String questionResolveState, int page, int pageSize) {
 
-        if(questionResolveState!=null) {
+        if (questionResolveState != null) {
             return find
                     .where()
                     .eq("user", expert)
@@ -143,6 +144,7 @@ public class Question extends BaseModel {
 
     /**
      * 获取所有问题
+     *
      * @param page
      * @param pageSize
      * @return

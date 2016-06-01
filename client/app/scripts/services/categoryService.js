@@ -61,7 +61,8 @@ angular.module('clientApp')
         method: 'GET',
         url: apiUrl + '/categories',
         data: {
-          categoryType: params.type
+          categoryType: params.type,
+          parentId: params.parentId
         },
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })

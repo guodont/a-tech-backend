@@ -10,6 +10,7 @@ import com.qiniu.util.Auth;
 import controllers.secured.AdminSecured;
 import models.*;
 import models.enums.UserType;
+import play.Play;
 import play.cache.Cache;
 import play.data.Form;
 import play.data.validation.Constraints;
@@ -446,7 +447,7 @@ public class Application extends BaseController {
         response().setHeader("VERIFY_UUID", codeUuid);
 
         // 保存code到Cache
-        Cache.set(codeUuid, code, 5*60);
+        Cache.set(codeUuid, code, 5*60*1000);
 
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
 

@@ -5,6 +5,7 @@
 
 package models;
 
+import com.avaje.ebean.Ebean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.UnsupportedEncodingException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
+import controllers.secured.AdminSecured;
 import models.enums.UserType;
 import play.data.validation.Constraints;
 
@@ -212,7 +214,17 @@ public class User extends BaseModel {
     public static List<User> findUsers(int page, int pageSize) {
         return find
                 .where()
-                .setOrderBy("whenCreated desc , sort desc")
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<User> findUsers2(int page, int pageSize) {
+        return Ebean.find(User.class)
+                .select("phone")
+                .where()
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -222,7 +234,7 @@ public class User extends BaseModel {
         return find
                 .where()
                 .eq("userType", userType)
-                .setOrderBy("whenCreated desc , sort desc")
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
