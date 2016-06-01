@@ -3,6 +3,7 @@ package models;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by j on 2016/4/13.
@@ -33,4 +34,29 @@ public class Link extends BaseModel{
     @Column(length = 255, nullable = false)
     @Constraints.MaxLength(255)
     public String image;
+
+
+    public static final Finder<Long,Link> find =new Finder<Long, Link>(Long.class,Link.class);
+
+    /**
+     * 通过id查询链接
+     */
+    public static Link findLinkById(final Long id){
+        return find
+                .where()
+                .eq("id", id)
+                .findUnique();
+    }
+
+    /**
+     * 查找所有链接
+     */
+    public static List<Link> findAlllinks(int page, int pageSize){
+        return find
+                .where()
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
 }

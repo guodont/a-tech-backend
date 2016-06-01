@@ -205,3 +205,15 @@ GET         /api/v1/advertisements                  controllers.AdvController.ge
 PUT         /api/v1/advertisement/:id               controllers.AdvController.updateAdv(id: Long)
 # delete adv
 DELETE      /api/v1/advertisement/:id               controllers.AdvController.deleteAdv(id: Long)
+
+# add link
+POST        /api/v1/link                            controllers.LinkController.addLink
+# get advById
+GET         /api/v1/link/:id                        controllers.LinkController.getAdvById(id: Long)
+# get  all adv
+GET         /api/v1/links                           controllers.LinkController.getLinks
+# update adv
+PUT         /api/v1/link/:id                        controllers.LinkController.updateLink(id: Long)
+# delete adv
+DELETE      /api/v1/link/:id                        controllers.LinkController.deleteLink(id: Long)
+
