@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.qiniu.util.Auth;
 import controllers.secured.AdminSecured;
 import models.*;
+import models.enums.Position;
 import models.enums.UserType;
 import play.Play;
 import play.cache.Cache;
@@ -23,6 +24,8 @@ import utils.CommenUtils;
 import utils.JsonResult;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -58,27 +61,32 @@ public class Application extends BaseController {
 
         // TODO 获取聚合数据,按最新发布时间 和 sort desc 排序
 
-        // 获取广告数据
+        // TODO 获取广告数据
+        List<Advertisement> advertisementsInTop = Advertisement.findAdvertisementsByPos(Position.TOP.getName());
 
-        // 获取公告通知
+        List<Advertisement> advertisementsInFloat = Advertisement.findAdvertisementsByPos(Position.FLOAT.getName());
 
-        // 获取新闻板块数据
+        List<Advertisement> advertisementsInAmong = Advertisement.findAdvertisementsByPos(Position.AMONG.getName());
 
-        // 获取文章板块分类数据
+        // TODO 获取公告通知
 
-        // 获取文章板块数据
+        // TODO 获取新闻板块数据
 
-        // 获取问答板块数据
+        // TODO 获取文章板块分类数据
 
-        // 获取专家板块数据
+        // TODO 获取文章板块数据
 
-        // 获取交易板块数据
+        // TODO 获取问答板块数据
 
-        // 获取视频分类数据
+        // TODO 获取专家板块数据
 
-        // 获取视频板块数据
+        // TODO 获取交易板块数据
 
-        // 获取友情链接数据
+        // TODO 获取视频分类数据
+
+        // TODO 获取视频板块数据
+
+        // TODO 获取友情链接数据
 
         return ok();
     }
@@ -110,7 +118,11 @@ public class Application extends BaseController {
             //判断cache code
             String verifyUuid = request().getHeader("VERIFY_UUID");
 
-            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).equals(newUser.verifyCode)) {
+            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
+                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+            }
+
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
 
                 //  保存用户信息
                 User user = new User();
@@ -154,7 +166,7 @@ public class Application extends BaseController {
 
         User loginUser = getUser(); //  获取当前登录用户
 
-        if (loginUser != null) {
+        if (loginUser == null) {
             //  用户未登录
             return badRequest(new JsonResult("error", "User not login").toJsonResponse());
 
@@ -447,7 +459,7 @@ public class Application extends BaseController {
         response().setHeader("VERIFY_UUID", codeUuid);
 
         // 保存code到Cache
-        Cache.set(codeUuid, code, 5*60*1000);
+        Cache.set(codeUuid, code + "," + testPhone, 5*60*1000);
 
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
 

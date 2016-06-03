@@ -21,7 +21,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.router'
   ])
   // .constant('apiUrl', 'http://localhost:9000/api/v1')
   .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
@@ -29,7 +30,52 @@ angular
   .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .constant('cloudUrl', 'http://storage.workerhub.cn/')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $stateProvider, $locationProvider) {
+    // $stateProvider
+    //   .state('home', {
+    //     url: '/',
+    //     views: {
+    //       'header': {
+    //         templateUrl: 'include/head.html'
+    //       },
+    //       'content': {
+    //         templateUrl: 'views/welcome.html',
+    //         controller: 'MainCtrl'
+    //       },
+    //       'bottom': {
+    //         templateUrl: 'include/foot.html'
+    //       }
+    //     }
+    //   }).state('article', {
+    //     url: '/article/list',
+    //     views: {
+    //       'header': {
+    //         templateUrl: 'include/head.html'
+    //       },
+    //       'content': {
+    //         templateUrl: 'views/article/list.html',
+    //         controller: 'ArticleCtrl'
+    //       },
+    //       'bottom': {
+    //         templateUrl: 'include/foot.html'
+    //       }
+    //     }
+    //   })
+    //   .state('login', {
+    //     url: '/login',
+    //     views: {
+    //       'header': {
+    //         template: '<h1 style="margin: 45px;">农科110后台管理系统</h1>'
+    //       },
+    //       'content': {
+    //         templateUrl: 'views/login.html',
+    //         controller: 'LoginCtrl'
+    //       },
+    //       'bottom': {
+    //         template: '<p style="margin: 45px;">山西科技报刊总社版权所有 晋ICP备08000801号</p>'
+    //       }
+    //     }
+    //   });
     $routeProvider
       .when('/', {
         templateUrl: 'views/welcome.html',
@@ -114,68 +160,80 @@ angular
       .when('/link/list', {
         templateUrl: 'views/link/list.html',
         controller: 'LinkCtrl'
+          .when('/adv/add', {
+            templateUrl: 'views/adv/add.html',
+            controller: 'AdvCtrl'
+          })
+          .when('/adv/:id/update', {
+            templateUrl: 'views/adv/update.html',
+            controller: 'AdvCtrl'
+          })
+          .when('/adv/list', {
+            templateUrl: 'views/adv/list.html',
+            controller: 'AdvCtrl'
+          })
+          .otherwise({
+            redirectTo: '/'
+          })
       })
-      .otherwise({
-        redirectTo: '/'
-      });
-  })
-  .directive('observe', function () {
-    return {
-      restrice: 'EA',
-      controller: function ($scope, pagerConfig, $location) {
-        $scope.currentPage = $location.search().currentPage ? parseInt($location.search().currentPage) : 1;
+      .directive('observe', function () {
+        return {
+          restrice: 'EA',
+          controller: function ($scope, pagerConfig, $location) {
+            $scope.currentPage = $location.search().currentPage ? parseInt($location.search().currentPage) : 1;
 
-        $scope.selectPage = function (index) {
-          $location.search('currentPage', index);
-        };
-        $scope.getCurPage = function () {
-          return $scope.currentPage;
-        };
-        $scope.next = function () {
-          if ($scope.isLast()) {
-            return;
-          }
-          $scope.selectPage($scope.currentPage + 1);
-        };
-        $scope.provie = function () {
-          if ($scope.isFirst()) return
-          $scope.selectPage($scope.currentPage - 1);
-        }
-        $scope.first = function () {
-          $scope.selectPage(1);
-        }
-        $scope.last = function () {
-          $scope.selectPage($scope.totalPages - 1);
-        }
-        $scope.isFirst = function () {
-          return $scope.currentPage <= 1;
-        };
-        $scope.isLast = function () {
-          return $scope.currentPage >= $scope.totalPages - 1;
-        }
-        $scope.getText = function (key) {
-          return pagerConfig.text[key];
-        };
+            $scope.selectPage = function (index) {
+              $location.search('currentPage', index);
+            };
+            $scope.getCurPage = function () {
+              return $scope.currentPage;
+            };
+            $scope.next = function () {
+              if ($scope.isLast()) {
+                return;
+              }
+              $scope.selectPage($scope.currentPage + 1);
+            };
+            $scope.provie = function () {
+              if ($scope.isFirst()) return
+              $scope.selectPage($scope.currentPage - 1);
+            }
+            $scope.first = function () {
+              $scope.selectPage(1);
+            }
+            $scope.last = function () {
+              $scope.selectPage($scope.totalPages - 1);
+            }
+            $scope.isFirst = function () {
+              return $scope.currentPage <= 1;
+            };
+            $scope.isLast = function () {
+              return $scope.currentPage >= $scope.totalPages - 1;
+            }
+            $scope.getText = function (key) {
+              return pagerConfig.text[key];
+            };
 
 
-      },
-      link: function (scope, ele, attrs) {
+          },
+          link: function (scope, ele, attrs) {
 
-        scope.itemsPerpage = attrs.itemsperpage || 1;
-        scope.listSizes = attrs.listsizes;
-        attrs.$observe('totalitems', function (val) {
-          scope.totalItems = val;
-        })
-      },
-      templateUrl: '../include/page.html'
-    }
-  }).constant('pagerConfig', {
-    text: {
-      'first': '首页',
-      'provie': '上一页',
-      'next': '下一页',
-      'last': '尾页',
-    }
+            scope.itemsPerpage = attrs.itemsperpage || 1;
+            scope.listSizes = attrs.listsizes;
+            attrs.$observe('totalitems', function (val) {
+              scope.totalItems = val;
+            })
+          },
+          templateUrl: '../include/page.html'
+        }
+      }).constant('pagerConfig', {
+      text: {
+        'first': '首页',
+        'provie': '上一页',
+        'next': '下一页',
+        'last': '尾页',
+      }
+    });
   })
   .run(runBlock);
 

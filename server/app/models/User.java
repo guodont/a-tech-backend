@@ -141,6 +141,10 @@ public class User extends BaseModel {
         this.phone = phone;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
     public void setLastIp(String lastIp) {
         this.lastIp = lastIp;
     }
@@ -151,6 +155,18 @@ public class User extends BaseModel {
 
     public void setEmail(String email) {
         this.email = email.toLowerCase();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public String getLastIp() {
+        return lastIp;
     }
 
     public static final Finder<Long, User> find = new Finder<Long, User>(
