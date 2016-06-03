@@ -68,7 +68,7 @@ public class VideoController extends BaseController {
      */
     @Security.Authenticated(AdminSecured.class)
     public static Result updateVideo(long videoId) {
-        Form<VideoController.VideoForm> postForm = Form.form(VideoController.VideoForm.class).bindFromRequest();
+        Form<VideoForm> postForm = Form.form(VideoForm.class).bindFromRequest();
 
         if (postForm.hasErrors()) {
 
@@ -77,14 +77,14 @@ public class VideoController extends BaseController {
         } else {
             Category category = Category.find.byId(postForm.get().categoryId);
             //  更新视频
-            Video video = new Video();
+            Video video =Video.findVideoById(videoId);
 
             video.name = postForm.get().name;
             video.description = postForm.get().description;
             video.path = postForm.get().path;
             video.admin = getAdmin();
             video.category = category;
-            video.update();
+            video.save();
             return ok(new JsonResult("success", "Video updated successfully").toJsonResponse());
         }
     }

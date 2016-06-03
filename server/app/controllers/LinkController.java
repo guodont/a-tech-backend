@@ -40,6 +40,7 @@ public class LinkController extends BaseController{
      * @param id
      * @return
      */
+    @Security.Authenticated(AdminSecured.class)
     public static Result getLinkById(Long id){
 
         Link link =Link.findLinkById(id);
@@ -49,6 +50,7 @@ public class LinkController extends BaseController{
     /**
      * 查询所有link
      */
+    @Security.Authenticated(AdminSecured.class)
     public static  Result getAlllinks(){
 
         initPageing();
@@ -61,6 +63,7 @@ public class LinkController extends BaseController{
      * 更新link
      *
      */
+    @Security.Authenticated(AdminSecured.class)
     public static  Result updateLinkById(Long id){
         Form<LinkForm> postForm =Form.form(LinkController.LinkForm.class).bindFromRequest();
         if(postForm.hasErrors()){
@@ -80,6 +83,7 @@ public class LinkController extends BaseController{
     /**
      * 删除link
      */
+    @Security.Authenticated(AdminSecured.class)
     public static Result deleteLink(Long id){
         Link link = Link.find.byId(id);
         if(link ==null){
