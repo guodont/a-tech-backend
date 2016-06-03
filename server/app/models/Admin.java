@@ -65,6 +65,10 @@ public class Admin extends BaseModel {
         this.email = email.toLowerCase();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     /**
      * 通过邮箱密码查找管理员
      * @param email

@@ -36,6 +36,7 @@ public class VideoController extends BaseController {
             video.name = postForm.get().name;
             video.description = postForm.get().description;
             video.path = postForm.get().path;
+            video.thumbnail = postForm.get().thumbnail;
             video.admin = getAdmin();
             video.category = category;
             video.clickCount = 0L;
@@ -82,6 +83,7 @@ public class VideoController extends BaseController {
             video.name = postForm.get().name;
             video.description = postForm.get().description;
             video.path = postForm.get().path;
+            video.thumbnail = postForm.get().thumbnail;
             video.admin = getAdmin();
             video.category = category;
             video.update();
@@ -125,6 +127,9 @@ public class VideoController extends BaseController {
         @Constraints.MaxLength(255)
         @Constraints.Required
         public String path;          //  路径
+
+        // @Constraints.MaxLength(255)
+        public String thumbnail;          //  缩略图
 
         @Constraints.Required
         public Long categoryId;     //  分类id

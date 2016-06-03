@@ -1,47 +1,46 @@
 'use strict';
 /**
- * 文章管理控制器
+ * 广告管理控制器
  */
 angular.module('clientApp')
-  .controller('ArticleCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, articleService, categoryService, cloudUrl) {
+  .controller('AdvCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, advService, categoryService, cloudUrl) {
 
 
     $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
-    $scope.imageData = "null";
 
-    $scope.getArticles = function () {
-      articleService.getArticles(
+    $scope.getAdvs = function () {
+      advService.getAdvs(
         {
           curPage : $scope.curPage
         },
         function (res) {
           console.log(res.data);
-          $scope.articles = res.data;
+          $scope.advs = res.data;
         },
         function (res) {
-          console.log("文章获取失败");
+          console.log("广告获取失败");
         }
       );
     };
 
-    $scope.getArticles();
+    $scope.getAdvs();
 
-    $scope.getArticleInfo = function () {
-      articleService.getArticle(
+    $scope.getAdvInfo = function () {
+      advService.getAdv(
         {
-          articleId: $routeParams.id
+          advId: $routeParams.id
         },
         function (res) {
           console.log(res.data);
-          var article = res.data;
-          $scope.title = article.title;
-          $scope.content = article.content;
-          editor.setValue(article.content);
-          $scope.tag = article.tag;
-          $scope.sort = article.sort;
-          $scope.imageData = article.image;
-          $scope.cateImage = cloudUrl + article.image;
-          $scope.categoryId = article.category.id;
+          var adv = res.data;
+          $scope.title = adv.title;
+          $scope.content = adv.content;
+          editor.setValue(adv.content);
+          $scope.tag = adv.tag;
+          $scope.sort = adv.sort;
+          $scope.imageData = adv.image;
+          $scope.cateImage = cloudUrl + adv.image;
+          $scope.categoryId = adv.category.id;
           // $scope.$apply();
         },
         function (res) {
@@ -51,25 +50,24 @@ angular.module('clientApp')
     };
 
     if ($routeParams.id != null) {
-      $scope.getArticleInfo();
+      $scope.getAdvInfo();
     }
 
-    $scope.addArticle = function () {
-      articleService.addArticle(
+    $scope.addAdv = function () {
+      advService.addAdv(
         {
-          title: $scope.title,
-          // content: $scope.content,
-          content: editor.getValue(),
-          tag: $scope.tag,
+          name: $scope.name,
+          description: $scope.description,
+          url: $scope.url,
           sort: $scope.sort,
           image: $scope.imageData,
-          categoryId: $scope.categoryId
+          position: $scope.position
         },
         function (res) {
           $scope.subject = '';
           $scope.content = '';
           alertService.add('success', res.data.success.message);
-          $location.path('/article/list');
+          $location.path('/adv/list');
         },
         function (res) {
           console.log(res);
@@ -92,22 +90,22 @@ angular.module('clientApp')
       );
     };
 
-    $scope.updateArticle = function () {
-      articleService.updateArticle(
+    $scope.updateAdv = function () {
+      advService.updateAdv(
         {
-          articleId: $routeParams.id,
-          title: $scope.title,
-          content: editor.getValue(),
-          tag: $scope.tag,
+          advId: $routeParams.id,
+          name: $scope.name,
+          description: $scope.description,
+          url: $scope.url,
           sort: $scope.sort,
           image: $scope.imageData,
-          categoryId: $scope.categoryId
+          position: $scope.position
         },
         function (res) {
           $scope.subject = '';
           $scope.content = '';
           alertService.add('success', res.data.success.message);
-          $location.path('/article/list');
+          $location.path('/adv/list');
         },
         function (res) {
           console.log(res);
@@ -130,70 +128,16 @@ angular.module('clientApp')
       );
     };
 
-    $scope.deleteArticle = function (id) {
-      articleService.deleteArticle({
+    $scope.deleteAdv = function (id) {
+      advService.deleteAdv({
           id: id
         },
         function (res) {
           alertService.add('success', res.data.success.message);
-          $scope.getArticles();
+          $scope.getAdvs();
         }, function (res) {
           alertService.add('success', res.data.error.message);
         });
-    };
-
-    $scope.getCategories = function (type) {
-      categoryService.getCategories(
-        {
-          type: type,
-          parentId: "0"
-        },
-        function (res) {
-          console.log(res.data);
-          $scope.categories = res.data;
-        },
-        function (res) {
-          console.log("文章分类获取失败");
-        }
-      );
-    };
-
-    $scope.getCategories('ARTICLE');  // 获取文章分类
-
-    $scope.addCategory = function () {
-      categoryService.addCategory(
-        {
-          parentId: $scope.categoryId,
-          name: $scope.name,
-          sort: $scope.sort,
-          image: $scope.imageData,
-          type: 'ARTICLE'
-        },
-        function (res) {
-          console.log(res.data.success.message);
-          alertService.add('success', res.data.success.message);
-          $('.at-add-category').modal('hide'); // 隐藏模态框
-          $scope.getCategories('ARTICLE');  // 获取文章分类
-        },
-        function (res) {
-          console.log(res);
-          if (res.status === 400) {
-            angular.forEach(res.data, function (value, key) {
-              if (key === 'name' || key === 'image') {
-                alertService.add('danger', key + ' : ' + value);
-              } else {
-                alertService.add('danger', value.message);
-              }
-            });
-          } else if (res.status === 401) {
-            $location.path('/login');
-          } else if (res.status === 500) {
-            alertService.add('danger', 'Internal server error!');
-          } else {
-            alertService.add('danger', res.date);
-          }
-        }
-      );
     };
 
     $scope.images = [];
@@ -205,7 +149,7 @@ angular.module('clientApp')
       // 在初始化时，uptoken, uptoken_url, uptoken_func 三个参数中必须有一个被设置
       // 切如果提供了多个，其优先级为 uptoken > uptoken_url > uptoken_func
       // 其中 uptoken 是直接提供上传凭证，uptoken_url 是提供了获取上传凭证的地址，如果需要定制获取 uptoken 的过程则可以设置 uptoken_func
-      uptoken: 'K8eqr1qikcsa2OXUkg_gMxIX16cCPR9U8yULRKDr:yo4NJzSnaKKXHeA3LVgcFCcn3uk=:eyJzY29wZSI6Im5rMTEwLWltYWdlcyIsImRlYWRsaW5lIjoxNDY0NzY4NjUzLCJzYXZlS2V5IjoicWluaXVfY2xvdWRfc3RvcmFnZV8xNDY0NzY1MDUzIiwibWltZUxpbWl0IjoiaW1hZ2VcLyoifQ==', // uptoken 是上传凭证，由其他程序生成
+      uptoken: 'K8eqr1qikcsa2OXUkg_gMxIX16cCPR9U8yULRKDr:uOVzmGKrnT9yDhX3AYrjcpTbies=:eyJzY29wZSI6Im5rMTEwLWltYWdlcyIsImRlYWRsaW5lIjoxNDY0NzgwMjY2LCJzYXZlS2V5IjoicWluaXVfY2xvdWRfc3RvcmFnZV8xNDY0Nzc2NjY2IiwibWltZUxpbWl0IjoiaW1hZ2VcLyoifQ==', // uptoken 是上传凭证，由其他程序生成
       // TODO
       // uptoken_url: 'http://cloud.workerhub.cn//api/quick_start/simple_image_example_token.php',         // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
       // uptoken_func: function(file){    // 在需要获取 uptoken 时，该方法会被调用

@@ -177,11 +177,22 @@ public class QuestionController extends BaseController {
             questions = Question.findQuestionsByCategory(category, page, pageSize);
             for ( Question question : questions) {
                 // 判断用户的收藏状态
-
+                question.user.setPhone("****");
+                questions.remove(question);
+                questions.add(question);
             }
             return ok(Json.toJson(questions));
         } else {
-            return ok(Json.toJson(Question.findQuestions(page, pageSize)));
+            questions = Question.findQuestions(page, pageSize);
+            for ( Question question : questions) {
+                // 判断用户的收藏状态
+                question.user.setPhone("****");
+                FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(),question);
+//                questions.remove(question);
+//                questions.add(question);
+            }
+
+            return ok(Json.toJson(questions));
         }
     }
 

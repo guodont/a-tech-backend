@@ -32,6 +32,13 @@ public class Video extends BaseModel {
     @Constraints.MaxLength(255)
     @Constraints.Required
     public String path;
+
+    /**
+     * 视频缩略图
+     */
+    @Constraints.MaxLength(255)
+    public String thumbnail;
+
     /**
      * 管理员
      */

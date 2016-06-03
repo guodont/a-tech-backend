@@ -17,7 +17,7 @@
             </div>
             <div style="margin: 5px 0px;">
               <label for="categoryId">所属父分类</label>
-              <select name="categoryId" ng-model="categoryId" id="categoryId" >
+              <select name="categoryId" ng-model="categoryId" id="categoryId">
                 <option value="0" selected>一级分类</option>
                 <option ng-repeat="category in categories" value="{{category.id}}">{{ category.name }}</option>
               </select>
@@ -34,7 +34,7 @@
               </div>
             </div>
             <!--<div class="field" ng-repeat="image in images" >-->
-              <img style="max-width: 500px" src="{{ cateImage }}">
+            <img style="max-width: 500px" src="{{ cateImage }}">
             <!--</div>-->
             <br>
           </div>
@@ -63,7 +63,8 @@
     <tbody>
     <tr ng-repeat="category in categories">
       <td>{{ category.id }}</td>
-      <td><img style="max-width: 80px;max-height: 60px;" src="http://storage.workerhub.cn/{{ category.image }}" alt=""></td>
+      <td><img style="max-width: 80px;max-height: 60px;" src="http://storage.workerhub.cn/{{ category.image }}" alt="">
+      </td>
       <td>{{ category.name }}</td>
       <td>{{ category.whenCreated | date }}</td>
       <td>{{ category.sort }}</td>
