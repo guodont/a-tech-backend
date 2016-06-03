@@ -1,0 +1,30 @@
+<form name="postForm" ng-submit="updateVideo()" novalidate>
+  <div>
+    <label for="name">名称</label>
+    <input name="name" class="form-control" type="subject" id="name" placeholder="Subject"
+           ng-model="name">
+  </div>
+  <div>
+    <label for="description">描述</label>
+    <textarea id="editor" ng-model="description" id="description"  placeholder="在此编辑描述" style="width: 100% ;" autofocus></textarea>
+  </div>
+  <div>
+    <label for="path">文件路径</label>
+    <input name="path" class="form-control" type="subject" id="path" placeholder="文件路径"
+           ng-model="path">
+  </div>
+  <div>
+    <label for="categoryId">所属分类</label>
+    <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类"
+           ng-model="categoryId">
+  </div>
+
+  <br>
+  <button type="submit" class="btn btn-primary">保存</button>
+</form>
+<script type="text/javascript">
+  var editor = new Simditor({
+    textarea: $('#editor')
+    //optional options
+  });
+</script>

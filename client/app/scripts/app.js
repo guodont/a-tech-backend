@@ -91,6 +91,10 @@ angular
         templateUrl: 'views/video/categories.html',
         controller: 'VideoCtrl'
       })
+      .when('/video/:id/update', {
+        templateUrl: 'views/video/update.html',
+        controller: 'VideoCtrl'
+      })
       .when('/question/list', {
         templateUrl: 'views/question/list.html',
         controller: 'QuestionCtrl'
@@ -102,6 +106,14 @@ angular
       .when('/trade/list', {
         templateUrl: 'views/trade/list.html',
         controller: 'TradeCtrl'
+      })
+      .when('/link/add', {
+        templateUrl: 'views/link/add.html',
+        controller: 'LinkCtrl'
+      })
+      .when('/link/list', {
+        templateUrl: 'views/link/list.html',
+        controller: 'LinkCtrl'
       })
       .otherwise({
         redirectTo: '/'

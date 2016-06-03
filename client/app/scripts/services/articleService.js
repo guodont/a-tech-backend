@@ -3,10 +3,10 @@
  */
 'use strict';
 
-angular.module('clientApp')
-  .service('articleService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
+    angular.module('clientApp')
+      .service('articleService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
 
-    var self = this;
+        var self = this;
 
     // 添加文章
     self.addArticle = function (params, success, error) {

@@ -8,6 +8,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/video.js/dist/video-js.css" />
   <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
   <link rel="stylesheet" href="bower_components/simditor/styles/simditor.css" />
   <!-- endbower -->
@@ -342,7 +343,7 @@
           </a>
           <ul class="submenu">
             <li menu-container="true">
-              <a href="">
+              <a href="#/link/list" >
                 <i class="icon-double-angle-right"></i>
                 友情链接管理
               </a>
@@ -422,15 +423,12 @@
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-
 <script src="bower_components/video.js/dist/video.js"></script>
 <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
 <script src="bower_components/simple-module/lib/module.js"></script>
 <script src="bower_components/simple-hotkeys/lib/hotkeys.js"></script>
 <script src="bower_components/simple-uploader/lib/uploader.js"></script>
 <script src="bower_components/simditor/lib/simditor.js"></script>
-<script type="text/javascript" src="bower_components/plupload/js/moxie.js"></script>
-<script type="text/javascript" src="bower_components/plupload/js/plupload.dev.js"></script>
 <script src="bower_components/qiniu/dist/qiniu.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
@@ -458,6 +456,9 @@
 <script src="scripts/services/questionService.js"></script>
 <script src="scripts/controllers/user.js"></script>
 <script src="scripts/controllers/trade.js"></script>
+<script src="scripts/controllers/link.js"></script>
+<script src="scripts/services/linkService.js"></script>
+
 
 
 <!-- endbuild -->

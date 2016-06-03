@@ -23,9 +23,9 @@
       <td>{{ video.clickCount }}</td>
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-          <button class="btn btn-xs btn-info">
-           <a ><i class="icon-edit bigger-120"></i></a>
-          </button>
+          <a class="btn btn-xs btn-info" href="#/video/{{ video.id }}/update">
+            <i class="icon-edit bigger-120"></i>
+          </a>
           <button class="btn btn-xs btn-danger" ng-click="deleteVideo(video.id)">
             <a ><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
           </button>
