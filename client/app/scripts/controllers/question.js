@@ -62,4 +62,28 @@ angular.module('clientApp')
         });
     };
 
+    // 审核问题
+    $scope.auditQuestion = function (question) {
+      $scope.curQuestion = question;
+      console.log("审核问题");
+    };
+
+    // 拒绝审核
+    $scope.auditWithRefuse = function (question) {
+      // TODO
+      console.log("拒绝审核");
+    };
+
+    // 通过审核
+    $scope.auditWithPass = function (question) {
+      // TODO
+      console.log("通过审核");
+    };
+
+    // 指派给专家
+    $scope.assignToexpert = function (question) {
+      // TODO
+      console.log("指派给专家");
+    };
+
   });

@@ -36,6 +36,8 @@ module.exports = function(config) {
       'bower_components/simple-uploader/lib/uploader.js',
       'bower_components/simditor/lib/simditor.js',
       'bower_components/qiniu/dist/qiniu.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.js',
+      'bower_components/semantic/dist/semantic.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

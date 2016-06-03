@@ -63,8 +63,12 @@ public class AdvController extends BaseController{
         String position =Position.AMONG.getName();
         Advertisement adv =new Advertisement();
 
-        //判断广告位置
 
+        if (request().getQueryString("position") != null) {
+            position = request().getQueryString("position");
+        }
+
+        //判断广告位置
         if(position.equals(Position.AMONG.getName())){
             List<Advertisement> advertisementsByPos=Advertisement.findAdvertisementsByPos(Position.AMONG.getName());
             return(ok(Json.toJson(advertisementsByPos)));
@@ -77,8 +81,6 @@ public class AdvController extends BaseController{
             List<Advertisement> advertisementsByPos=Advertisement.findAdvertisementsByPos(Position.TOP.getName());
             return(ok(Json.toJson(advertisementsByPos)));
         }
-
-
 
         //  如果不传位置参数则默认显示所有广告
         initPageing();

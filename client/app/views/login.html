@@ -1,14 +1,95 @@
-<form name="loginForm" ng-submit="login()" novalidate>
-  <div>
-    <label for="email">Email</label>
-    <input name="email" class="form-control" type="email" id="email" placeholder="Email"
-           ng-model="email">
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input name="password" class="form-control" type="password" id="password"
-           placeholder="Password" ng-model="password">
+<style>
+  ::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+  }
 
-  </div>
-  <button type="submit" class="btn btn-primary">Log in</button>
-</form>
+  ::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+  }
+
+  html,
+  input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background: #f0f0f0;
+  }
+
+  .container {
+    max-width: 500px;
+    _width: 500px;
+    padding: 30px 20px 50px;
+    border: 1px solid #b3b3b3;
+    border-radius: 4px;
+    margin: 0 auto;
+    box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+    background: #fcfcfc;
+  }
+
+  h1 {
+    margin: 0 10px;
+    font-size: 38px;
+    text-align: center;
+  }
+
+  h1 span {
+    color: #bbb;
+  }
+
+  h3 {
+    margin: 1.5em 0 0.5em;
+  }
+
+  p {
+    margin: 1em 0;
+    text-align: center;
+  }
+
+  ul {
+    padding: 0 0 0 40px;
+    margin: 1em 0;
+  }
+
+  .container {
+    max-width: 380px;
+    _width: 380px;
+    margin: 0 auto;
+  }
+
+  /* google search */
+
+  #goog-fixurl ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #goog-fixurl form {
+    margin: 0;
+  }
+
+  input::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+</style>
+<div class="container">
+  <form name="loginForm" ng-submit="login()" novalidate>
+    <div>
+      <label for="email">邮箱</label>
+      <input name="email" class="form-control" type="email" id="email" placeholder="Email"
+             ng-model="email">
+    </div>
+    <div>
+      <label for="password">密码</label>
+      <input name="password" class="form-control" type="password" id="password"
+             placeholder="Password" ng-model="password">
+    </div>
+
+    <br>
+    <button type="submit" class="btn btn-lg btn-primary btn-block">登录</button>
+  </form>
+</div>

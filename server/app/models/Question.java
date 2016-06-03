@@ -72,6 +72,17 @@ public class Question extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public List<Answer> answers;
 
+    @Access(value = AccessType.PROPERTY)
+    private boolean isFav;
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+    }
+
     /**
      * 问题图片
      */
