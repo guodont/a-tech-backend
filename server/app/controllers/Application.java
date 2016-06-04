@@ -115,14 +115,14 @@ public class Application extends BaseController {
 
         } else {
 //
-//            //判断cache code
-//            String verifyUuid = request().getHeader("VERIFY_UUID");
-//
-//            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
-//                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
-//            }
-//
-//            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
+            //判断cache code
+            String verifyUuid = request().getHeader("VERIFY_UUID");
+
+            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
+                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+            }
+
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
 
                 //  保存用户信息
                 User user = new User();
@@ -141,9 +141,9 @@ public class Application extends BaseController {
 
                 return status(201, authTokenJson);
 
-//            } else {
-//                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
-//            }
+            } else {
+                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+            }
         }
     }
 
@@ -442,6 +442,7 @@ public class Application extends BaseController {
 
     /**
      * 发送短信验证码
+     *
      * @return
      */
     public static Result sendSMSVerifyCode() {
@@ -459,7 +460,7 @@ public class Application extends BaseController {
         response().setHeader("VERIFY_UUID", codeUuid);
 
         // 保存code到Cache
-        Cache.set(codeUuid, code + "," + testPhone, 5*60*1000);
+        Cache.set(codeUuid, code + "," + testPhone, 5 * 60 * 1000);
 
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
 
@@ -478,7 +479,7 @@ public class Application extends BaseController {
         String result = CommenUtils.request(httpUrl, httpArg.toString());
         // TODO=========
 
-        if(result.equals("0")) {
+        if (result.equals("0")) {
             return ok(new JsonResult("success", "验证短信发送成功").toJsonResponse());
         } else {
             return ok(new JsonResult("error", "验证短信发送失败").toJsonResponse());
@@ -488,6 +489,7 @@ public class Application extends BaseController {
 
     /**
      * 普通用户获取上传token
+     *
      * @return
      */
     @Security.Authenticated(Secured.class)
@@ -504,6 +506,7 @@ public class Application extends BaseController {
 
     /**
      * 管理员用户获取上传token
+     *
      * @return
      */
     @Security.Authenticated(AdminSecured.class)
@@ -520,6 +523,7 @@ public class Application extends BaseController {
 
     /**
      * 图形验证码
+     *
      * @return
      */
     public static Result captcha() {
@@ -578,7 +582,7 @@ public class Application extends BaseController {
         @Constraints.MinLength(3)
         public String userName; //  用户名
 
-//        @Constraints.Required
+        @Constraints.Required
         public String verifyCode; //  验证码
 
     }
