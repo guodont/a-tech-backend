@@ -146,7 +146,7 @@ angular.module('clientApp')
       categoryService.getCategories(
         {
           type: type,
-          parentId: "0"
+          parentId: ""
         },
         function (res) {
           console.log(res.data);
@@ -160,6 +160,17 @@ angular.module('clientApp')
 
     $scope.getCategories('ARTICLE');  // 获取文章分类
 
+    $('.ui.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#categoryId').attr("value",value);
+          $scope.categoryId = value;
+        }
+      })
+    ;
+
     $scope.addCategory = function () {
       categoryService.addCategory(
         {
@@ -172,7 +183,7 @@ angular.module('clientApp')
         function (res) {
           console.log(res.data.success.message);
           alertService.add('success', res.data.success.message);
-          $('.at-add-category').modal('hide'); // 隐藏模态框
+          // $('.at-add-category').modal('hide'); // 隐藏模态框
           $scope.getCategories('ARTICLE');  // 获取文章分类
         },
         function (res) {

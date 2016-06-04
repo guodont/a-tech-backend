@@ -1,24 +1,25 @@
 <form name="postForm" ng-submit="addArticle()" novalidate>
-  <div>
+  <div class="field">
     <label for="title">标题</label>
     <input name="title" class="form-control" type="subject" id="title" placeholder="输入文章标题"
            ng-model="title">
   </div>
-  <div>
+  <div class="field">
     <label for="content">内容</label>
-    <textarea id="editor" ng-model="content" id="content"  placeholder="在此编辑文章" style="width: 100% ;" autofocus></textarea>
+    <textarea id="editor" ng-model="content" id="content" placeholder="在此编辑文章" style="width: 100% ;"
+              autofocus></textarea>
   </div>
   <div>
     <label for="tag">标签</label>
     <input name="tag" class="form-control" type="subject" id="tag" placeholder="输入合适的标签,便于用户搜索"
            ng-model="tag">
   </div>
-  <div>
+  <div class="field">
     <label for="categoryId">所属分类</label>
     <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类"
            ng-model="categoryId">
   </div>
-  <div>
+  <div class="field">
     <label for="sort">排序</label>
     <input name="sort" class="form-control" type="subject" id="sort" placeholder="排序值为: 1-255"
            ng-model="sort">

@@ -224,7 +224,7 @@ angular
           scope.totalItems = val;
         })
       },
-      templateUrl: '../include/page.html'
+      templateUrl: 'include/page.html'
     }
   }).constant('pagerConfig', {
     text: {
@@ -249,7 +249,8 @@ function runBlock($http) {
     'Accept': 'application/json'
   };
   $http.defaults.headers.put = {
-    'Content-Type': 'application/json;charset=utf-8',
+    // !!! put 请求有时候不能加  Content-Type
+    // 'Content-Type': 'application/json;charset=utf-8',
     'Accept': 'application/json'
   };
 }

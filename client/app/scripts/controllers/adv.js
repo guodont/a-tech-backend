@@ -8,6 +8,15 @@ angular.module('clientApp')
 
     $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
 
+    $('.ui.dropdown')
+      .dropdown({
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#position').attr("value",value);
+          $scope.position = value;
+        }
+      })
+    ;
     $scope.getAdvs = function () {
       advService.getAdvs(
         {

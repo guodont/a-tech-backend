@@ -59,12 +59,8 @@ angular.module('clientApp')
     self.getCategories = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/categories',
-        data: {
-          categoryType: params.type,
-          parentId: params.parentId
-        },
-        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
+        url: apiUrl + '/categories?categoryType=' + params.type + '&parentId=' + params.parentId,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
           if (typeof (success) === 'function') {

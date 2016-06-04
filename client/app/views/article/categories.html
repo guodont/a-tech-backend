@@ -10,19 +10,28 @@
         </div>
         <form name="postForm" ng-submit="addCategory()" novalidate>
           <div class="modal-body">
-            <div>
+            <div  class="field">
               <label for="name">名称</label>
               <input name="name" class="form-control" type="subject" id="name" placeholder="输入分类名称,不超过24字"
                      ng-model="name">
             </div>
-            <div style="margin: 5px 0px;">
+            <div class="field">
               <label for="categoryId">所属父分类</label>
-              <select name="categoryId" ng-model="categoryId" id="categoryId">
-                <option value="0" selected>一级分类</option>
-                <option ng-repeat="category in categories" value="{{category.id}}">{{ category.name }}</option>
-              </select>
+              <input type="hiden" ng-hide="true" ng-model="categoryId" id="categoryId">
+              <div class="ui search selection dropdown  remote example">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <div class="item" data-value="0">
+                    作为一级分类
+                  </div>
+                  <div ng-repeat="category in categories" class="item" data-value="{{ category.id }}">
+                    {{ category.name }}
+                  </div>
+                </div>
+                <div class="default text">选择分类</div>
+              </div>
             </div>
-            <div>
+            <div  class="field">
               <label for="sort">排序</label>
               <input name="sort" class="form-control" type="subject" id="sort" placeholder="排序值为: 1-255"
                      ng-model="sort">
@@ -63,7 +72,13 @@
     <tbody>
     <tr ng-repeat="category in categories">
       <td>{{ category.id }}</td>
-      <td><img style="max-width: 80px;max-height: 60px;" src="http://storage.workerhub.cn/{{ category.image }}" alt="">
+      <td>
+        <div ng-if="category.image !== 'null'">
+          <img style="max-width: 80px;max-height: 60px;" ng-src="http://storage.workerhub.cn/{{ category.image }}" alt="">
+        </div>
+        <div ng-if="category.image == 'null'">
+          无图片
+        </div>
       </td>
       <td>{{ category.name }}</td>
       <td>{{ category.whenCreated | date }}</td>
@@ -81,4 +96,6 @@
     </tr>
     </tbody>
   </table>
+  <observe></observe>
+
 </div>
