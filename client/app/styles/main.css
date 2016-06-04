@@ -85,3 +85,12 @@ body {
 .modal-content {
   /*padding: 25px;*/
 }
+
+
+.table-responsive {
+  overflow-x: inherit !important;
+}
+
+.field {
+  margin-top: 15px;
+}

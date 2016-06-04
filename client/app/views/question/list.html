@@ -9,37 +9,37 @@
           <h4 class="modal-title">审核问题</h4>
         </div>
         <div class="modal-body">
-          <div>
+          <div class="field">
             <label>标题</label>
             <p>{{ curQuestion.title }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>描述</label>
             <p>{{ curQuestion.description }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>配图</label>
             <div class="field" ng-repeat="image in images">
               <img style="max-width: 500px" src="{{ cateImage }}">
             </div>
           </div>
-          <div>
+          <div class="field">
             <label>所属分类</label>
             <p>{{ curQuestion.category.name }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>审核状态</label>
             <p>{{ curQuestion.questionAuditState }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>指派人</label>
             <p>{{ curQuestion.expert }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>发布者</label>
             <p>{{ curQuestion.user.name }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>发布时间</label>
             <p>{{ curQuestion.whenCreated | date:'yyyy-MM-dd HH:mm' }}</p>
           </div>
@@ -62,11 +62,11 @@
           <h4 class="modal-title">指派问题给专家</h4>
         </div>
         <div class="modal-body">
-          <div>
+          <div class="field">
             <label>标题</label>
             <p>{{ curQuestion.title }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>所属分类</label>
             <p>{{ curQuestion.category.name }}</p>
           </div>
@@ -85,11 +85,11 @@
             </div>
             </p>
           </div>
-          <div>
+          <div class="field">
             <label>发布者</label>
             <p>{{ curQuestion.user.name }}</p>
           </div>
-          <div>
+          <div class="field">
             <label>发布时间</label>
             <p>{{ curQuestion.whenCreated | date:'yyyy-MM-dd HH:mm' }}</p>
           </div>

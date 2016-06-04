@@ -148,7 +148,7 @@ angular.module('clientApp')
       categoryService.getCategories(
         {
           type: type,
-          parentId: "0"
+          parentId: ""
         },
         function (res) {
           console.log(res.data);
@@ -159,6 +159,17 @@ angular.module('clientApp')
         }
       );
     };
+
+    $('.ui.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#categoryId').attr("value",value);
+          $scope.categoryId = value;
+        }
+      })
+    ;
 
     $scope.getCategories('VIDEO');  // 获取文章分类
 
@@ -174,7 +185,7 @@ angular.module('clientApp')
         function (res) {
           console.log(res.data.success.message);
           alertService.add('success', res.data.success.message);
-          $('.at-add-category').modal('hide'); // 隐藏模态框
+          // $('.at-add-category').modal('hide'); // 隐藏模态框
           $scope.getCategories('VIDEO');  // 获取视频分类
         },
         function (res) {
