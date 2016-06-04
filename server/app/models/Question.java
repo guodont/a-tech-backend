@@ -1,14 +1,11 @@
 package models;
 
-import jdk.nashorn.internal.objects.annotations.Property;
 import models.enums.QuestionAuditState;
 import models.enums.QuestionResolveState;
-import org.jboss.logging.Field;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.jar.Pack200;
 
 /**
  * Created by j on 2016/4/13.
