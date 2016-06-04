@@ -33,9 +33,8 @@ public class Category extends BaseModel {
     /**
      * 分类表图片
      */
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     @Constraints.MaxLength(255)
-    @Constraints.Required
     public String image;
     /**
      * 分类表排序
@@ -63,6 +62,15 @@ public class Category extends BaseModel {
         return find
                 .where()
                 .eq("pid", pid)
+                .setOrderBy("sort desc")
+                .findList();
+    }
+
+    public static List<Category> findCategoriesByParentAndType(final long pid, final String type) {
+        return find
+                .where()
+                .eq("pid", pid)
+                .eq("categoryType", type)
                 .setOrderBy("sort desc")
                 .findList();
     }

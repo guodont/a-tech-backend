@@ -114,7 +114,7 @@ public class Application extends BaseController {
             return badRequest(new JsonResult("error", "User exists").toJsonResponse());
 
         } else {
-
+//
             //判断cache code
             String verifyUuid = request().getHeader("VERIFY_UUID");
 
@@ -442,6 +442,7 @@ public class Application extends BaseController {
 
     /**
      * 发送短信验证码
+     *
      * @return
      */
     public static Result sendSMSVerifyCode() {
@@ -459,7 +460,7 @@ public class Application extends BaseController {
         response().setHeader("VERIFY_UUID", codeUuid);
 
         // 保存code到Cache
-        Cache.set(codeUuid, code + "," + testPhone, 5*60*1000);
+        Cache.set(codeUuid, code + "," + testPhone, 5 * 60 * 1000);
 
         String testContent = "【农科110】您的验证码是[" + code + "],５分钟内有效。若非本人操作请忽略此消息。";
 
@@ -478,7 +479,7 @@ public class Application extends BaseController {
         String result = CommenUtils.request(httpUrl, httpArg.toString());
         // TODO=========
 
-        if(result.equals("0")) {
+        if (result.equals("0")) {
             return ok(new JsonResult("success", "验证短信发送成功").toJsonResponse());
         } else {
             return ok(new JsonResult("error", "验证短信发送失败").toJsonResponse());
@@ -488,6 +489,7 @@ public class Application extends BaseController {
 
     /**
      * 普通用户获取上传token
+     *
      * @return
      */
     @Security.Authenticated(Secured.class)
@@ -504,6 +506,7 @@ public class Application extends BaseController {
 
     /**
      * 管理员用户获取上传token
+     *
      * @return
      */
     @Security.Authenticated(AdminSecured.class)
@@ -520,6 +523,7 @@ public class Application extends BaseController {
 
     /**
      * 图形验证码
+     *
      * @return
      */
     public static Result captcha() {

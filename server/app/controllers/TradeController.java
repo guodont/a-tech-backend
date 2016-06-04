@@ -16,6 +16,8 @@ import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
+import java.util.List;
+
 /**
  * @author guodont
  *         <p>
@@ -128,13 +130,24 @@ public class TradeController extends BaseController {
      */
     public static Result getTrades() {
         initPageing();
+        List<Trade> trades = null;
         if (request().getQueryString("category") != null) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            return ok(Json.toJson(Trade.findTradesByCategoryAndStatus(category, TradeState.AUDITED.getName(), page, pageSize)));
+            trades = Trade.findTradesByCategoryAndStatus(category, TradeState.AUDITED.getName(), page, pageSize);
         } else {
-            return ok(Json.toJson(Trade.findTrades(page, pageSize)));
+            trades = Trade.findTrades(page, pageSize);
         }
+        for (Trade trade : trades) {
+            // 判断用户的收藏状态
+            if (FavoriteTrade.findFavoriteByTradeIdAndUser(getUser(), trade) != null) {
+                trade.setFav(true);
+            } else {
+                trade.setFav(false);
+            }
+            trade.user.setFieldSecurity();   // 设置字段安全性
+        }
+        return ok(Json.toJson(trades));
     }
 
     /**
@@ -181,18 +194,21 @@ public class TradeController extends BaseController {
     public static Result favTrade(long tradeId) {
         Trade trade = Trade.findTradeById(tradeId);
 
+        if (FavoriteTrade.findFavoriteByTradeIdAndUser(getUser(),trade) != null)
+            return badRequest(new JsonResult("error", "已收藏过此交易").toJsonResponse());
+
         if (trade != null) {
+
             FavoriteTrade favoriteTrade = new FavoriteTrade();
             favoriteTrade.trade = trade;
             favoriteTrade.user = getUser();
             favoriteTrade.save();            // 保存收藏记录表
-
             trade.likeCount += 1;    // 收藏数+1
             trade.save();
 
-            return ok(new JsonResult("success", "fav trade success").toJsonResponse());
+            return ok(new JsonResult("success", "交易收藏成功").toJsonResponse());
         } else {
-            return badRequest(new JsonResult("error", "such trade not exits").toJsonResponse());
+            return badRequest(new JsonResult("error", "此交易不存在").toJsonResponse());
         }
     }
 
@@ -210,7 +226,7 @@ public class TradeController extends BaseController {
         trade.likeCount -= 1;    // 收藏数-1
         trade.save();
 
-        return ok(new JsonResult("success", "cancel fav trade success").toJsonResponse());
+        return ok(new JsonResult("success", "取消收藏成功").toJsonResponse());
     }
 
     /**

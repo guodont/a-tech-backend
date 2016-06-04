@@ -15,7 +15,6 @@ public class BaseController extends Controller {
     public static int pageSize;
 
     public static void initPageing() {
-
         if (request().getQueryString("page") != null && request().getQueryString("pageSize") != null) {
             page = Integer.valueOf(request().getQueryString("page"));
             pageSize = Integer.valueOf(request().getQueryString("pageSize"));
@@ -40,7 +39,19 @@ public class BaseController extends Controller {
      * @return
      */
     public static User getUser() {
-        return (User) Http.Context.current().args.get("user");
+//        return (User) Http.Context.current().args.get("user");
+        // !!这里直接从请求头里获取token 再从数据库获取当前会话用户,否则普通不需权限的get动作就不能调用此方法了
+        String[] authTokenHeaderValues = request().headers().get(SecurityController.AUTH_TOKEN_HEADER);
+        if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
+            User user = models.User.findByAuthToken(authTokenHeaderValues[0]);
+            if (user != null) {
+                return user;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
 }

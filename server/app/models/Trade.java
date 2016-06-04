@@ -64,6 +64,19 @@ public class Trade extends BaseModel {
 
     @Constraints.MaxLength(255)
     public String images;
+
+
+    @Access(value = AccessType.PROPERTY)
+    private boolean isFav;
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+    }
+
     /**
      * 交易图片
      */

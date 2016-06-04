@@ -1,5 +1,6 @@
 package models;
 
+import jdk.nashorn.internal.objects.annotations.Property;
 import models.enums.QuestionAuditState;
 import models.enums.QuestionResolveState;
 import org.jboss.logging.Field;
