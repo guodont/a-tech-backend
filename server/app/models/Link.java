@@ -31,7 +31,7 @@ public class Link extends BaseModel{
     /**
      * 图片
      */
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     @Constraints.MaxLength(255)
     public String image;
 

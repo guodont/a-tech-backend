@@ -21,7 +21,7 @@ public class Answer extends BaseModel {
     public Question question;
 
     /**
-     * 问题内容
+     * 回答内容
      */
     @Column(columnDefinition = "TEXT")
     @Constraints.Required

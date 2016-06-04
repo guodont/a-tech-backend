@@ -169,6 +169,13 @@ public class User extends BaseModel {
         return lastIp;
     }
 
+    public void setFieldSecurity() {
+        this.phone = "****";
+        this.realName = "****";
+        this.email = "****";
+        this.lastIp = "****";
+    }
+
     public static final Finder<Long, User> find = new Finder<Long, User>(
             Long.class, User.class);
 

@@ -133,6 +133,7 @@ public class QuestionController extends BaseController {
             question.questionResolveState = QuestionResolveState.RESOLVED;  // 问题标记为已解决
             question.save();
             newAnswer.question = question;
+            newAnswer.content = commentForm.get().content;
             newAnswer.user = getUser();
             newAnswer.save();
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
@@ -171,29 +172,26 @@ public class QuestionController extends BaseController {
     public static Result getQuestions() {
         initPageing();
         List<Question> questions = null;
+
         if (request().getQueryString("category") != null) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
             questions = Question.findQuestionsByCategory(category, page, pageSize);
-            for ( Question question : questions) {
-                // 判断用户的收藏状态
-                question.user.setPhone("****");
-                questions.remove(question);
-                questions.add(question);
-            }
-            return ok(Json.toJson(questions));
         } else {
             questions = Question.findQuestions(page, pageSize);
-            for ( Question question : questions) {
-                // 判断用户的收藏状态
-                question.user.setPhone("****");
-                FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(),question);
-//                questions.remove(question);
-//                questions.add(question);
-            }
-
-            return ok(Json.toJson(questions));
         }
+
+        for (Question question : questions) {
+            // 判断用户的收藏状态
+            if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(), question) != null) {
+                question.setFav(true);
+            } else {
+                question.setFav(false);
+            }
+            question.user.setFieldSecurity();   // 设置字段安全性
+        }
+
+        return ok(Json.toJson(questions));
     }
 
     /**
@@ -205,11 +203,27 @@ public class QuestionController extends BaseController {
     public static Result getQuestionsByExpert(long expertId) {
         initPageing();
         User user = User.findById(expertId);
+
+        List<Question> questions = null;
+
         if (request().getQueryString("status") != null) {
-            return ok(Json.toJson(Question.findQuestionsByExpertAndStatus(user, request().getQueryString("status"), page, pageSize)));
+            questions = Question.findQuestionsByExpertAndStatus(user, request().getQueryString("status"), page, pageSize);
         } else {
-            return ok(Json.toJson(Question.findQuestionsByExpertAndStatus(user, null, page, pageSize)));
+            questions = Question.findQuestionsByExpertAndStatus(user, null, page, pageSize);
         }
+
+        for (Question question : questions) {
+            // 判断用户的收藏状态
+            if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(), question) != null) {
+                question.setFav(true);
+            } else {
+                question.setFav(false);
+            }
+            question.user.setFieldSecurity();   // 设置字段安全性
+        }
+
+        return ok(Json.toJson(questions));
+
     }
 
     /**
@@ -236,9 +250,13 @@ public class QuestionController extends BaseController {
      */
     @Security.Authenticated(Secured.class)
     public static Result favQuestion(long questionId) {
+
         Question question = Question.findQuestionById(questionId);
 
-        if (question !=null) {
+        if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(),question) != null)
+            return badRequest(new JsonResult("error", "已收藏过此问题").toJsonResponse());
+
+        if (question != null) {
             FavoriteQuestion favoriteQuestion = new FavoriteQuestion();
             favoriteQuestion.question = question;
             favoriteQuestion.user = getUser();
@@ -247,9 +265,9 @@ public class QuestionController extends BaseController {
             question.likeCount += 1;    // 收藏数+1
             question.save();
 
-            return ok(new JsonResult("success", "fav question success").toJsonResponse());
+            return ok(new JsonResult("success", "问题收藏成功").toJsonResponse());
         } else {
-            return badRequest(new JsonResult("error", "such question not exits").toJsonResponse());
+            return badRequest(new JsonResult("error", "问题不存在").toJsonResponse());
         }
 
     }
@@ -269,7 +287,7 @@ public class QuestionController extends BaseController {
         question.likeCount -= 1;    // 收藏数-1
         question.save();
 
-        return ok(new JsonResult("success", "cancel fav question success").toJsonResponse());
+        return ok(new JsonResult("success", "取消收藏成功").toJsonResponse());
     }
 
     /**
@@ -287,9 +305,7 @@ public class QuestionController extends BaseController {
         @Constraints.Required
         public String content;      //  内容
 
-
         public String image;        //  配图
-
     }
 
     /**
@@ -301,8 +317,7 @@ public class QuestionController extends BaseController {
         public Long questionId;      //  问题id
 
         @Constraints.Required
-        public String comment;      //  评论内容
-
+        public String content;      //  评论内容
     }
 
 }

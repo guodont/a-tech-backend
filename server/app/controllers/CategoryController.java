@@ -86,9 +86,9 @@ public class CategoryController extends BaseController {
             categoryType = request().getQueryString("categoryType");
         }
 
-        if (request().getQueryString("parentId") != null) {
+        if (request().getQueryString("parentId") != null && !request().getQueryString("parentId").equals("")) {
             if(Category.findCategoryById(Long.parseLong(request().getQueryString("parentId"))) != null) {
-                categories = Category.findCategoriesByParent(Long.parseLong(request().getQueryString("parentId")));
+                categories = Category.findCategoriesByParentAndType(Long.parseLong(request().getQueryString("parentId")),categoryType);
             }
         } else {
             categories = Category.findCategoriesByType(categoryType);
@@ -123,7 +123,7 @@ public class CategoryController extends BaseController {
         public String name;           //  分类名称
 
         @Constraints.MaxLength(255)
-        @Constraints.Required
+//        @Constraints.Required
         public String image;          //  配图
 
         public Integer sort;          //  排序

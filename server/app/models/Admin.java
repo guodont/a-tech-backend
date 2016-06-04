@@ -51,6 +51,12 @@ public class Admin extends BaseModel {
     public String lastIp;
 
 
+    public void setFieldSecurity() {
+        this.phone = "****";
+        this.lastIp = "****";
+        this.email = "****";
+    }
+
     /**
      * Finder 数据库查询操作
      */
