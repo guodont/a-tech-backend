@@ -39,12 +39,45 @@ angular.module('clientApp')
         });
     };
 
+    $scope.getCategories = function (type) {
+      categoryService.getCategories(
+        {
+          type: type,
+          parentId: ""
+        },
+        function (res) {
+          console.log(res.data);
+          $scope.categories = res.data;
+        },
+        function (res) {
+          console.log("专家分类获取失败");
+        }
+      );
+    };
+
+    $scope.getCategories('EXPERT');  // 获取专家分类
+
+    $('.ui.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#categoryId').attr("value", value);
+          $scope.categoryId = value;
+        }
+      })
+    ;
+
+    $scope.toAddExpert = function (user) {
+      $scope.curUserid = user.id;
+    };
+
     $scope.addExpert = function () {
       expertService.addExpert(
         {
-          userId: $scope.userId,
+          userId: $scope.curUserid,
           name: $scope.name,
-          category: $scope.category,
+          categoryId: $scope.categoryId,
           professional: $scope.professional,
           duty: $scope.duty,
           introduction: $scope.introduction,

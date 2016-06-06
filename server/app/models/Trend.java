@@ -39,7 +39,7 @@ public class Trend extends BaseModel {
         return find
                 .where()
                 .eq("user", user)
-                .setOrderBy("whenCreated desc , sort desc")
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();

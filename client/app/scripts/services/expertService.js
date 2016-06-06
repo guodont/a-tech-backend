@@ -33,7 +33,7 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
-          category: params.category,
+          categoryId: params.categoryId,
           professional: params.professional,
           duty: params.duty,
           introduction: params.introduction,

@@ -35,6 +35,9 @@ public class ExpertController extends BaseController {
             user.userType = UserType.EXPERT;
             user.update();
 
+            if (Expert.findExpertByUser(user) != null)
+                return badRequest(new JsonResult("error", "此用户已经是专家").toJsonResponse());
+
             Category category = Category.find.byId(postForm.get().categoryId);
             Expert expert = new Expert();
             expert.user = user;

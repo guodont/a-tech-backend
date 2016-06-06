@@ -8,48 +8,58 @@
             aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">成为专家</h4>
         </div>
-      <div class="modal-body">
         <form name="postForm" ng-submit="addExpert()" novalidate>
-          <div class="field">
-            <label for="name">专家姓名</label>
-            <input name="name" class="form-control" type="subject" id="name" placeholder="输入专家姓名"
-                   ng-model="name">
+
+          <div class="modal-body">
+            <div class="field">
+              <label for="name">专家姓名</label>
+              <input name="name" class="form-control" type="subject" id="name" placeholder="输入专家姓名"
+                     ng-model="name">
+            </div>
+            <div class="field">
+              <label for="categoryId">所属分类</label>
+              <input type="hiden" ng-hide="true" ng-model="categoryId" id="categoryId">
+              <div class="ui search selection dropdown  remote example">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <div ng-repeat="category in categories" class="item" data-value="{{ category.id }}">
+                    {{ category.name }}
+                  </div>
+                </div>
+                <div class="default text">选择分类</div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="professional">职称</label>
+              <input name="professional" class="form-control" type="subject" id="professional" placeholder="请输入职称"
+                     ng-model="professional">
+            </div>
+            <div class="field">
+              <label for="duty">职务</label>
+              <input name="duty" class="form-control" type="subject" id="duty" placeholder="输入职务"
+                     ng-model="duty">
+            </div>
+            <div class="field">
+              <label for="introduction">简介</label>
+              <input name="introduction" class="form-control" type="subject" id="introduction" placeholder="输入简介"
+                     ng-model="introduction">
+            </div>
+            <div class="field">
+              <label for="service">服务项目</label>
+              <input name="service" class="form-control" type="subject" id="service" placeholder="输入服务项目"
+                     ng-model="service">
+            </div>
+            <div class="field">
+              <label for="company">所在单位</label>
+              <input name="company" class="form-control" type="subject" id="company" placeholder="输入所在单位"
+                     ng-model="company">
+            </div>
+
           </div>
-          <div class="field">
-            <label for="categoryId">所属分类</label>
-            <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类"
-                   ng-model="categoryId">
+          <div class="modal-footer">
+            <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
+            <input type="submit" class="btn btn-primary" value="确定">
           </div>
-          <div class="field">
-            <label for="professional">职称</label>
-            <input name="professional" class="form-control" type="subject" id="professional" placeholder="请输入职称"
-                   ng-model="professional">
-          </div>
-          <div class="field">
-            <label for="duty">职务</label>
-            <input name="duty" class="form-control" type="subject" id="duty" placeholder="输入职务"
-                   ng-model="duty">
-          </div>
-          <div class="field">
-            <label for="introduction">简介</label>
-            <input name="introduction" class="form-control" type="subject" id="introduction" placeholder="输入简介"
-                   ng-model="introduction">
-          </div>
-          <div class="field">
-            <label for="service">服务项目</label>
-            <input name="service" class="form-control" type="subject" id="service" placeholder="输入服务项目"
-                   ng-model="service">
-          </div>
-          <div class="field">
-            <label for="company">所在单位</label>
-            <input name="company" class="form-control" type="subject" id="company" placeholder="输入所在单位"
-                   ng-model="company">
-          </div>
-      </div>
-        <div class="modal-footer">
-          <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
-          <a type="submit" class="btn btn-primary" >确定</a>
-        </div>
         </form>
 
       </div>
@@ -77,7 +87,7 @@
       <td>{{ user.phone }}</td>
       <td>{{ user.industry }}</td>
       <td>{{ user.scale }}</td>
-      <td>{{ user.whenCreated | date:'yyyy-MM-dd HH:mm'  }}</td>
+      <td>{{ user.whenCreated | date:'yyyy-MM-dd HH:mm' }}</td>
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
           <a class="btn btn-xs btn-info" href="#/user/{{ user.id }}/update">
@@ -88,7 +98,7 @@
           </button>
         </div>
         <a class="btn btn-xs btn-default" data-toggle="modal" data-target=".at-post-expert"
-           ng-click="auditQuestion(question)">
+           ng-click="toAddExpert(user)">
           <i class="icon-edit bigger-120"></i>指定为专家
         </a>
       </td>
