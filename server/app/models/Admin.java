@@ -1,5 +1,8 @@
 package models;
 
+import com.avaje.ebean.Ebean;
+import models.enums.AdminType;
+import models.enums.UserType;
 import org.joda.time.DateTime;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
@@ -10,6 +13,7 @@ import javax.persistence.Id;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -50,6 +54,10 @@ public class Admin extends BaseModel {
     @Constraints.MaxLength(45)
     public String lastIp;
 
+    /**
+     * 管理员类别
+     */
+    private AdminType adminType;
 
     public void setFieldSecurity() {
         this.phone = "****";
@@ -101,6 +109,22 @@ public class Admin extends BaseModel {
                 .findUnique();
     }
 
+    public static List<Admin> findAdmins(int page, int pageSize) {
+        return find
+                .where()
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static Admin findById(Long userId) {
+        return find
+                .where()
+                .eq("id", userId)
+                .findUnique();
+    }
+
     /**
      * 加密算法
      * @param value
@@ -136,9 +160,23 @@ public class Admin extends BaseModel {
         if (authToken == null) {
             return null;
         }
-
         try  {
             return find.where().eq("authToken", authToken).findUnique();
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Admin findMasterByAuthToken(String authToken) {
+        if (authToken == null) {
+            return null;
+        }
+        try  {
+            return find.where()
+                    .eq("authToken", authToken)
+                    .eq("adminType", AdminType.MASTER.getName())
+                    .findUnique();
         }
         catch (Exception e) {
             return null;

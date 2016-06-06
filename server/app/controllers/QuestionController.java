@@ -51,6 +51,11 @@ public class QuestionController extends BaseController {
             question.title = postForm.get().title;
             question.category = category;
             question.user = getUser();
+
+            User expert = User.findById(postForm.get().expertId);
+            if (expert != null)
+                question.expert = expert;
+
             // TODO 保存图片路径 逗号隔开
             question.images = postForm.get().image;
             question.content = postForm.get().content;
@@ -71,6 +76,7 @@ public class QuestionController extends BaseController {
         Question question = Question.findQuestionById(questionId);
         question.questionAuditState = QuestionAuditState.AUDITED;   // 已通过审核
         question.save();
+        // TODO 消息通知给用户 && JPush
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -85,6 +91,25 @@ public class QuestionController extends BaseController {
         Question question = Question.findQuestionById(questionId);
         question.questionAuditState = QuestionAuditState.FAILED;   // 审核失败
         question.save();
+        // TODO 消息通知给用户 && JPush
+        return ok(new JsonResult("success", "handl success").toJsonResponse());
+    }
+
+
+    /**
+     * 指派给专家问题
+     *
+     * @param id
+     * @param expertId
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result assignQuestion(long id, long expertId) {
+        Question question = Question.findQuestionById(id);
+        User expert = User.findById(expertId);
+        question.expert = expert;
+        question.update();
+        // TODO 消息通知给用户 && JPush
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -128,14 +153,17 @@ public class QuestionController extends BaseController {
         if (commentForm.hasErrors()) {
             return badRequest(commentForm.errorsAsJson());
         } else {
-            Answer newAnswer = new Answer();
+//            Answer newAnswer = new Answer();
             Question question = Question.findQuestionById(commentForm.get().questionId);
+            // 判断问题是否指派给此专家
             question.questionResolveState = QuestionResolveState.RESOLVED;  // 问题标记为已解决
-            question.save();
-            newAnswer.question = question;
-            newAnswer.content = commentForm.get().content;
-            newAnswer.user = getUser();
-            newAnswer.save();
+            question.answer = commentForm.get().content;
+            question.update();
+//            newAnswer.question = question;
+//            newAnswer.content = commentForm.get().content;
+//            newAnswer.user = getUser();
+//            newAnswer.save();
+            // TODO 消息通知给用户 && JPush
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
         }
     }
@@ -159,10 +187,10 @@ public class QuestionController extends BaseController {
      * @param id
      * @return
      */
-    public static Result getAnswer(long id) {
-        Question question = Question.findQuestionById(id);
-        return ok(Json.toJson(Answer.findAllAnswersByQuestion(question)));
-    }
+//    public static Result getAnswer(long id) {
+//        Question question = Question.findQuestionById(id);
+//        return ok(Json.toJson(Answer.findAllAnswersByQuestion(question)));
+//    }
 
     /**
      * 获取所有问题
@@ -253,7 +281,7 @@ public class QuestionController extends BaseController {
 
         Question question = Question.findQuestionById(questionId);
 
-        if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(),question) != null)
+        if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(), question) != null)
             return badRequest(new JsonResult("error", "已收藏过此问题").toJsonResponse());
 
         if (question != null) {
@@ -290,6 +318,7 @@ public class QuestionController extends BaseController {
         return ok(new JsonResult("success", "取消收藏成功").toJsonResponse());
     }
 
+
     /**
      * 发布问题表单数据
      */
@@ -297,6 +326,8 @@ public class QuestionController extends BaseController {
 
         @Constraints.Required
         public Long categoryId;     //  分类id
+
+        public Long expertId;       //  专家id
 
         @Constraints.Required
         @Constraints.MaxLength(45)
@@ -317,7 +348,7 @@ public class QuestionController extends BaseController {
         public Long questionId;      //  问题id
 
         @Constraints.Required
-        public String content;      //  评论内容
+        public String content;       //  评论内容
     }
 
 }

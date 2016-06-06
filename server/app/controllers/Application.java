@@ -114,15 +114,15 @@ public class Application extends BaseController {
             return badRequest(new JsonResult("error", "User exists").toJsonResponse());
 
         } else {
+
+//            //判断cache code
+//            String verifyUuid = request().getHeader("VERIFY_UUID");
 //
-            //判断cache code
-            String verifyUuid = request().getHeader("VERIFY_UUID");
-
-            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
-                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
-            }
-
-            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
+//            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
+//                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+//            }
+//
+//            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
 
                 //  保存用户信息
                 User user = new User();
@@ -140,10 +140,10 @@ public class Application extends BaseController {
                 response().setCookie(AUTH_TOKEN, authToken);
 
                 return status(201, authTokenJson);
-
-            } else {
-                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
-            }
+//
+//            } else {
+//                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+//            }
         }
     }
 
@@ -273,7 +273,7 @@ public class Application extends BaseController {
             //  保存最后登录ip
             user.setLastIp(request().remoteAddress());
             user.update();
-
+            // TODO 如果已经有token 则不重新生成token
             String authToken = user.createToken();
             ObjectNode authTokenJson = Json.newObject();
             authTokenJson.put(AUTH_TOKEN, authToken);
@@ -582,7 +582,7 @@ public class Application extends BaseController {
         @Constraints.MinLength(3)
         public String userName; //  用户名
 
-        @Constraints.Required
+//        @Constraints.Required
         public String verifyCode; //  验证码
 
     }

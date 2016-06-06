@@ -85,10 +85,10 @@ public class UserController extends BaseController {
             User user = getUser();
             user.setEmail(userInfoFormForm.get().email);
             user.setRealName(userInfoFormForm.get().realName);
-//            user.address = userInfoFormForm.get().address;
-//            user.scale = userInfoFormForm.get().scale;
-//            user.avatar = userInfoFormForm.get().avatar;
-//            user.industry = userInfoFormForm.get().industry;
+            user.address = userInfoFormForm.get().address;
+            user.scale = userInfoFormForm.get().scale;
+            user.avatar = userInfoFormForm.get().avatar;
+            user.industry = userInfoFormForm.get().industry;
             user.save();
         }
         return ok(new JsonResult("success", "Article updated").toJsonResponse());
@@ -101,33 +101,33 @@ public class UserController extends BaseController {
      */
     @Security.Authenticated(Secured.class)
     public static Result updateUserPassword() {
-//        Form<UserChangePasswordForm> userChangePasswordFormForm = Form.form(UserChangePasswordForm.class).bindFromRequest();
-//
-//        if (userChangePasswordFormForm.hasErrors()) {
-//            return badRequest(userChangePasswordFormForm.errorsAsJson());
-//        } else {
-//
-//            User user = User.findByNameAndPassword(getUser().name, userChangePasswordFormForm.get().oldPassword);
-//            // 判断旧密码是否正确
-//            if ( user != null) {
-//
-//                //  更新用户密码信息
-//                user.setPassword(userChangePasswordFormForm.get().newPassword);
-//                //  更新token
-//                String authToken = user.createToken();
-//                user.update();
-//
-//                ObjectNode authTokenJson = Json.newObject();
-//                authTokenJson.put(AUTH_TOKEN, authToken);
-//                response().setCookie(AUTH_TOKEN, authToken);
-//
-//                return ok(authTokenJson);
-//
-//            } else {
+        Form<UserChangePasswordForm> userChangePasswordFormForm = Form.form(UserChangePasswordForm.class).bindFromRequest();
+
+        if (userChangePasswordFormForm.hasErrors()) {
+            return badRequest(userChangePasswordFormForm.errorsAsJson());
+        } else {
+
+            User user = User.findByNameAndPassword(getUser().name, userChangePasswordFormForm.get().oldPassword);
+            // 判断旧密码是否正确
+            if (user != null) {
+
+                //  更新用户密码信息
+                user.setPassword(userChangePasswordFormForm.get().newPassword);
+                //  更新token
+                String authToken = user.createToken();
+                user.update();
+
+                ObjectNode authTokenJson = Json.newObject();
+                authTokenJson.put(AUTH_TOKEN, authToken);
+                response().setCookie(AUTH_TOKEN, authToken);
+
+                return ok(authTokenJson);
+
+            } else {
 
                 return badRequest(new JsonResult("error", "User not exist").toJsonResponse());
-//            }
-//        }
+            }
+        }
     }
 
     /**

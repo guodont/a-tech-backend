@@ -24,10 +24,10 @@ angular
     'ui.bootstrap',
     'ui.router'
   ])
-  // .constant('apiUrl', 'http://localhost:9000/api/v1')
-  .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
-  // .constant('hostUrl', 'http://localhost:9000')
-  .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  .constant('apiUrl', 'http://localhost:9000/api/v1')
+  // .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
+  .constant('hostUrl', 'http://localhost:9000')
+  // .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .constant('cloudUrl', 'http://storage.workerhub.cn/')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider, $stateProvider, $locationProvider) {
@@ -239,6 +239,50 @@ angular
       'last': '尾页',
     }
   })
+  .filter('trustHtml', function ($sce) {
+
+    return function (input) {
+
+      return $sce.trustAsHtml(input);
+
+    }
+
+  })
+  .filter('replaceHtml', function () {
+
+    return function (input) {
+      return input.replace(/<\/?[^>]*>/g, "").substr(0, 255) + "...";
+    }
+
+  })
+  .filter('showStatus', function () {
+
+    return function (input) {
+      var status;
+      switch (input) {
+        case 'WAIT_AUDITED':
+          status = '待审核';
+          break;
+        case 'AUDITED':
+          status = '审核通过';
+          break;
+        case 'FAILED':
+          status = '审核失败';
+          break;
+        case 'WAIT_RESOLVE':
+          status = '待解决';
+          break;
+        case 'RESOLVED':
+          status = '已解决';
+          break;
+        default:
+          status = '未知';
+          break;
+      }
+      return status;
+    }
+
+  })
   .run(runBlock);
 
 function runBlock($http) {
@@ -255,7 +299,7 @@ function runBlock($http) {
   };
   $http.defaults.headers.put = {
     // !!! put 请求有时候不能加  Content-Type
-    // 'Content-Type': 'application/json;charset=utf-8',
+    'Content-Type': 'application/json;charset=utf-8',
     'Accept': 'application/json'
   };
 }
