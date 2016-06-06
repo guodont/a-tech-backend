@@ -1,0 +1,29 @@
+<div class="table-responsive">
+
+
+  <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th>编号</th>
+      <th>专家</th>
+      <th>分类</th>
+      <th>职称</th>
+      <th>职务</th>
+      <th>服务项目</th>
+      <th>所在单位</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="link in links">
+      <td>{{ expert.id }}</td>
+      <td>{{ expert.category}}</td>
+      <td>{{ expert.professional }}</td>
+      <td>{{ expert.duty}}</td>
+      <td>{{ expert.introduction}}</td>
+      <td>{{ expert.service}}</td>
+      <td>{{ expert.company}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <observe></observe>
+</div>

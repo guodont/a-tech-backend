@@ -88,7 +88,7 @@ GET         /api/v1/user/:id                        controllers.UserController.g
 # update user
 PUT         /api/v1/user/:id                        controllers.UserController.updateUser(id: Long)
 # update password
-PUT         /api/v1/my/password                   controllers.UserController.updateUserPassword
+PUT         /api/v1/my/password                     controllers.UserController.updateUserPassword
 # delete user
 DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
 
@@ -141,7 +141,7 @@ PUT         /api/v1/question/:id/auditfail          controllers.QuestionControll
 # delete question
 DELETE      /api/v1/question/:id                    controllers.QuestionController.deleteQuestion(id: Long)
 # get User's question
-GET         /api/v1/my/questions                  controllers.QuestionController.getUserQuestions
+GET         /api/v1/my/questions                    controllers.QuestionController.getUserQuestions
 # add a answer
 POST        /api/v1/question/answer                 controllers.QuestionController.addAnswer
 # fav question
@@ -176,13 +176,13 @@ GET         /api/v1/user/favorite/trades            controllers.TradeController.
 
 
 # expert
-GET         /api/v1/expert/:id/album                controllers.ExpertController.getAlbumes(id: Long)
+GET         /api/v1/expert/:id/album                controllers.ExpertInfoController.getAlbumes(id: Long)
 # upload image
-POST        /api/v1/expert/album                    controllers.ExpertController.uploadImage
+POST        /api/v1/expert/album                    controllers.ExpertInfoController.uploadImage
 # get trends
-GET         /api/v1/expert/:id/trend                controllers.ExpertController.getTrends(id: Long)
+GET         /api/v1/expert/:id/trend                controllers.ExpertInfoController.getTrends(id: Long)
 # post trend
-POST        /api/v1/expert/trend                    controllers.ExpertController.addTrend
+POST        /api/v1/expert/trend                    controllers.ExpertInfoController.addTrend
 # get expert's question
 GET         /api/v1/expert/:id/questions            controllers.QuestionController.getQuestionsByExpert(id: Long)
 # get expert's articles
@@ -190,9 +190,11 @@ GET         /api/v1/expert/:id/articles             controllers.ArticleControlle
 # add article for expert
 POST        /api/v1/expert/article                  controllers.ArticleController.addArticleForExpert
 # get expert infomation
-GET         /api/v1/expert/:id                      controllers.ExpertController.getExpertInformation(id: Long)
+GET         /api/v1/expert/:id                      controllers.ExpertInfoController.getExpertInformation(id: Long)
 # expert profile
-PUT         /api/v1/expert                          controllers.ExpertController.updateExpertProfile
+PUT         /api/v1/expert                          controllers.ExpertInfoController.updateExpertProfile
+#expert getexperts
+GET         /api/v1/experts                         controllers.ExpertController.getExperts
 
 
 # add adv

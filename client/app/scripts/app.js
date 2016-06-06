@@ -173,6 +173,11 @@ angular
         templateUrl: 'views/adv/list.html',
         controller: 'AdvCtrl'
       })
+      .when('/expert/list', {
+        templateUrl: 'views/expert/list.html',
+        controller: 'ExpertCtrl'
+      })
+
       .otherwise({
         redirectTo: '/'
       });
@@ -197,19 +202,19 @@ angular
         $scope.provie = function () {
           if ($scope.isFirst()) return
           $scope.selectPage($scope.currentPage - 1);
-        }
+        };
         $scope.first = function () {
           $scope.selectPage(1);
-        }
+        };
         $scope.last = function () {
           $scope.selectPage($scope.totalPages - 1);
-        }
+        };
         $scope.isFirst = function () {
           return $scope.currentPage <= 1;
         };
         $scope.isLast = function () {
           return $scope.currentPage >= $scope.totalPages - 1;
-        }
+        };
         $scope.getText = function (key) {
           return pagerConfig.text[key];
         };
