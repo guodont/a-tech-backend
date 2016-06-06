@@ -6,15 +6,13 @@ angular.module('clientApp')
   .controller('UserCtrl', function ($scope, $http, alertService, $location, categoryService, apiUrl, $cookieStore, expertService) {
 
     $scope.selectType = '';
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+
 
     $scope.getUsers = function (type) {
-
       $http({
         method: 'GET',
-        url: apiUrl + '/users',
-        data: {
-          // categoryType: params.type
-        },
+        url: apiUrl + '/users' + '?pageSize=20&page=' + $scope.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {

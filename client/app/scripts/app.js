@@ -145,6 +145,10 @@ angular
         templateUrl: 'views/question/list.html',
         controller: 'QuestionCtrl'
       })
+      .when('/question/categories', {
+        templateUrl: 'views/question/categories.html',
+        controller: 'QuestionCtrl'
+      })
       .when('/user/list', {
         templateUrl: 'views/user/list.html',
         controller: 'UserCtrl'
@@ -177,7 +181,10 @@ angular
         templateUrl: 'views/expert/list.html',
         controller: 'ExpertCtrl'
       })
-
+      .when('/expert/categories', {
+        templateUrl: 'views/expert/categories.html',
+        controller: 'ExpertCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

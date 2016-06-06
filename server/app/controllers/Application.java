@@ -115,14 +115,14 @@ public class Application extends BaseController {
 
         } else {
 
-//            //判断cache code
-//            String verifyUuid = request().getHeader("VERIFY_UUID");
-//
-//            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
-//                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
-//            }
-//
-//            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
+            //判断cache code
+            String verifyUuid = request().getHeader("VERIFY_UUID");
+
+            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
+                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+            }
+
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
 
                 //  保存用户信息
                 User user = new User();
@@ -141,9 +141,9 @@ public class Application extends BaseController {
 
                 return status(201, authTokenJson);
 //
-//            } else {
-//                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
-//            }
+            } else {
+                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+            }
         }
     }
 

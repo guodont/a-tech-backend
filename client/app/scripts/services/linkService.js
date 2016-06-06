@@ -72,7 +72,7 @@ angular.module('clientApp')
     self.getLinks = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/links',
+        url: apiUrl + '/links' + '?pageSize=20&page=' + params.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
