@@ -1,18 +1,82 @@
-////////
-// This sample is published as part of the blog question at www.toptal.com/blog
-// Visit www.toptal.com/blog and subscribe to our newsletter to read great posts
-////////
-
 'use strict';
 /**
  * 问题管理控制器
  */
 angular.module('clientApp')
-  .controller('QuestionCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService, apiUrl, $cookieStore) {
+  .controller('QuestionCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService, apiUrl, $cookieStore, categoryService) {
+
+    $scope.getCategories = function (type) {
+      categoryService.getCategories(
+        {
+          type: type,
+          parentId: ""
+        },
+        function (res) {
+          console.log(res.data);
+          $scope.categories = res.data;
+        },
+        function (res) {
+          console.log("问题分类获取失败");
+        }
+      );
+    };
+
+    $scope.getCategories('QUESTION');  // 获取问题分类
+
+    $('.ui.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#categoryId').attr("value", value);
+          $scope.categoryId = value;
+        }
+      })
+    ;
+
+    $scope.addCategory = function () {
+      categoryService.addCategory(
+        {
+          parentId: $scope.categoryId,
+          name: $scope.name,
+          sort: $scope.sort,
+          image: $scope.imageData,
+          type: 'QUESTION'
+        },
+        function (res) {
+          console.log(res.data.success.message);
+          alertService.add('success', res.data.success.message);
+          // $('.at-add-category').modal('hide'); // 隐藏模态框
+          $scope.getCategories('QUESTION');  // 获取问题分类
+        },
+        function (res) {
+          console.log(res);
+          if (res.status === 400) {
+            angular.forEach(res.data, function (value, key) {
+              if (key === 'name' || key === 'image') {
+                alertService.add('danger', key + ' : ' + value);
+              } else {
+                alertService.add('danger', value.message);
+              }
+            });
+          } else if (res.status === 401) {
+            $location.path('/login');
+          } else if (res.status === 500) {
+            alertService.add('danger', 'Internal server error!');
+          } else {
+            alertService.add('danger', res.date);
+          }
+        }
+      );
+    };
+
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
 
     $scope.getQuestions = function () {
       questionService.getQuestions(
-        {},
+        {
+          curPage: $scope.curPage
+        },
         function (res) {
           console.log(res.data);
           $scope.questions = res.data;
@@ -106,10 +170,10 @@ angular.module('clientApp')
         });
     };
 
-    // 指派给专家
+    // 指派给问题
     $scope.assignToexpert = function (question) {
       // TODO
-      console.log("指派给专家");
+      console.log("指派给问题");
     };
 
   });

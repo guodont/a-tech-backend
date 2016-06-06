@@ -68,7 +68,7 @@ public class Expert extends BaseModel {
         return find
                 .where()
                 .eq("category", category)
-                .setOrderBy("whenCreated desc , sort desc")
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
@@ -90,7 +90,7 @@ public class Expert extends BaseModel {
     public static List<Expert> findExperts(int page, int pageSize) {
         return find
                 .where()
-                .setOrderBy("whenCreated desc , sort desc")
+                .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();

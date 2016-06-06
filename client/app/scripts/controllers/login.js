@@ -18,7 +18,7 @@ angular.module('clientApp')
     $scope.isAuthenticated = function () {
       if (userService.username) {
         $log.debug(userService.username);
-        $location.path('/dashboard');
+        $location.path('/whelcome');
       } else {
         signupService.isAuthenticated(
           {},
@@ -26,7 +26,7 @@ angular.module('clientApp')
             console.log(res.data);
             if (res.data.hasOwnProperty('success')) {
               userService.username = res.data.success.user;
-              $location.path('/dashboard');
+              $location.path('/whelcome');
             }
           },
           function (res) {
@@ -71,7 +71,7 @@ angular.module('clientApp')
             $cookieStore.put('isLoggedIn', 1);
             $cookieStore.put('authToken', data.authToken);
             // userService.username = data.success.user;
-            $location.path('/dashboard');
+            $location.path('/whelcome');
           }
           console.log($cookieStore.get("authToken"));
         });

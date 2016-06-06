@@ -6,15 +6,13 @@ angular.module('clientApp')
   .controller('UserCtrl', function ($scope, $http, alertService, $location, categoryService, apiUrl, $cookieStore, expertService) {
 
     $scope.selectType = '';
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+
 
     $scope.getUsers = function (type) {
-
       $http({
         method: 'GET',
-        url: apiUrl + '/users',
-        data: {
-          // categoryType: params.type
-        },
+        url: apiUrl + '/users' + '?pageSize=20&page=' + $scope.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
@@ -41,12 +39,45 @@ angular.module('clientApp')
         });
     };
 
+    $scope.getCategories = function (type) {
+      categoryService.getCategories(
+        {
+          type: type,
+          parentId: ""
+        },
+        function (res) {
+          console.log(res.data);
+          $scope.categories = res.data;
+        },
+        function (res) {
+          console.log("专家分类获取失败");
+        }
+      );
+    };
+
+    $scope.getCategories('EXPERT');  // 获取专家分类
+
+    $('.ui.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          $('#categoryId').attr("value", value);
+          $scope.categoryId = value;
+        }
+      })
+    ;
+
+    $scope.toAddExpert = function (user) {
+      $scope.curUserid = user.id;
+    };
+
     $scope.addExpert = function () {
       expertService.addExpert(
         {
-          userId: $scope.userId,
+          userId: $scope.curUserid,
           name: $scope.name,
-          category: $scope.category,
+          categoryId: $scope.categoryId,
           professional: $scope.professional,
           duty: $scope.duty,
           introduction: $scope.introduction,

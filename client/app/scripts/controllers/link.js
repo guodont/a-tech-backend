@@ -5,9 +5,13 @@
 angular.module('clientApp')
   .controller('LinkCtrl', function ($scope, $rootScope, $http, alertService, $location, linkService) {
 
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+
     $scope.getLinks = function () {
       linkService.getLinks(
-        {},
+        {
+          curPage: $scope.curPage
+        },
         function (res) {
           console.log(res.data);
           $scope.links = res.data;

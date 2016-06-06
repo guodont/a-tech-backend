@@ -6,10 +6,12 @@
 angular.module('clientApp')
   .controller('TradeCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService,$cookieStore, apiUrl) {
 
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+
     $scope.getTrades = function () {
       $http({
         method: 'GET',
-        url: apiUrl + '/trades',
+        url: apiUrl + '/trades' + '?pageSize=20&page=' + $scope.curPage,
         data: {
           // categoryType: params.type
         },
