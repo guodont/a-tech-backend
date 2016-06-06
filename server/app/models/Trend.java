@@ -31,4 +31,17 @@ public class Trend extends BaseModel {
     @Constraints.MaxLength(255)
     public String images;
 
+    public static final Finder<Long, Trend> find = new Finder<Long, Trend>(
+            Long.class, Trend.class);
+
+
+    public static List<Trend> findExpertsByUser(final User user, int page, int pageSize) {
+        return find
+                .where()
+                .eq("user", user)
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
 }

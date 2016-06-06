@@ -36,9 +36,8 @@ public class Album extends BaseModel {
     /**
      * 照片描述
      */
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     @Constraints.MaxLength(255)
-    @Constraints.Required
     public String description;
 
     public static final Finder<Long, Album> find = new Finder<Long, Album>(

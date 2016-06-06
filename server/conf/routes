@@ -194,9 +194,11 @@ POST        /api/v1/expert/article                  controllers.ArticleControlle
 # get expert infomation
 GET         /api/v1/expert/:id                      controllers.ExpertInfoController.getExpertInformation(id: Long)
 # expert profile
-PUT         /api/v1/expert                          controllers.ExpertInfoController.updateExpertProfile
+PUT         /api/v1/expert                          controllers.ExpertController.updateExpertForExpert
 #expert getexperts
 GET         /api/v1/experts                         controllers.ExpertController.getExperts
+# add expert
+POST        /api/v1/user/:id/experts                controllers.ExpertController.addExpert(id: Long)
 
 
 # add adv

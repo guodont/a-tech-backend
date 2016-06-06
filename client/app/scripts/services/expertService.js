@@ -3,7 +3,7 @@
  */
 'use strict';
 angular.module('clientApp')
-  .service('expertService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
+  .service('expertService', ['$http', '$cookies', 'apiUrl', '$cookieStore', 'ToKenHeader', function ($http, $cookies, apiUrl, $cookieStore, ToKenHeader) {
 
     var self = this;
 
@@ -29,7 +29,7 @@ angular.module('clientApp')
     self.addExpert = function (params, success, error) {
       $http({
         method: 'POST',
-        url: apiUrl + '/expert',
+        url: apiUrl + '/user/' + params.userId + '/experts',
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
@@ -37,8 +37,8 @@ angular.module('clientApp')
           professional: params.professional,
           duty: params.duty,
           introduction: params.introduction,
-          service:params.service,
-          company:params.company
+          service: params.service,
+          company: params.company
         }
       })
         .then(function (res) {
