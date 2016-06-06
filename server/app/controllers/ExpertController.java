@@ -1,121 +1,144 @@
-////////
-// This sample is published as part of the blog article at www.toptal.com/blog
-// Visit www.toptal.com/blog and subscribe to our newsletter to read great posts
-////////
-
 package controllers;
 
 import controllers.secured.AdminSecured;
-import controllers.secured.ExpertSecured;
-import models.*;
-import models.enums.ArticlePushState;
-import models.enums.ArticleState;
-import models.enums.ArticleType;
+import models.Admin;
+import models.Category;
+import models.Expert;
+import models.User;
+import models.enums.UserType;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
-import java.io.File;
-import java.util.UUID;
-
 /**
- * @author guodont
- *         <p>
- *         专家控制器
+ * Created by j on 2016/6/4.
  */
-public class ExpertController extends BaseController {
-
-
-    /**
-     * 获取专家相册照片
-     *
-     * @return
-     */
-    public static Result getAlbumes(long id) {
-        User user = User.findById(id);
-        initPageing();
-        return ok(Json.toJson(Album.findAlbumsByUser(user, page, pageSize)));
-    }
+public class ExpertController extends BaseController{
 
     /**
-     * 专家上传照片
-     *
-     * @return
+     * 设置普通用户为专家
      */
-    @Security.Authenticated(ExpertSecured.class)
-    public static Result uploadImage() {
-        Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart image = body.getFile("image");
+    @Security.Authenticated(AdminSecured.class)
+    public static Result changeType(long id) {
 
-        if (image != null) {
-
-            String fileName = image.getFilename();
-            String ext = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-            String accessName = UUID.randomUUID().toString() + ext;
-
-            // 判断文件类型
-            if (!ext.equals(".gif") && !ext.equals(".jpg") && !ext.equals(".jpeg") && !ext.equals(".bmp") && !ext.equals(".png")) {
-                return badRequest(new JsonResult("error", "格式不支持").toJsonResponse());
-            } else {
-                File file = image.getFile();
-                file.renameTo(new File("public/images", accessName));
-
-                // 保存j图片信息到数据库
-                Image imageData = new Image();
-                imageData.name = accessName;
-                imageData.oldName = fileName;
-                imageData.src = accessName;
-                imageData.save();
-
-                return ok(new JsonResult("success", request().host() + "/assets/images/" + accessName).toJsonResponse());
-            }
-
+        Form<ExpertForm> postForm = Form.form(ExpertForm.class).bindFromRequest();
+        if (postForm.hasErrors()) {
+            return badRequest(postForm.errorsAsJson());
         } else {
-            return badRequest(new JsonResult("error", "没有文件数据").toJsonResponse());
+            //保存用户类型
+            User user = new User();
+            if (user.userType == UserType.PUBLIC) {
+                user.userType = UserType.EXPERT;
+            }
+            user.save();
+
+            Expert expert = Expert.findExpertById(id);
+            Category category = Category.find.byId(postForm.get().categoryId);
+
+            expert.user = user;
+            expert.category =category;
+            expert.professional=postForm.get().professional;
+            expert.duty =postForm.get().duty;
+            expert.service =postForm.get().service;
+            expert.introduction =postForm.get().introduction;
+            expert.company =postForm.get().company;
+
+            expert.save();
+
+            return ok(new JsonResult("success", "普通用户变成专家用户成功").toJsonResponse());
         }
     }
 
+
     /**
-     * 获取专家动态
-     *
+     * 获取所有专家
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getExperts(){
+        initPageing();
+        response().setHeader("TOTAL_SIZE", String.valueOf(Expert.find.findRowCount()));
+        response().setHeader("CUR_PAGE",String.valueOf(page));
+        response().setHeader("PAGE_SIZE",String.valueOf(pageSize));
+
+        return ok(Json.toJson(Expert.findExpertByUser(getUser())));
+    }
+
+    /**
+     * 通过专家id获取专家
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static  Result getExpertById(){
+        return  ok(Json.toJson(getExpertById()));
+    }
+
+
+    /**
+     * 通过专家id删除专家
      * @param id
      * @return
      */
-    public static Result getTrends(long id) {
-        return play.mvc.Results.TODO;
+    @Security.Authenticated(AdminSecured.class)
+    public static Result deleteExpert(long id) {
+        Expert expert = Expert.find.byId(id);
+        if (expert != null) {
+            expert.delete();
+            return ok(new JsonResult("success", "Expert deleted successfully").toJsonResponse());
+        } else {
+            return ok(new JsonResult("error", "Expert not exist").toJsonResponse());
+        }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result updateExpert(long id) {
+//        Form<ExpertInfoForm> expertInfoFormForm = Form.form(ExpertInfoForm.class).bindFromRequest();
+//
+//        if (expertInfoFormForm.hasErrors()) {
+//            return badRequest(expertInfoFormForm.errorsAsJson());
+//        } else {
+//            //  更新用户信息
+//            Expert expert = getExpert();
+//            expert.setEmail(userInfoFormForm.get().email);
+//            expert.setRealName(userInfoFormForm.get().realName);
+//            user.address = userInfoFormForm.get().address;
+//            user.scale = userInfoFormForm.get().scale;
+//            user.avatar = userInfoFormForm.get().avatar;
+//            user.industry = userInfoFormForm.get().industry;
+//            user.save();
+//        }
+        return ok(new JsonResult("success", "Article updated").toJsonResponse());
     }
 
     /**
-     * 获取专家信息
-     *
-     * @param id
-     * @return
+     *  专家信息表单数据
      */
-    public static Result getExpertInformation(long id) {
-        return play.mvc.Results.TODO;
-    }
+    public static class ExpertForm {
+        @Constraints.Required
+        public Long categoryId;     //  分类id
 
-    /**
-     * 更新专家信息
-     *
-     * @return
-     */
-    @Security.Authenticated(ExpertSecured.class)
-    public static Result updateExpertProfile() {
-        return play.mvc.Results.TODO;
-    }
+        @Constraints.Required
+        @Constraints.MaxLength(45)
+        public String professional;       //  职称
 
-    /**
-     * 专家发布动态
-     *
-     * @return
-     */
-    @Security.Authenticated(ExpertSecured.class)
-    public static Result addTrend() {
-        return play.mvc.Results.TODO;
+
+        @Constraints.Required
+        @Constraints.MaxLength(45)
+        public String duty;             //  职务
+
+        @Constraints.Required
+        @Constraints.MaxLength(255)
+        public String introduction;        //  简介
+
+        @Constraints.Required
+        public String service;        //  服务项目
+
+        @Constraints.Required
+        @Constraints.MaxLength(255)
+        public String company;        //  所在单位
     }
 }
+
