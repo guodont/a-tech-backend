@@ -29,7 +29,7 @@
           </div>
           <div class="field">
             <label>审核状态</label>
-            <p>{{ curQuestion.questionAuditState }}</p>
+            <p>{{ curQuestion.questionAuditState | showStatus}}</p>
           </div>
           <div class="field">
             <label>指派人</label>
@@ -124,8 +124,8 @@
       <td>{{ question.title }}</td>
       <td>{{ question.category.name }}</td>
       <td>{{ question.clickCount }}</td>
-      <td>{{ question.questionAuditState }}</td>
-      <td>{{ question.questionResolveState }}</td>
+      <td>{{ question.questionAuditState | showStatus}}</td>
+      <td>{{ question.questionResolveState | showStatus}}</td>
       <td>{{ question.expert }}</td>
       <td>{{ question.user.name }}</td>
       <td>{{ question.whenCreated | date:'yyyy-MM-dd HH:mm'}}</td>

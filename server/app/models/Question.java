@@ -63,12 +63,18 @@ public class Question extends BaseModel {
 
     @Constraints.MaxLength(255)
     public String images;
+//
+//    /**
+//     * 问题的回答
+//     */
+//    @OneToMany(cascade = CascadeType.ALL)
+//    public List<Answer> answers;
 
     /**
-     * 问题的回答
+     * 回答内容
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<Answer> answers;
+    @Column(columnDefinition = "TEXT")
+    public String answer;
 
     @Access(value = AccessType.PROPERTY)
     private boolean isFav;

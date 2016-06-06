@@ -8,7 +8,7 @@
  * 问题管理控制器
  */
 angular.module('clientApp')
-  .controller('QuestionCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService) {
+  .controller('QuestionCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService, apiUrl, $cookieStore) {
 
     $scope.getQuestions = function () {
       questionService.getQuestions(
@@ -72,12 +72,38 @@ angular.module('clientApp')
     $scope.auditWithRefuse = function (question) {
       // TODO
       console.log("拒绝审核");
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/question/' + question.id + '/auditfail',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          console.log(res.data);
+          alertService.add('success', res.data.success.message);
+          $scope.getQuestions();
+        }, function (res) {
+          console.log(res.data);
+          alertService.add('error', res.data.success.message);
+        });
     };
 
     // 通过审核
     $scope.auditWithPass = function (question) {
       // TODO
       console.log("通过审核");
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/question/' + question.id + '/auditpass',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          console.log(res.data);
+          alertService.add('success', res.data.success.message);
+          $scope.getQuestions();
+        }, function (res) {
+          console.log(res.data);
+          alertService.add('error', res.data.success.message);
+        });
     };
 
     // 指派给专家

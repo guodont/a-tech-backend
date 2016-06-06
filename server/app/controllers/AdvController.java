@@ -17,111 +17,98 @@ import java.util.List;
  * 广告控制器
  * Created by guodont on 16/5/31.
  */
-public class AdvController extends BaseController{
+public class AdvController extends BaseController {
 
     /**
      * 管理员添加广告
+     *
      * @return
      */
     @Security.Authenticated(AdminSecured.class)
     public static Result addAdv() {
         Form<AdvForm> postForm = Form.form(AdvForm.class).bindFromRequest();
-        if(postForm.hasErrors()){
+        if (postForm.hasErrors()) {
             return badRequest(postForm.errorsAsJson());
-        }
-        else {
-//            添加广告
-            Advertisement adv =new Advertisement();
-            adv.name =postForm.get().name;
-            adv.description =postForm.get().description;
-            adv.url =postForm.get().url;
-            adv.image =postForm.get().image;
-            adv.position =postForm.get().position;
+        } else {
+            Advertisement adv = new Advertisement();
+            adv.name = postForm.get().name;
+            adv.description = postForm.get().description;
+            adv.url = postForm.get().url;
+            adv.image = postForm.get().image;
+            adv.position = postForm.get().position;
             adv.save();
-            return ok(new JsonResult("success","Advertisement added successfully").toJsonResponse());
+            return ok(new JsonResult("success", "Advertisement added successfully").toJsonResponse());
         }
     }
 
     /**
      * 根据id获取广告
+     *
      * @param id
      * @return
      */
     public static Result getAdvById(long id) {
 
-        Advertisement adv =Advertisement.findAdvById(id);
+        Advertisement adv = Advertisement.findAdvById(id);
         return ok(Json.toJson(adv));
     }
 
     /**
      * 获取广告
+     *
      * @return
      */
     public static Result getAdvs() {
         // TODO 根据位置获取广告
+        List<Advertisement> advertisements = null;
 
-        String position =Position.AMONG.getName();
-        Advertisement adv =new Advertisement();
+        String position;
 
-
-        if (request().getQueryString("position") != null) {
+        if (request().getQueryString("position") != null && !request().getQueryString("position").equals("")) {
             position = request().getQueryString("position");
+            //判断广告位置
+            if (position.equals(Position.AMONG.getName())) {
+                advertisements = Advertisement.findAdvertisementsByPos(Position.AMONG.getName());
+            } else if (position.equals(Position.FLOAT.getName())) {
+                advertisements = Advertisement.findAdvertisementsByPos(Position.FLOAT.getName());
+            } else if (position.equals(Position.TOP.getName())) {
+                advertisements = Advertisement.findAdvertisementsByPos(Position.TOP.getName());
+            }
+        } else {
+            //  如果不传位置参数则默认显示所有广告
+            initPageing();
+            advertisements = Advertisement.findAlladvs(page, pageSize);
         }
-
-        //判断广告位置
-        if(position.equals(Position.AMONG.getName())){
-            List<Advertisement> advertisementsByPos=Advertisement.findAdvertisementsByPos(Position.AMONG.getName());
-            return(ok(Json.toJson(advertisementsByPos)));
-        }
-        else if(position.equals(Position.FLOAT.getName())){
-            List<Advertisement> advertisementsByPos=Advertisement.findAdvertisementsByPos(Position.FLOAT.getName());
-            return(ok(Json.toJson(advertisementsByPos)));
-        }
-        else if (position.equals(Position.TOP.getName())){
-            List<Advertisement> advertisementsByPos=Advertisement.findAdvertisementsByPos(Position.TOP.getName());
-            return(ok(Json.toJson(advertisementsByPos)));
-        }
-
-        //  如果不传位置参数则默认显示所有广告
-        initPageing();
-        List<Advertisement> advs =Advertisement.findAlladvs(page,pageSize);
-        return ok(Json.toJson(advs));
+        return ok(Json.toJson(advertisements));
     }
 
     @Security.Authenticated(AdminSecured.class)
     public static Result updateAdv(long id) {
 
-        Form<AdvForm> postForm =Form.form(AdvController.AdvForm.class).bindFromRequest();
-        if(postForm.hasErrors()){
+        Form<AdvForm> postForm = Form.form(AdvController.AdvForm.class).bindFromRequest();
+        if (postForm.hasErrors()) {
             return badRequest(postForm.errorsAsJson());
-        }
-        else
-        {
+        } else {
             //更新广告
-            Advertisement adv =Advertisement.findAdvById(id);
-            adv.name =postForm.get().name;
-            adv.description =postForm.get().description;
-            adv.url =postForm.get().url;
-            adv.image =postForm.get().image;
-            adv.position =postForm.get().position;
+            Advertisement adv = Advertisement.findAdvById(id);
+            adv.name = postForm.get().name;
+            adv.description = postForm.get().description;
+            adv.url = postForm.get().url;
+            adv.image = postForm.get().image;
+            adv.position = postForm.get().position;
             adv.update();
-
             return ok(new JsonResult("success", "Advertisement updated successfully").toJsonResponse());
-
         }
-
     }
 
     public static Result deleteAdv(long id) {
 
         Advertisement adv = Advertisement.find.byId(id);
-        if(adv==null){
+        if (adv == null) {
             return status(404, new JsonResult("error", "Advertisement not found").toJsonResponse());
-        }
-        else
-        {
+        } else {
             adv.delete();
-            return ok(new JsonResult("success","Advertisement deleted successfully").toJsonResponse());
+            return ok(new JsonResult("success", "Advertisement deleted successfully").toJsonResponse());
         }
 
     }

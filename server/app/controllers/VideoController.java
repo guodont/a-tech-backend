@@ -108,6 +108,8 @@ public class VideoController extends BaseController {
      */
     public static Result getVideoById(Long id) {
         Video video = Video.findVideoById(id);
+        video.clickCount += 1;
+        video.update();
         return ok(Json.toJson(video));
     }
 

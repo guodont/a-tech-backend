@@ -131,17 +131,19 @@ POST        /api/v1/question                        controllers.QuestionControll
 # view question
 GET         /api/v1/question/:id                    controllers.QuestionController.getQuesion(id: Long)
 # answer
-GET         /api/v1/question/:id/answer             controllers.QuestionController.getAnswer(id: Long)
+#GET         /api/v1/question/:id/answer             controllers.QuestionController.getAnswer(id: Long)
 # update question
 PUT         /api/v1/question/:id                    controllers.QuestionController.updateQuestion(id: Long)
 # auditQuestionWithAudited
 PUT         /api/v1/question/:id/auditpass          controllers.QuestionController.auditQuestionWithAudited(id: Long)
 
 PUT         /api/v1/question/:id/auditfail          controllers.QuestionController.auditQuestionWithAuditFailed(id: Long)
+
+PUT         /api/v1/question/:id/assign/:expertId   controllers.QuestionController.assignQuestion(id: Long , expertId: Long)
 # delete question
 DELETE      /api/v1/question/:id                    controllers.QuestionController.deleteQuestion(id: Long)
 # get User's question
-GET         /api/v1/my/questions                  controllers.QuestionController.getUserQuestions
+GET         /api/v1/my/questions                    controllers.QuestionController.getUserQuestions
 # add a answer
 POST        /api/v1/question/answer                 controllers.QuestionController.addAnswer
 # fav question
@@ -217,3 +219,8 @@ PUT         /api/v1/link/:id                        controllers.LinkController.u
 # delete adv
 DELETE      /api/v1/link/:id                        controllers.LinkController.deleteLink(id: Long)
 
+GET         /api/v1/messages                        controllers.MessageController.getMessages
+
+GET         /api/v1/messages/unReadcount            controllers.MessageController.getUnReadMessageCount
+
+PUT         /api/v1/message/:id                     controllers.MessageController.readMarkMessage(id: Long)

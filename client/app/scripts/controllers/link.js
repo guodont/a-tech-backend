@@ -44,7 +44,7 @@ angular.module('clientApp')
           $scope.url = '';
           $scope.image = '';
           alertService.add('success', res.data.success.message);
-          $location.path('/link/list');
+          $scope.getLinks();
         },
         function (res) {
           console.log(res);

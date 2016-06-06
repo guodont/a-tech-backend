@@ -10,7 +10,7 @@ angular.module('clientApp')
     self.addVideo = function (params, success, error) {
       $http({
         method: 'POST',
-        url: apiUrl + '/article',
+        url: apiUrl + '/video',
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           name: params.name,
@@ -54,7 +54,7 @@ angular.module('clientApp')
         });
     };
 
-    // 更新视频
+    // 添加视频
     self.getVideo = function (params, success, error) {
       $http({
         method: 'GET',

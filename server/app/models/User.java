@@ -85,7 +85,7 @@ public class User extends BaseModel {
     /**
      * 最后登录IP
      */
-    @Column(length = 45,nullable = false)
+    @Column(length = 45, nullable = false)
     @Constraints.MaxLength(45)
     private String lastIp;
 
@@ -96,8 +96,10 @@ public class User extends BaseModel {
     private String authToken;
 
     public String createToken() {
-        authToken = UUID.randomUUID().toString();
-        save();
+        if (authToken == null) {
+            authToken = UUID.randomUUID().toString();
+            save();
+        }
         return authToken;
     }
 
@@ -110,10 +112,9 @@ public class User extends BaseModel {
         if (authToken == null) {
             return null;
         }
-        try  {
+        try {
             return find.where().eq("authToken", authToken).findUnique();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -122,13 +123,12 @@ public class User extends BaseModel {
         if (authToken == null) {
             return null;
         }
-        try  {
+        try {
             return find.where()
                     .eq("authToken", authToken)
                     .eq("userType", UserType.EXPERT.getName())
                     .findUnique();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }

@@ -9,15 +9,23 @@
     <textarea id="editor" ng-model="content" id="content" placeholder="在此编辑文章" style="width: 100% ;"
               autofocus></textarea>
   </div>
-  <div>
+  <div class="field">
     <label for="tag">标签</label>
     <input name="tag" class="form-control" type="subject" id="tag" placeholder="输入合适的标签,便于用户搜索"
            ng-model="tag">
   </div>
   <div class="field">
     <label for="categoryId">所属分类</label>
-    <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类"
-           ng-model="categoryId">
+    <input type="hiden" ng-hide="true" ng-model="categoryId" id="categoryId">
+    <div class="ui search selection dropdown  remote example">
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <div ng-repeat="category in categories" class="item" data-value="{{ category.id }}">
+          {{ category.name }}
+        </div>
+      </div>
+      <div class="default text">选择分类</div>
+    </div>
   </div>
   <div class="field">
     <label for="sort">排序</label>
@@ -36,7 +44,26 @@
 </form>
 <script type="text/javascript">
   var editor = new Simditor({
-    textarea: $('#editor')
-    //optional options
-  });
+      textarea: $('#editor'),//optional options
+      toolbar: [
+        'title',
+        'bold',
+        'italic',
+        'underline',
+        'strikethrough',
+        'fontScale',
+        'color',
+        'ol',
+        'ul',
+        'blockquote',
+        'code',
+        'table',
+        'link',
+        'image',
+        'hr',
+        'indent',
+        'outdent',
+        'alignment'
+      ]
+    });
 </script>

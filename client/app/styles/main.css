@@ -94,3 +94,7 @@ body {
 .field {
   margin-top: 15px;
 }
+
+.btn {
+  padding: 2px 7px;
+}
