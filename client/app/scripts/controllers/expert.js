@@ -25,6 +25,7 @@ angular.module('clientApp')
     $scope.addExpert = function () {
       expertService.addExpert(
         {
+          userId: $scope.userId,
           name: $scope.name,
           category: $scope.category,
           professional: $scope.professional,

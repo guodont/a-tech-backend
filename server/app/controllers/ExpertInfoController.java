@@ -1,26 +1,13 @@
-////////
-// This sample is published as part of the blog article at www.toptal.com/blog
-// Visit www.toptal.com/blog and subscribe to our newsletter to read great posts
-////////
-
 package controllers;
 
-import controllers.secured.AdminSecured;
 import controllers.secured.ExpertSecured;
 import models.*;
-import models.enums.ArticlePushState;
-import models.enums.ArticleState;
-import models.enums.ArticleType;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
-
-import java.io.File;
-import java.util.UUID;
 
 /**
  * @author guodont
@@ -36,9 +23,11 @@ public class ExpertInfoController extends BaseController {
      * @return
      */
     public static Result getAlbumes(long id) {
-        User user = User.findById(id);
+        Expert expert = Expert.findExpertById(id);
+        if (expert == null)
+            return badRequest(new JsonResult("error", "没有此用户").toJsonResponse());
         initPageing();
-        return ok(Json.toJson(Album.findAlbumsByUser(user, page, pageSize)));
+        return ok(Json.toJson(Album.findAlbumsByUser(expert.user, page, pageSize)));
     }
 
     /**
@@ -48,34 +37,17 @@ public class ExpertInfoController extends BaseController {
      */
     @Security.Authenticated(ExpertSecured.class)
     public static Result uploadImage() {
-        Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart image = body.getFile("image");
-
-        if (image != null) {
-
-            String fileName = image.getFilename();
-            String ext = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-            String accessName = UUID.randomUUID().toString() + ext;
-
-            // 判断文件类型
-            if (!ext.equals(".gif") && !ext.equals(".jpg") && !ext.equals(".jpeg") && !ext.equals(".bmp") && !ext.equals(".png")) {
-                return badRequest(new JsonResult("error", "格式不支持").toJsonResponse());
-            } else {
-                File file = image.getFile();
-                file.renameTo(new File("public/images", accessName));
-
-                // 保存j图片信息到数据库
-                Image imageData = new Image();
-                imageData.name = accessName;
-                imageData.oldName = fileName;
-                imageData.src = accessName;
-                imageData.save();
-
-                return ok(new JsonResult("success", request().host() + "/assets/images/" + accessName).toJsonResponse());
-            }
-
+        Form<AddImageForm> addImageFormForm = Form.form(AddImageForm.class).bindFromRequest();
+        if (addImageFormForm.hasErrors()) {
+            return badRequest(addImageFormForm.errorsAsJson());
         } else {
-            return badRequest(new JsonResult("error", "没有文件数据").toJsonResponse());
+            Album album = new Album();
+            album.user = getUser();
+            album.name = addImageFormForm.get().name;
+            album.path = addImageFormForm.get().path;
+            album.description = addImageFormForm.get().description;
+            album.save();
+            return ok(new JsonResult("success", "Image added").toJsonResponse());
         }
     }
 
@@ -86,7 +58,10 @@ public class ExpertInfoController extends BaseController {
      * @return
      */
     public static Result getTrends(long id) {
-        return play.mvc.Results.TODO;
+        Expert expert = Expert.findExpertById(id);
+        if (expert == null)
+            return badRequest(new JsonResult("error", "没有此用户").toJsonResponse());
+        return ok(Json.toJson(Trend.findExpertsByUser(expert.user, page, pageSize)));
     }
 
     /**
@@ -96,18 +71,9 @@ public class ExpertInfoController extends BaseController {
      * @return
      */
     public static Result getExpertInformation(long id) {
-        return play.mvc.Results.TODO;
+        return ok(Json.toJson(Expert.findExpertById(id)));
     }
 
-    /**
-     * 更新专家信息
-     *
-     * @return
-     */
-    @Security.Authenticated(ExpertSecured.class)
-    public static Result updateExpertProfile() {
-        return play.mvc.Results.TODO;
-    }
 
     /**
      * 专家发布动态
@@ -116,6 +82,49 @@ public class ExpertInfoController extends BaseController {
      */
     @Security.Authenticated(ExpertSecured.class)
     public static Result addTrend() {
-        return play.mvc.Results.TODO;
+
+        Form<TrendForm> trendFormForm = Form.form(TrendForm.class).bindFromRequest();
+        if (trendFormForm.hasErrors()) {
+            return badRequest(trendFormForm.errorsAsJson());
+        } else {
+            Trend trend = new Trend();
+            trend.user = getUser();
+            trend.content = trendFormForm.get().content;
+            trend.images = trendFormForm.get().images;
+            trend.save();
+            return ok(new JsonResult("success", "Trend added").toJsonResponse());
+        }
+    }
+
+    /**
+     * 发布动态表单数据
+     */
+    public static class TrendForm {
+
+        @Constraints.MaxLength(255)
+        @Constraints.Required
+        public String content;       //  内容
+
+        @Constraints.MaxLength(255)
+        public String images;        //  配图
+
+    }
+
+    /**
+     * 添加照片数据
+     */
+    public static class AddImageForm {
+
+        @Constraints.MaxLength(45)
+        @Constraints.Required
+        public String name;         //  照片名
+
+        @Constraints.MaxLength(255)
+        @Constraints.Required
+        public String path;         //  存储路径
+
+        @Constraints.MaxLength(255)
+        public String description;  //  描述
+
     }
 }

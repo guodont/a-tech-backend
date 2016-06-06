@@ -27,20 +27,19 @@ public class Expert extends BaseModel {
     /**
      * 职称
      */
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     @Constraints.MaxLength(45)
     public String professional;
     /**
      * 职务
      */
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     @Constraints.MaxLength(45)
-    @Constraints.Required
     public String duty;
     /**
      * 简介
      */
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     @Constraints.MaxLength(255)
     public String introduction;
     /**
@@ -51,7 +50,7 @@ public class Expert extends BaseModel {
     /**
      * 所在单位
      */
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     @Constraints.MaxLength(45)
     public String company;
 
@@ -61,30 +60,45 @@ public class Expert extends BaseModel {
 
     /**
      * 通过分类查找专家
+     *
      * @param category
      * @return
      */
-    public static List<Expert> findExpertsByCategory(final Category category) {
+    public static List<Expert> findExpertsByCategory(final Category category, int page, int pageSize) {
         return find
                 .where()
                 .eq("category", category)
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
     /**
      * 通过用户查找专家
+     *
      * @param user
      * @return
      */
-    public static List<Expert> findExpertByUser(final User user) {
+    public static Expert findExpertByUser(final User user) {
         return find
                 .where()
                 .eq("user", user)
+                .findUnique();
+    }
+
+    public static List<Expert> findExperts(int page, int pageSize) {
+        return find
+                .where()
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
                 .findList();
     }
 
     /**
      * 通过id查找专家
+     *
      * @param id
      * @return
      */
