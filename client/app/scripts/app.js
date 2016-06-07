@@ -185,6 +185,10 @@ angular
         templateUrl: 'views/expert/categories.html',
         controller: 'ExpertCtrl'
       })
+      .when('/admin/list', {
+        templateUrl: 'views/admin/list.html',
+        controller: 'AdminCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

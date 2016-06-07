@@ -90,21 +90,23 @@ public class Trade extends BaseModel {
      * @param category
      * @return
      */
-    public static List<Trade> findTradesByCategoryAndStatus(final Category category, String state, int page, int pageSize) {
+    public static List<Trade> findTradesByCategoryAndStatus(final Category category, String state, String tradeType, int page, int pageSize) {
         return find
                 .where()
                 .eq("category", category)
                 .eq("tradeState", state)
+                .eq("tradeType", tradeType)
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
     }
 
-    public static List<Trade> findTradesByCategory(final Category category, int page, int pageSize) {
+    public static List<Trade> findTradesByCategory(final Category category, String tradeType, int page, int pageSize) {
         return find
                 .where()
                 .eq("category", category)
+                .eq("tradeType", tradeType)
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
@@ -152,5 +154,28 @@ public class Trade extends BaseModel {
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
+    }
+
+    public static List<Trade> findTradesByUserAndStatus(final User user, String tradeState, int page, int pageSize) {
+
+        if (tradeState != null) {
+            return find
+                    .where()
+                    .eq("user", user)
+                    .eq("tradeState", tradeState)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .eq("user", user)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
+
     }
 }

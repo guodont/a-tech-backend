@@ -4,7 +4,6 @@
     <tr>
       <th>编号</th>
       <th>名称</th>
-      <th>描述</th>
       <th>文件路径</th>
       <th>管理员</th>
       <th>分类</th>
@@ -16,7 +15,6 @@
     <tr ng-repeat="video in videos">
       <td>{{ video.id }}</td>
       <td>{{ video.name }}</td>
-      <td>{{ video.description}}</td>
       <td>{{ video.path }}</td>
       <td>{{ video.admin.name }}</td>
       <td>{{ video.category.name }}</td>
@@ -24,10 +22,10 @@
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
           <a class="btn btn-xs btn-info" href="#/video/{{ video.id }}/update">
-            <i class="icon-edit bigger-120"></i>
+            <i class="icon-edit bigger-120"></i>编辑
           </a>
           <button class="btn btn-xs btn-danger" ng-click="deleteVideo(video.id)">
-            <a ><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+            <a style="color: #FFFFFF;"><i class="icon-trash bigger-120 " ></i>删除</a>
           </button>
         </div>
       </td>

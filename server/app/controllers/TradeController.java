@@ -101,8 +101,18 @@ public class TradeController extends BaseController {
         if (user == null) {
             return badRequest(new JsonResult("error", "No such user").toJsonResponse());
         }
+
+
+        List<Trade> trades = null;
+
+        if (request().getQueryString("status") != null) {
+            trades = Trade.findTradesByUserAndStatus(user, request().getQueryString("status"), page, pageSize);
+        } else {
+            trades = Trade.findTradesByUserAndStatus(user, null, page, pageSize);
+        }
+
         initPageing();
-        return ok(Json.toJson(Trade.findTradesByUser(user, page, pageSize)));
+        return ok(Json.toJson(trades));
     }
 
     /**
@@ -131,10 +141,17 @@ public class TradeController extends BaseController {
     public static Result getTrades() {
         initPageing();
         List<Trade> trades = null;
-        if (request().getQueryString("category") != null) {
+        String tradeType = TradeType.DEMAND.getName();
+        if (request().getQueryString("tradeType") != null && !request().getQueryString("tradeType").equals("")) {
+            if (request().getQueryString("tradeType").equals("DEMAND"))
+                tradeType = "DEMAND";
+            else
+                tradeType = "SUPPLY";
+        }
+        if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            trades = Trade.findTradesByCategoryAndStatus(category, TradeState.AUDITED.getName(), page, pageSize);
+            trades = Trade.findTradesByCategoryAndStatus(category, TradeState.AUDITED.getName(), tradeType, page, pageSize);
         } else {
             trades = Trade.findTrades(page, pageSize);
         }
@@ -158,10 +175,17 @@ public class TradeController extends BaseController {
     @Security.Authenticated(AdminSecured.class)
     public static Result getTradesForAdmin() {
         initPageing();
+        String tradeType = TradeType.DEMAND.getName();
+        if (request().getQueryString("tradeType") != null && !request().getQueryString("tradeType").equals("")) {
+            if (request().getQueryString("tradeType").equals("DEMAND"))
+                tradeType = "DEMAND";
+            else
+                tradeType = "SUPPLY";
+        }
         if (request().getQueryString("category") != null) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            return ok(Json.toJson(Trade.findTradesByCategory(category, page, pageSize)));
+            return ok(Json.toJson(Trade.findTradesByCategory(category, tradeType, page, pageSize)));
         } else {
             return ok(Json.toJson(Trade.findTradesForAdmin(page, pageSize)));
         }
@@ -194,7 +218,7 @@ public class TradeController extends BaseController {
     public static Result favTrade(long tradeId) {
         Trade trade = Trade.findTradeById(tradeId);
 
-        if (FavoriteTrade.findFavoriteByTradeIdAndUser(getUser(),trade) != null)
+        if (FavoriteTrade.findFavoriteByTradeIdAndUser(getUser(), trade) != null)
             return badRequest(new JsonResult("error", "已收藏过此交易").toJsonResponse());
 
         if (trade != null) {

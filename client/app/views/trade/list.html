@@ -4,7 +4,6 @@
     <tr>
       <th>编号</th>
       <th>标题</th>
-      <th>描述</th>
       <th>分类</th>
       <th>点击数</th>
       <th>发布者</th>
@@ -15,17 +14,17 @@
     <tr ng-repeat="trade in trades">
       <td>{{ trade.id }}</td>
       <td>{{ trade.title }}</td>
-      <td>{{ trade.description }}</td>
       <td>{{ trade.category.name }}</td>
       <td>{{ trade.clickCount }}</td>
       <td>{{ trade.user.name }}</td>
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-          <a class="btn btn-xs btn-info" href="#/trade/{{ trade.id }}/update">
-            <i class="icon-edit bigger-120"></i>
+          <a class="btn btn-xs btn-success" data-toggle="modal" data-target=".at-audit-question"
+             ng-click="auditTrade(trade)">
+            <i class="icon-edit bigger-120"></i>审核操作
           </a>
-          <button class="btn btn-xs btn-danger" ng-click="deletetrade(trade.id)">
-            <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+          <button class="btn btn-xs btn-danger" ng-click="deleteTrade(trade)">
+            <a href="" style="color: #FFFFFF;"><i class="icon-trash bigger-120 "></i>删除</a>
           </button>
         </div>
       </td>

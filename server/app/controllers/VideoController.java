@@ -97,7 +97,15 @@ public class VideoController extends BaseController {
      */
     public static Result getVideos() {
         initPageing();
-        List<Video> videos = Video.findVideos(page, pageSize);
+        List<Video> videos = null;
+
+        if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
+            int categoryId = Integer.parseInt(request().getQueryString("category"));
+            Category category = Category.findCategoryById(categoryId);
+            videos = Video.findVideosCategory(category, page, pageSize);
+        } else {
+            videos = Video.findVideos(page, pageSize);
+        }
         return ok(Json.toJson(videos));
     }
 
