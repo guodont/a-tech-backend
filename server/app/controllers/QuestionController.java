@@ -125,7 +125,16 @@ public class QuestionController extends BaseController {
             return badRequest(new JsonResult("error", "No such user").toJsonResponse());
         }
         initPageing();
-        return ok(Json.toJson(Question.findQuestionsByUser(user, page, pageSize)));
+
+        List<Question> questions = null;
+
+        if (request().getQueryString("status") != null) {
+            questions = Question.findQuestionsByUserAndStatus(user, request().getQueryString("status"), page, pageSize);
+        } else {
+            questions = Question.findQuestionsByUserAndStatus(user, null, page, pageSize);
+        }
+
+        return ok(Json.toJson(questions));
     }
 
 
@@ -201,7 +210,7 @@ public class QuestionController extends BaseController {
         initPageing();
         List<Question> questions = null;
 
-        if (request().getQueryString("category") != null) {
+        if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
             questions = Question.findQuestionsByCategory(category, page, pageSize);

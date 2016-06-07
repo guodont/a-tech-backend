@@ -84,4 +84,14 @@ public class Video extends BaseModel {
                 .eq("id", id)
                 .findUnique();
     }
+
+    public static List<Video> findVideosCategory(final Category category, int page, int pageSize) {
+        return find
+                .where()
+                .eq("category", category)
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
 }

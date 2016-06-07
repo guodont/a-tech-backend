@@ -157,6 +157,10 @@ angular
         templateUrl: 'views/trade/list.html',
         controller: 'TradeCtrl'
       })
+      .when('/trade/categories', {
+        templateUrl: 'views/trade/categories.html',
+        controller: 'TradeCtrl'
+      })
       .when('/link/add', {
         templateUrl: 'views/link/add.html',
         controller: 'LinkCtrl'
@@ -184,6 +188,10 @@ angular
       .when('/expert/categories', {
         templateUrl: 'views/expert/categories.html',
         controller: 'ExpertCtrl'
+      })
+      .when('/admin/list', {
+        templateUrl: 'views/admin/list.html',
+        controller: 'AdminCtrl'
       })
       .otherwise({
         redirectTo: '/'

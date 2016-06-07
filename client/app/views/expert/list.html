@@ -5,23 +5,37 @@
     <thead>
     <tr>
       <th>编号</th>
-      <th>专家</th>
-      <th>分类</th>
-      <th>职称</th>
+      <th>名字</th>
       <th>职务</th>
+      <th>职称</th>
+      <th>分类</th>
+      <th>简介</th>
       <th>服务项目</th>
       <th>所在单位</th>
+      <th>操作</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="link in links">
+    <tr ng-repeat="expert in experts">
       <td>{{ expert.id }}</td>
-      <td>{{ expert.category}}</td>
+      <td>{{ expert.user.realName }}</td>
       <td>{{ expert.professional }}</td>
       <td>{{ expert.duty}}</td>
+      <td>{{ expert.category.name}}</td>
       <td>{{ expert.introduction}}</td>
       <td>{{ expert.service}}</td>
       <td>{{ expert.company}}</td>
+      <td>
+        <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+          <a class="btn btn-xs btn-default" data-toggle="modal" data-target=".at-assign-question"
+             ng-click="updateExpert(expert)">
+            <i class="icon-edit bigger-120"></i>修改资料
+          </a>
+          <button class="btn btn-xs btn-danger" ng-click="deleteExpert(expert)">
+            <a href="" style="color: #FFFFFF;"><i class="icon-trash bigger-120 "></i>删除</a>
+          </button>
+        </div>
+      </td>
     </tr>
     </tbody>
   </table>

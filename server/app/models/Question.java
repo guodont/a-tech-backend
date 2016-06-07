@@ -123,7 +123,7 @@ public class Question extends BaseModel {
         if (questionResolveState != null) {
             return find
                     .where()
-                    .eq("user", expert)
+                    .eq("expert", expert)
                     .eq("questionResolveState", questionResolveState)
                     .setOrderBy("whenCreated desc")
                     .setFirstRow((page - 1) * pageSize)
@@ -132,7 +132,36 @@ public class Question extends BaseModel {
         } else {
             return find
                     .where()
-                    .eq("user", expert)
+                    .eq("expert", expert)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
+
+    }
+
+    /**
+     * 查找某用户发布的问题
+     *
+     * @param user
+     * @return
+     */
+    public static List<Question> findQuestionsByUserAndStatus(final User user, String questionResolveState, int page, int pageSize) {
+
+        if (questionResolveState != null) {
+            return find
+                    .where()
+                    .eq("user", user)
+                    .eq("questionResolveState", questionResolveState)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .eq("user", user)
                     .setOrderBy("whenCreated desc")
                     .setFirstRow((page - 1) * pageSize)
                     .setMaxRows(pageSize)

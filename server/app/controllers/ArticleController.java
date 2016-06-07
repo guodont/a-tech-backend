@@ -85,7 +85,12 @@ public class ArticleController extends BaseController {
             article.content = postForm.get().content;
             article.user = getUser();
             article.articleState = ArticleState.WAIT_AUDITED;   // 管理员发布的文章状态直接为已审核
-            article.articleType = ArticleType.WEB;              // 默认为网站文章
+
+            if (postForm.get().type.equals("article"))
+                article.articleType = ArticleType.ARTICLE;              // 默认为网站文章
+            else
+                article.articleType = ArticleType.ACCOMPLISH;
+
             article.articlePushState = ArticlePushState.NO_PUSH;// 默认不推送到app
 
             article.save();
@@ -148,6 +153,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 获取文章的评论
+     *
      * @param articleId
      * @return
      */
@@ -188,6 +194,19 @@ public class ArticleController extends BaseController {
     }
 
     /**
+     * 获取某专家的成果数据
+     *
+     * @param expertId
+     * @return
+     */
+    public static Result getResultArticlesByExpert(long expertId) {
+        initPageing();
+        Article article = new Article();
+        User user = User.findById(expertId);
+        return ok(Json.toJson(article.findResultArticlesByUser(user, page, pageSize)));
+    }
+
+    /**
      * 通过分类获取文章数据
      *
      * @param cateId
@@ -196,7 +215,10 @@ public class ArticleController extends BaseController {
     public static Result getArticlesByCategory(long cateId) {
         initPageing();
         Article article = new Article();
-        return ok(Json.toJson(article.findArticlesByCategory(cateId, page, pageSize)));
+        Category category = Category.findCategoryById(cateId);
+        if (category == null)
+            return ok(new JsonResult("error", "分类不存在").toJsonResponse());
+        return ok(Json.toJson(article.findArticlesByCategory(category, page, pageSize)));
     }
 
     /**
@@ -242,6 +264,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 获取相关联的推荐文章 TODO
+     *
      * @param id
      * @return
      */
@@ -270,6 +293,8 @@ public class ArticleController extends BaseController {
         public Integer sort;        //  排序
 
         public String image;        //  配图
+
+        public String type;        //   类型
 
     }
 

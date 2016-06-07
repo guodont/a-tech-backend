@@ -50,13 +50,10 @@ public class LinkController extends BaseController{
     /**
      * 查询所有link
      */
-    @Security.Authenticated(AdminSecured.class)
     public static  Result getAlllinks(){
-
         initPageing();
         List<Link> links =Link.findAlllinks(page,pageSize);
         return ok(Json.toJson(links));
-
     }
 
     /**

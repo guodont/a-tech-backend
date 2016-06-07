@@ -44,7 +44,7 @@ public class Article extends BaseModel {
     @ManyToOne
     public Admin admin;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
     /**
      * 排序
@@ -105,16 +105,18 @@ public class Article extends BaseModel {
         return find
                 .where()
                 .eq("articleType", articleType)
+                .eq("articleState", ArticleState.AUDITED.getName())
                 .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
                 .findList();
     }
 
-    public static List<Article> findArticlesByCategory(Long categoryId, int page, int pageSize) {
+    public static List<Article> findArticlesByCategory(Category category, int page, int pageSize) {
         return find
                 .where()
-                .eq("categoryId", categoryId)
+                .eq("category", category)
+                .eq("articleState", ArticleState.AUDITED.getName())
                 .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
@@ -148,5 +150,16 @@ public class Article extends BaseModel {
                 .where()
                 .eq("id", id)
                 .findUnique();
+    }
+
+    public static List<Article> findResultArticlesByUser(final User user, int page, int pageSize) {
+        return find
+                .where()
+                .eq("articleType", ArticleType.ACCOMPLISH)
+                .eq("user", user)
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
     }
 }

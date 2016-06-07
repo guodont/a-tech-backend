@@ -168,7 +168,7 @@ PUT         /api/v1/trade/:id/auditfail             controllers.TradeController.
 # delete trade
 DELETE      /api/v1/trade/:id                       controllers.TradeController.deleteTrade(id: Long)
 # get User's trades
-GET         /api/v1/my/trades                     controllers.TradeController.getUserTrades
+GET         /api/v1/my/trades                       controllers.TradeController.getUserTrades
 # fav trade
 PUT         /api/v1/trade/:id/fav                   controllers.TradeController.favTrade(id: Long)
 # unFav trade
@@ -189,6 +189,8 @@ POST        /api/v1/expert/trend                    controllers.ExpertInfoContro
 GET         /api/v1/expert/:id/questions            controllers.QuestionController.getQuestionsByExpert(id: Long)
 # get expert's articles
 GET         /api/v1/expert/:id/articles             controllers.ArticleController.getArticlesByExpert(id: Long)
+
+GET         /api/v1/expert/:id/results              controllers.ArticleController.getResultArticlesByExpert(id: Long)
 # add article for expert
 POST        /api/v1/expert/article                  controllers.ArticleController.addArticleForExpert
 # get expert infomation

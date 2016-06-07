@@ -74,19 +74,19 @@ public class CategoryController extends BaseController {
     }
 
     /**
-     * 根据分类类型获取分类
-     *
-     * @return
-     */
-    public static Result getCategories() {
-        String categoryType = CategoryType.ARTICLE.getName();
-        List<Category> categories = null;
+        * 根据分类类型获取分类
+                *
+        * @return
+        */
+        public static Result getCategories() {
+            String categoryType = CategoryType.ARTICLE.getName();
+            List<Category> categories = null;
 
-        if (request().getQueryString("categoryType") != null) {
-            categoryType = request().getQueryString("categoryType");
-        }
+            if (request().getQueryString("categoryType") != null) {
+                categoryType = request().getQueryString("categoryType");
+            }
 
-        if (request().getQueryString("parentId") != null && !request().getQueryString("parentId").equals("")) {
+            if (request().getQueryString("parentId") != null && !request().getQueryString("parentId").equals("")) {
             if(Category.findCategoryById(Long.parseLong(request().getQueryString("parentId"))) != null) {
                 categories = Category.findCategoriesByParentAndType(Long.parseLong(request().getQueryString("parentId")),categoryType);
             }
