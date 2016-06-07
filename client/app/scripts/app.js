@@ -157,6 +157,10 @@ angular
         templateUrl: 'views/trade/list.html',
         controller: 'TradeCtrl'
       })
+      .when('/trade/categories', {
+        templateUrl: 'views/trade/categories.html',
+        controller: 'TradeCtrl'
+      })
       .when('/link/add', {
         templateUrl: 'views/link/add.html',
         controller: 'LinkCtrl'

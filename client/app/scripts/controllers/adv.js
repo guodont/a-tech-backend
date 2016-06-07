@@ -42,14 +42,12 @@ angular.module('clientApp')
         function (res) {
           console.log(res.data);
           var adv = res.data;
-          $scope.title = adv.title;
-          $scope.content = adv.content;
-          editor.setValue(adv.content);
-          $scope.tag = adv.tag;
-          $scope.sort = adv.sort;
-          $scope.imageData = adv.image;
-          $scope.cateImage = cloudUrl + adv.image;
-          $scope.categoryId = adv.category.id;
+          $scope.name = adv.name;
+          $scope.description = adv.description;
+          editor.setValue(adv.description);
+          $scope.url = adv.url;
+          $scope.image = adv.image;
+          $scope.position = adv.position;
           // $scope.$apply();
         },
         function (res) {
@@ -197,7 +195,7 @@ angular.module('clientApp')
           },
           'UploadProgress': function (up, file) {
             // 每个文件上传时,处理相关的事情
-            
+
             console.log(up);
           },
           'FileUploaded': function (up, file, info) {
