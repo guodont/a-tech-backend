@@ -126,7 +126,16 @@ public class TradeController extends BaseController {
         if (trade != null) {
             trade.clickCount += 1;   // 浏览量+1
             trade.save();
-            return ok(Json.toJson(Trade.findTradeById(id)));
+
+            // 判断用户的收藏状态
+            if (FavoriteTrade.findFavoriteByTradeIdAndUser(getUser(), trade) != null) {
+                trade.setFav(true);
+            } else {
+                trade.setFav(false);
+            }
+            trade.user.setFieldSecurity();   // 设置字段安全性
+
+            return ok(Json.toJson(trade));
         } else {
             return badRequest(new JsonResult("error", "No such trade").toJsonResponse());
         }

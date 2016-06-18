@@ -214,11 +214,10 @@ public class ArticleController extends BaseController {
      */
     public static Result getArticlesByCategory(long cateId) {
         initPageing();
-        Article article = new Article();
         Category category = Category.findCategoryById(cateId);
         if (category == null)
-            return ok(new JsonResult("error", "分类不存在").toJsonResponse());
-        return ok(Json.toJson(article.findArticlesByCategory(category, page, pageSize)));
+            return badRequest(new JsonResult("error", "分类不存在").toJsonResponse());
+        return ok(Json.toJson(Article.findArticlesByCategory(category, page, pageSize)));
     }
 
     /**
