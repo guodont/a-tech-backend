@@ -24,21 +24,6 @@ angular.module('clientApp')
       );
     };
 
-    $scope.getComments = function () {
-      articleService.getComments(
-        {
-          curPage: $scope.curPage
-        },
-        function (res) {
-          console.log(res.data);
-          $scope.articles = res.data;
-        },
-        function (res) {
-          console.log("评论获取失败");
-        }
-      );
-    };
-
     $scope.getArticles();
 
     $scope.getArticleInfo = function () {
