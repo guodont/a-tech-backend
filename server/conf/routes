@@ -76,6 +76,12 @@ POST        /api/v1/article/:id/comments            controllers.ArticleControlle
 # get article recommend
 GET         /api/v1/article/:id/recommends          controllers.ArticleController.getRecommends(id: Long)
 
+# comment
+
+# get all comments
+GET         /api/v1/comments                        controllers.CommentController.getAllComments()
+# delete comment
+DELETE      /api/v1/comment/:id                     controllers.CommentController.deleteComment(id: Long)
 
 # user manage
 

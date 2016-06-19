@@ -117,6 +117,12 @@ angular
         templateUrl: 'views/article/categories.html',
         controller: 'ArticleCtrl'
       })
+
+      .when('/comment/list', {
+        templateUrl: 'views/comment/list.html',
+        controller: 'CommentCtrl'
+      })
+
       .when('/category/add', {
         templateUrl: 'views/category/add.html',
         controller: 'CategoryCtrl'

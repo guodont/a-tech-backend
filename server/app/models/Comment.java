@@ -47,6 +47,17 @@ public class Comment extends BaseModel {
     }
 
     /**
+     * 查询所有评论
+     * @return
+     */
+    public static List<Comment> findAllComments(int page, int pageSize) {
+        return find
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    /**
      * 查询某用户的所有评论
      * @param user
      * @return
@@ -57,5 +68,17 @@ public class Comment extends BaseModel {
                 .eq("user", user)
                 .setOrderBy("whenCreated desc")
                 .findList();
+    }
+
+    /**
+     * 通过ID查询评论
+     * @param id
+     * @return
+     */
+    public static Comment findCommentById(final long id) {
+        return find
+                .where()
+                .eq("id", id)
+                .findUnique();
     }
 }

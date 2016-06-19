@@ -178,6 +178,20 @@ public class ArticleController extends BaseController {
     }
 
     /**
+     * 获取所有文章评论
+     *
+     * @return
+     */
+    public static Result getComments() {
+        initPageing();
+        Comment comment = new Comment();
+        response().setHeader("TOTAL_SIZE", String.valueOf(Comment.find.findRowCount()));
+        response().setHeader("CUR_PAGE", String.valueOf(page));
+        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
+        return ok(Json.toJson(comment.findAllComments(page, pageSize)));
+    }
+
+    /**
      * 获取某专家的文章数据
      *
      * @param expertId

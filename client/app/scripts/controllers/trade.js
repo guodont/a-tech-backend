@@ -52,4 +52,48 @@ angular.module('clientApp')
       $scope.getTradeInfo();
     }
 
+    // 审核交易
+    $scope.auditTrade = function (trade) {
+      $scope.curTrade = trade;
+      console.log("审核交易");
+    };
+
+    // 拒绝审核
+    $scope.auditWithRefuse = function (trade) {
+      // TODO
+      console.log("拒绝审核");
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/trade/' + trade.id + '/auditfail',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          console.log(res.data);
+          alertService.add('success', res.data.success.message);
+          $scope.getTrades();
+        }, function (res) {
+          console.log(res.data);
+          alertService.add('error', res.data.success.message);
+        });
+    };
+
+    // 通过审核
+    $scope.auditWithPass = function (trade) {
+      // TODO
+      console.log("通过审核");
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/trade/' + trade.id + '/auditpass',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          console.log(res.data);
+          alertService.add('success', res.data.success.message);
+          $scope.getTrades();
+        }, function (res) {
+          console.log(res.data);
+          alertService.add('error', res.data.success.message);
+        });
+    };
+
   });
