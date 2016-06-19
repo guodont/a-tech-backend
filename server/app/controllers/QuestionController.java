@@ -162,16 +162,12 @@ public class QuestionController extends BaseController {
         if (commentForm.hasErrors()) {
             return badRequest(commentForm.errorsAsJson());
         } else {
-//            Answer newAnswer = new Answer();
             Question question = Question.findQuestionById(commentForm.get().questionId);
             // 判断问题是否指派给此专家
             question.questionResolveState = QuestionResolveState.RESOLVED;  // 问题标记为已解决
             question.answer = commentForm.get().content;
+            question.expert = getUser();
             question.update();
-//            newAnswer.question = question;
-//            newAnswer.content = commentForm.get().content;
-//            newAnswer.user = getUser();
-//            newAnswer.save();
             // TODO 消息通知给用户 && JPush
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
         }
