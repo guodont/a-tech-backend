@@ -187,7 +187,13 @@ public class QuestionController extends BaseController {
         Question question = Question.findQuestionById(id);
         question.clickCount += 1;   // 浏览量+1
         question.save();
-        return ok(Json.toJson(Question.findQuestionById(id)));
+        // 判断用户的收藏状态
+        if (FavoriteQuestion.findFavoriteByQuestionAndUser(getUser(), question) != null) {
+            question.setFav(true);
+        } else {
+            question.setFav(false);
+        }
+        return ok(Json.toJson(question));
     }
 
     /**

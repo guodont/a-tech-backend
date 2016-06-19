@@ -133,7 +133,7 @@ public class TradeController extends BaseController {
             } else {
                 trade.setFav(false);
             }
-            trade.user.setFieldSecurity();   // 设置字段安全性
+//            trade.user.setFieldSecurity();   // 设置字段安全性
 
             return ok(Json.toJson(trade));
         } else {
