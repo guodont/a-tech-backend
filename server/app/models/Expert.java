@@ -87,6 +87,17 @@ public class Expert extends BaseModel {
                 .findUnique();
     }
 
+    /**
+     * 查找所有专家
+     * @return
+     */
+    public static List<Expert> findAllExperts() {
+        return find
+                .where()
+                .findList();
+    }
+
+
     public static List<Expert> findExperts(int page, int pageSize) {
         return find
                 .where()

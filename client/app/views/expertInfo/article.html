@@ -3,30 +3,28 @@
     <thead>
     <tr>
       <th>编号</th>
-      <th>配图</th>
       <th>标题</th>
-      <th>备注</th>
-      <th>位置</th>
+      <th>分类</th>
       <th>点击数</th>
-      <th>链接</th>
+      <th>评论数</th>
+      <th>发布者</th>
       <th>操作</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="adv in advs">
-      <td>{{ adv.id }}</td>
-      <td><img style="max-width: 80px;max-height: 60px;" src="http://storage.workerhub.cn/{{ adv.image }}" alt=""></td>
-      <td>{{ adv.name }}</td>
-      <td>{{ adv.description }}</td>
-      <td>{{ adv.position }}</td>
-      <td>{{ adv.clickCount }}</td>
-      <td>{{ adv.url }}</td>
+    <tr ng-repeat="article in articles">
+      <td>{{ article.id }}</td>
+      <td>{{ article.title }}</td>
+      <td>{{ article.category.name }}</td>
+      <td>{{ article.clickCount }}</td>
+      <td>{{ article.commentCount }}</td>
+      <td>{{ article.admin.name }}</td>
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-          <a class="btn btn-xs btn-info" href="#/adv/{{ adv.id }}/update">
+          <a class="btn btn-xs btn-info" href="#/article/{{ article.id }}/update">
             <i class="icon-edit bigger-120"></i>
           </a>
-          <button class="btn btn-xs btn-danger" ng-click="deleteAdv(adv.id)">
+          <button class="btn btn-xs btn-danger" ng-click="deleteArticle(article.id)">
             <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
           </button>
         </div>

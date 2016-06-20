@@ -19,7 +19,6 @@ public class ExpertInfoController extends BaseController {
 
     /**
      * 获取专家相册照片
-     *
      * @return
      */
     public static Result getAlbumes(long id) {

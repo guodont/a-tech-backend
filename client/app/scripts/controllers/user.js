@@ -25,6 +25,26 @@ angular.module('clientApp')
 
     $scope.getUsers('');
 
+    $scope.updateUser = function () {
+      articleService.updateUser(
+        {
+          userId: $routeParams.id,
+          name: $scope.name,
+          realName: $scope.realName,
+          phone: $scope.phone,
+          industry: $scope.industry,
+          scale: $scope.scale,
+        },
+        function (res) {
+          $scope.subject = '';
+          $scope.content = '';
+          alertService.add('success', res.data.success.message);
+          $location.path('/user/list');
+        }
+      );
+    };
+
+
     $scope.deleteUser = function (id) {
       $http({
         method: 'DELETE',
@@ -33,7 +53,7 @@ angular.module('clientApp')
       })
         .then(function (res) {
           alertService.add('success', res.data.success.message);
-          $scope.getCategories('');
+          $scope.getUsers('');
         }, function (res) {
           alertService.add('success', res.data.error.message);
         });

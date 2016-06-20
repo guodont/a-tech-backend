@@ -141,6 +141,21 @@ public class Article extends BaseModel {
     }
 
     /**
+     * 查找所有专家的所有文章
+     *
+     * @return
+     */
+    public static List<Article> findArticlesByExpert(int page, int pageSize) {
+        return find
+                .where()
+                .eq("articleType", ArticleType.ARTICLE)
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    /**
      * 通过id查找文章
      *
      * @param id

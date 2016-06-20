@@ -52,6 +52,19 @@ angular.module('clientApp')
       $scope.getTradeInfo();
     }
 
+    $scope.deleteTrade = function (id) {
+      videoService.deleteTrade({
+          tradeId: id
+        },
+        function (res) {
+          alertService.add('success', res.data.success.message);
+          $scope.getTrades();
+        }, function (res) {
+          alertService.add('success', res.data.error.message);
+        });
+    };
+
+
     // 审核交易
     $scope.auditTrade = function (trade) {
       $scope.curTrade = trade;

@@ -90,13 +90,13 @@
       <td>{{ user.whenCreated | date:'yyyy-MM-dd HH:mm' }}</td>
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-          <a class="btn btn-xs btn-info" href="#/user/{{ user.id }}/update">
-            <i class="icon-edit bigger-120"></i>
-          </a>
-          <button class="btn btn-xs btn-danger" ng-click="deleteuser(user.id)">
-            <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
-          </button>
-        </div>
+        <a class="btn btn-xs btn-info" href="#/user/{{ user.id }}/update">
+          <i class="icon-edit bigger-120"></i>
+        </a>
+        <button class="btn btn-xs btn-danger" ng-click="deleteUser(user.id)">
+          <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+        </button>
+      </div>
         <a class="btn btn-xs btn-default" data-toggle="modal" data-target=".at-post-expert"
            ng-click="toAddExpert(user)">
           <i class="icon-edit bigger-120"></i>指定为专家

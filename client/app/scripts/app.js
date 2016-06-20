@@ -118,6 +118,15 @@ angular
         controller: 'ArticleCtrl'
       })
 
+      .when('/user/:id/update', {
+        templateUrl: 'views/user/update.html',
+        controller: 'UserCtrl'
+      })
+      .when('/user/list', {
+        templateUrl: 'views/user/list.html',
+        controller: 'UserCtrl'
+      })
+
       .when('/comment/list', {
         templateUrl: 'views/comment/list.html',
         controller: 'CommentCtrl'
@@ -158,6 +167,14 @@ angular
       .when('/user/list', {
         templateUrl: 'views/user/list.html',
         controller: 'UserCtrl'
+      })
+      .when('/expertInfo/article', {
+        templateUrl: 'views/expertInfo/article.html',
+        controller: 'ExpertInfoCtrl'
+      })
+      .when('/expertInfo/album', {
+        templateUrl: 'views/expertInfo/album.html',
+        controller: 'ExpertInfoCtrl'
       })
       .when('/trade/list', {
         templateUrl: 'views/trade/list.html',
