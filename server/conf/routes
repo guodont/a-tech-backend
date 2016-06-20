@@ -98,6 +98,17 @@ PUT         /api/v1/my/password                     controllers.UserController.u
 # delete user
 DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
 
+# get all admins
+GET         /api/v1/admins                          controllers.AdminController.getAllAdmins
+# view admin details
+GET         /api/v1/admin/:id                       controllers.AdminController.getAdmin(id: Long)
+# update admin
+PUT         /api/v1/admin/:id                       controllers.AdminController.updateAdmin(id: Long)
+# update password
+PUT         /api/v1/curadmin/password               controllers.AdminController.updateAdminPassword()
+# delete admin
+DELETE      /api/v1/admin/:id                       controllers.AdminController.deleteAdmin(id: Long)
+
 
 
 # client api
@@ -231,6 +242,7 @@ PUT         /api/v1/link/:id                        controllers.LinkController.u
 # delete adv
 DELETE      /api/v1/link/:id                        controllers.LinkController.deleteLink(id: Long)
 
+# messages
 GET         /api/v1/messages                        controllers.MessageController.getMessages
 
 GET         /api/v1/messages/unReadcount            controllers.MessageController.getUnReadMessageCount

@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('categoryService', ['$http', '$cookies','$cookieStore', 'apiUrl', function ($http, $cookies,$cookieStore, apiUrl) {
+  .service('commentService', ['$http', '$cookies','$cookieStore', 'apiUrl', function ($http, $cookies,$cookieStore, apiUrl) {
 
     var self = this;
 
