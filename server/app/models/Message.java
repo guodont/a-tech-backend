@@ -3,10 +3,7 @@ package models;
 import models.enums.MessageType;
 import play.data.validation.Constraints;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -14,6 +11,7 @@ import java.util.List;
  * <p>
  * 通知消息
  */
+@Entity
 public class Message extends BaseModel {
 
     /**
