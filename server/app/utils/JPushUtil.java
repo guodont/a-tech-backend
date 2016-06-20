@@ -57,11 +57,11 @@ public class JPushUtil {
     }
 
 
-    public static void main(String[] args) {
-        HashMap<String,String> extras = new HashMap<>();
-        extras.put("id","1");
-        new JPushUtil("这是标题","这是内容","18404968725",extras).sendPushWith();
-    }
+//    public static void main(String[] args) {
+//        HashMap<String,String> extras = new HashMap<>();
+//        extras.put("id","1");
+//        new JPushUtil("这是标题","这是内容","18404968725",extras).sendPushWith();
+//    }
 
     public static void sendPushWith() {
         JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);

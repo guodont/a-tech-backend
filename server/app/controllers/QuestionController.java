@@ -88,7 +88,7 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<>();
+        HashMap<String, String> extras = new HashMap<String, String>();
         extras.put("id", String.valueOf(question.getId()));
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题已通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
@@ -117,7 +117,7 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<>();
+        HashMap<String, String> extras = new HashMap<String, String>();
         extras.put("id", String.valueOf(question.getId()));
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题未通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
@@ -150,7 +150,7 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<>();
+        HashMap<String, String> extras = new HashMap<String, String>();
         extras.put("id", String.valueOf(question.getId()));
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题已指派给专家,专家将尽快为您解决", question.title, question.user.getPhone(), extras).sendPushWith();
@@ -236,7 +236,7 @@ public class QuestionController extends BaseController {
             message2.save();
 
 
-            HashMap<String, String> extras = new HashMap<>();
+            HashMap<String, String> extras = new HashMap<String, String>();
             extras.put("id", String.valueOf(question.getId()));
             extras.put("type", MessageType.QUESTION.getName());
             new JPushUtil("问题:"+question.title+",已被回答", question.title,question.user.getPhone(), extras).sendPushWith();
