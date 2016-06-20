@@ -171,7 +171,7 @@ public class User extends BaseModel {
 
     public void setFieldSecurity() {
         this.phone = "****";
-        this.realName = "****";
+//        this.realName = "****";
         this.email = "****";
         this.lastIp = "****";
     }

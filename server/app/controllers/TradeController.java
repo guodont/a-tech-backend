@@ -7,6 +7,7 @@ package controllers;
 
 import controllers.secured.AdminSecured;
 import models.*;
+import models.enums.MessageType;
 import models.enums.TradeState;
 import models.enums.TradeType;
 import play.data.Form;
@@ -14,8 +15,10 @@ import play.data.validation.Constraints;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.JPushUtil;
 import utils.JsonResult;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -73,6 +76,21 @@ public class TradeController extends BaseController {
         Trade trade = Trade.findTradeById(tradeId);
         trade.tradeState = TradeState.AUDITED;   // 已通过审核
         trade.save();
+
+        Message message = new Message();
+        message.setMessageType(MessageType.QUESTION);
+        message.setMarkRead(false);
+        message.setRelationId(trade.getId());
+        message.setTitle("您的交易信息已通过审核");
+        message.setUser(trade.user);
+        message.setRemark(trade.title);
+        message.save();
+
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("id", String.valueOf(trade.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的交易信息已通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
+
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -87,6 +105,21 @@ public class TradeController extends BaseController {
         Trade trade = Trade.findTradeById(tradeId);
         trade.tradeState = TradeState.FAILED;   // 审核失败
         trade.save();
+
+        Message message = new Message();
+        message.setMessageType(MessageType.QUESTION);
+        message.setMarkRead(false);
+        message.setRelationId(trade.getId());
+        message.setTitle("您的交易信息未通过审核");
+        message.setUser(trade.user);
+        message.setRemark(trade.title);
+        message.save();
+
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("id", String.valueOf(trade.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的交易信息未通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
+
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 

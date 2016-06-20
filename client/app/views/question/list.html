@@ -33,7 +33,7 @@
           </div>
           <div class="field">
             <label>指派人</label>
-            <p>{{ curQuestion.expert }}</p>
+            <p>{{ curQuestion.expert.realName }}</p>
           </div>
           <div class="field">
             <label>发布者</label>
@@ -126,7 +126,7 @@
       <td>{{ question.clickCount }}</td>
       <td>{{ question.questionAuditState | showStatus}}</td>
       <td>{{ question.questionResolveState | showStatus}}</td>
-      <td>{{ question.expert }}</td>
+      <td>{{ question.expert.realName }}</td>
       <td>{{ question.user.name }}</td>
       <td>{{ question.whenCreated | date:'yyyy-MM-dd HH:mm'}}</td>
       <td>

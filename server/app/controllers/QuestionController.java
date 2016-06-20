@@ -16,9 +16,11 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.JPushUtil;
 import utils.JsonResult;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -76,7 +78,21 @@ public class QuestionController extends BaseController {
         Question question = Question.findQuestionById(questionId);
         question.questionAuditState = QuestionAuditState.AUDITED;   // 已通过审核
         question.save();
-        // TODO 消息通知给用户 && JPush
+
+        Message message = new Message();
+        message.setMessageType(MessageType.QUESTION);
+        message.setMarkRead(false);
+        message.setRelationId(question.getId());
+        message.setTitle("您的问题已通过审核");
+        message.setUser(question.user);
+        message.setRemark(question.title);
+        message.save();
+
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题已通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
+
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -91,7 +107,21 @@ public class QuestionController extends BaseController {
         Question question = Question.findQuestionById(questionId);
         question.questionAuditState = QuestionAuditState.FAILED;   // 审核失败
         question.save();
-        // TODO 消息通知给用户 && JPush
+
+        Message message = new Message();
+        message.setMessageType(MessageType.QUESTION);
+        message.setMarkRead(false);
+        message.setRelationId(question.getId());
+        message.setTitle("您的问题未通过审核");
+        message.setUser(question.user);
+        message.setRemark(question.title);
+        message.save();
+
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题未通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
+
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -109,7 +139,33 @@ public class QuestionController extends BaseController {
         User expert = User.findById(expertId);
         question.expert = expert;
         question.update();
-        // TODO 消息通知给用户 && JPush
+
+        // 发消息给用户
+        Message message = new Message();
+        message.setMessageType(MessageType.QUESTION);
+        message.setMarkRead(false);
+        message.setRelationId(question.getId());
+        message.setTitle("您的问题已指派给专家,专家将尽快为您解决");
+        message.setUser(question.user);
+        message.setRemark(question.title);
+        message.save();
+
+        HashMap<String, String> extras = new HashMap<>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题已指派给专家,专家将尽快为您解决", question.title, question.user.getPhone(), extras).sendPushWith();
+
+        // 发消息给专家
+        Message message2 = new Message();
+        message2.setMessageType(MessageType.QUESTION);
+        message2.setMarkRead(false);
+        message2.setRelationId(question.getId());
+        message2.setTitle("您有新的待回答问题,请及时回复");
+        message2.setUser(expert);
+        message2.setRemark(question.title);
+        message2.save();
+        new JPushUtil("您有新的待回答问题,请及时回复", question.title,expert.getPhone(), extras).sendPushWith();
+
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
 
@@ -168,7 +224,23 @@ public class QuestionController extends BaseController {
             question.answer = commentForm.get().content;
             question.expert = getUser();
             question.update();
-            // TODO 消息通知给用户 && JPush
+
+            // 发消息给用户
+            Message message2 = new Message();
+            message2.setMessageType(MessageType.QUESTION);
+            message2.setMarkRead(false);
+            message2.setRelationId(question.getId());
+            message2.setTitle("问题:"+question.title+",已被回答");
+            message2.setUser(question.user);
+            message2.setRemark(question.answer);
+            message2.save();
+
+
+            HashMap<String, String> extras = new HashMap<>();
+            extras.put("id", String.valueOf(question.getId()));
+            extras.put("type", MessageType.QUESTION.getName());
+            new JPushUtil("问题:"+question.title+",已被回答", question.title,question.user.getPhone(), extras).sendPushWith();
+
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
         }
     }
