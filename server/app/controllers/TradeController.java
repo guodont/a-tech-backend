@@ -78,7 +78,7 @@ public class TradeController extends BaseController {
         trade.save();
 
         Message message = new Message();
-        message.setMessageType(MessageType.QUESTION);
+        message.setMessageType(MessageType.TRADE);
         message.setMarkRead(false);
         message.setRelationId(trade.getId());
         message.setTitle("您的交易信息已通过审核");
@@ -88,7 +88,7 @@ public class TradeController extends BaseController {
 
         HashMap<String, String> extras = new HashMap<>();
         extras.put("id", String.valueOf(trade.getId()));
-        extras.put("type", MessageType.QUESTION.getName());
+        extras.put("type", MessageType.TRADE.getName());
         new JPushUtil("您的交易信息已通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
@@ -107,7 +107,7 @@ public class TradeController extends BaseController {
         trade.save();
 
         Message message = new Message();
-        message.setMessageType(MessageType.QUESTION);
+        message.setMessageType(MessageType.TRADE);
         message.setMarkRead(false);
         message.setRelationId(trade.getId());
         message.setTitle("您的交易信息未通过审核");
@@ -117,7 +117,7 @@ public class TradeController extends BaseController {
 
         HashMap<String, String> extras = new HashMap<>();
         extras.put("id", String.valueOf(trade.getId()));
-        extras.put("type", MessageType.QUESTION.getName());
+        extras.put("type", MessageType.TRADE.getName());
         new JPushUtil("您的交易信息未通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
