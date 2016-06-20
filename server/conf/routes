@@ -20,6 +20,8 @@ GET         /api/v1/captcha             controllers.Application.captcha
 
 GET         /api/v1/user/uploadToken    controllers.Application.getUploadTokenForUser
 
+GET         /api/v1/user/uploadTokenForAudio    controllers.Application.getAudioUploadTokenForUser
+
 GET         /api/v1/admin/uploadToken   controllers.Application.getUploadTokenForAdmin
 
 # Map static resources from the /public folder to the /assets URL path

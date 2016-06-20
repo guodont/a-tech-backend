@@ -15,7 +15,6 @@ public class Comment extends BaseModel {
      * 所属文章
      */
     @ManyToOne
-    @JsonIgnore
     public Article article;
     /**
      * 用户id

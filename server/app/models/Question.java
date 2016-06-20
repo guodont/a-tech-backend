@@ -61,7 +61,7 @@ public class Question extends BaseModel {
     @Enumerated(EnumType.STRING)
     public QuestionResolveState questionResolveState;
 
-    @Constraints.MaxLength(255)
+    @Column(columnDefinition = "TEXT")
     public String images;
 //
 //    /**

@@ -115,14 +115,14 @@ public class Application extends BaseController {
 
         } else {
 //
-//            //判断cache code
-//            String verifyUuid = request().getHeader("VERIFY_UUID");
-//
-//            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
-//                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
-//            }
-//
-//            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
+            //判断cache code
+            String verifyUuid = request().getHeader("VERIFY_UUID");
+
+            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(newUser.phone)) {
+                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+            }
+
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(newUser.verifyCode)) {
 
                 //  保存用户信息
                 User user = new User();
@@ -140,10 +140,10 @@ public class Application extends BaseController {
                 response().setCookie(AUTH_TOKEN, authToken);
 
                 return status(201, authTokenJson);
-////
-//            } else {
-//                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
-//            }
+//
+            } else {
+                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+            }
         }
     }
 
@@ -181,6 +181,21 @@ public class Application extends BaseController {
             return ok(new JsonResult("success", "User information saved").toJsonResponse());
         }
 
+    }
+
+
+    /**
+     * 用户绑定微信号
+     * @return
+     */
+    public static Result bindWeChatAccount() {
+
+        // TODO 接收手机号/密码/微信openId/avatar/username
+
+        // TODO 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 不保存密码
+
+
+        return ok();
     }
 
     /**
@@ -505,6 +520,23 @@ public class Application extends BaseController {
     }
 
     /**
+     * 普通用户获取语音上传token
+     *
+     * @return
+     */
+    @Security.Authenticated(Secured.class)
+    public static Result getAudioUploadTokenForUser() {
+
+        //要上传的空间
+        String bucketname = "nk110-audio";
+
+        //密钥配置
+        Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+
+        return ok(Json.toJson(new JsonResult("success", auth.uploadToken(bucketname)).toJsonResponse()));
+    }
+
+    /**
      * 管理员用户获取上传token
      *
      * @return
@@ -582,8 +614,31 @@ public class Application extends BaseController {
         @Constraints.MinLength(3)
         public String userName; //  用户名
 
-//        @Constraints.Required
+        @Constraints.Required
         public String verifyCode; //  验证码
+
+    }
+
+    /**
+     * 绑定微信账号表单
+     */
+    public static class BindWeChatAccountData {
+
+        @Constraints.Required
+        @Constraints.MinLength(6)
+        public String password; //  密码
+
+        @Constraints.Required
+        @Constraints.MinLength(11)
+        @Constraints.MaxLength(11)
+        public String phone;    //  手机号
+
+        public String userName; //  用户名
+
+        public String avatar; //  微信头像地址
+
+        @Constraints.Required
+        public String openId; //  微信用户OpenId
 
     }
 

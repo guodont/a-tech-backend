@@ -62,7 +62,7 @@ public class Trade extends BaseModel {
     @Enumerated(EnumType.STRING)
     public TradeState tradeState;
 
-    @Constraints.MaxLength(255)
+    @Column(columnDefinition = "TEXT")
     public String images;
 
 
