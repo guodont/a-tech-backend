@@ -86,7 +86,7 @@ public class TradeController extends BaseController {
         message.setRemark(trade.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<>();
+        HashMap<String, String> extras = new HashMap<String, String>();
         extras.put("id", String.valueOf(trade.getId()));
         extras.put("type", MessageType.TRADE.getName());
         new JPushUtil("您的交易信息已通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
@@ -115,7 +115,7 @@ public class TradeController extends BaseController {
         message.setRemark(trade.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<>();
+        HashMap<String, String> extras = new HashMap<String, String>();
         extras.put("id", String.valueOf(trade.getId()));
         extras.put("type", MessageType.TRADE.getName());
         new JPushUtil("您的交易信息未通过审核", trade.title, trade.user.getPhone(), extras).sendPushWith();
