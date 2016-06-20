@@ -83,7 +83,7 @@ public class UserController extends BaseController {
         } else {
             //  更新用户信息
             User user = getUser();
-            user.setEmail(userInfoFormForm.get().email);
+//            user.setEmail(userInfoFormForm.get().email);
             user.setRealName(userInfoFormForm.get().realName);
             user.address = userInfoFormForm.get().address;
             user.scale = userInfoFormForm.get().scale;
@@ -91,7 +91,7 @@ public class UserController extends BaseController {
             user.industry = userInfoFormForm.get().industry;
             user.save();
         }
-        return ok(new JsonResult("success", "Article updated").toJsonResponse());
+        return ok(new JsonResult("success", "UserInfo updated").toJsonResponse());
     }
 
     /**
