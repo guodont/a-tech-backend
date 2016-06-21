@@ -8,6 +8,9 @@ public enum MessageType implements ViewEnum{
     QUESTION("问题"),
     RELATION("关系"),
     SYSTEM("系统"),
+    WECHAT("微信"),
+    NOTICE("公告"),
+    ARTICLE("文章"),
     TRADE("交易");
     private  String value;
 
@@ -24,4 +27,5 @@ public enum MessageType implements ViewEnum{
     public String getValue() {
         return value;
     }
+
 }

@@ -497,7 +497,7 @@ public class Application extends BaseController {
         if (result.equals("0")) {
             return ok(new JsonResult("success", "验证短信发送成功").toJsonResponse());
         } else {
-            return ok(new JsonResult("error", "验证短信发送失败").toJsonResponse());
+            return badRequest(new JsonResult("error", "验证短信发送失败").toJsonResponse());
         }
     }
 

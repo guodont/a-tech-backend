@@ -63,6 +63,12 @@ public class Question extends BaseModel {
 
     @Column(columnDefinition = "TEXT")
     public String images;
+
+    /**
+     * 媒体id 如 语音资源id
+     */
+    @Column(columnDefinition = "TEXT")
+    public String mediaId;
 //
 //    /**
 //     * 问题的回答

@@ -3,10 +3,10 @@
  */
 'use strict';
 
-    angular.module('clientApp')
-      .service('articleService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
+angular.module('clientApp')
+  .service('articleService', ['$http', '$cookies', 'apiUrl', '$cookieStore', 'ToKenHeader', function ($http, $cookies, apiUrl, $cookieStore, ToKenHeader) {
 
-        var self = this;
+    var self = this;
 
     // 添加文章
     self.addArticle = function (params, success, error) {
@@ -101,6 +101,24 @@
       $http({
         method: 'DELETE',
         url: apiUrl + '/article/' + params.id,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
+      })
+        .then(function (res) {
+          if (typeof (success) === 'function') {
+            success(res);
+          }
+        }, function (res) {
+          if (typeof (error) === 'function') {
+            error(res);
+          }
+        });
+    };
+    
+    // 推送文章
+    self.pushArticle = function (params, success, error) {
+      $http({
+        method: 'POST',
+        url: apiUrl + '/article/push/' + params.id,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {

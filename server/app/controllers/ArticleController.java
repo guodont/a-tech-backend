@@ -8,15 +8,16 @@ package controllers;
 import controllers.secured.AdminSecured;
 import controllers.secured.ExpertSecured;
 import models.*;
-import models.enums.ArticlePushState;
-import models.enums.ArticleState;
-import models.enums.ArticleType;
+import models.enums.*;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
+import utils.JPushUtil;
 import utils.JsonResult;
+
+import java.util.HashMap;
 
 /**
  * @author guodont
@@ -24,6 +25,27 @@ import utils.JsonResult;
  *         文章控制器
  */
 public class ArticleController extends BaseController {
+
+
+    /**
+     * 推送文章
+     * @param id
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result pushArticle(long id) {
+
+        Article article = Article.findArticleById(id);
+
+        HashMap<String, String> extras = new HashMap<String, String>();
+        extras.put("id", String.valueOf(article.getId()));
+        extras.put("type", MessageType.ARTICLE.getName());
+
+        new JPushUtil(article.title, article.title, extras).sendPushForAll();
+
+        return ok(new JsonResult("success", "Article pushed successfully").toJsonResponse());
+
+    }
 
     /**
      * 管理员发布文章
@@ -132,6 +154,7 @@ public class ArticleController extends BaseController {
             article.save();
             newComment.article = article;
             newComment.user = getUser();
+            newComment.auditState = TradeState.WAIT_AUDITED;
             newComment.content = commentForm.get().comment;
             newComment.save();
             return status(201, new JsonResult("success", "Comment added successfully").toJsonResponse());

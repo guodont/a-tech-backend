@@ -37,12 +37,6 @@ public class JPushUtil {
     private static HashMap<String, String> extras;
     private String registrationId;
 
-    public JPushUtil(String title, String msgContent, String alias, String registrationId) {
-        this.title = title;
-        this.msgContent = msgContent;
-        this.alias = alias;
-        this.registrationId = registrationId;
-    }
 
     public JPushUtil(String msgContent, String title) {
         this.msgContent = msgContent;
@@ -53,6 +47,12 @@ public class JPushUtil {
         this.title = title;
         this.msgContent = msgContent;
         this.alias = alias;
+        this.extras = addExtras;
+    }
+
+    public JPushUtil(String title, String msgContent,HashMap addExtras) {
+        this.title = title;
+        this.msgContent = msgContent;
         this.extras = addExtras;
     }
 
@@ -67,6 +67,27 @@ public class JPushUtil {
         JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 
         PushPayload payload = buildPushObject_android_and_ios();
+
+        try {
+            PushResult result = jpushClient.sendPush(payload);
+            LOG.info("Got result - " + result);
+
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Code: " + e.getErrorCode());
+            LOG.info("Error Message: " + e.getErrorMessage());
+            LOG.info("Msg ID: " + e.getMsgId());
+        }
+    }
+
+    public static void sendPushForAll() {
+        JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
+
+        PushPayload payload = buildPushObject_android_and_ios_for_all();
 
         try {
             PushResult result = jpushClient.sendPush(payload);
@@ -104,6 +125,20 @@ public class JPushUtil {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android_ios())
                 .setAudience(Audience.alias(alias))
+                .setNotification(Notification.newBuilder()
+                        .setAlert(msgContent)
+                        .addPlatformNotification(AndroidNotification.newBuilder()
+                                .setTitle(title).build())
+                        .addPlatformNotification(IosNotification.newBuilder()
+                                .incrBadge(1)
+                                .addExtras(extras).build())
+                        .build())
+                .build();
+    }
+
+    public static PushPayload buildPushObject_android_and_ios_for_all() {
+        return PushPayload.newBuilder()
+                .setPlatform(Platform.android_ios())
                 .setNotification(Notification.newBuilder()
                         .setAlert(msgContent)
                         .addPlatformNotification(AndroidNotification.newBuilder()

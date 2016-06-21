@@ -23,10 +23,16 @@
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
           <a class="btn btn-xs btn-info" href="#/article/{{ article.id }}/update">
             <i class="icon-edit bigger-120"></i>
+            编辑
           </a>
-          <button class="btn btn-xs btn-danger" ng-click="deleteArticle(article.id)">
-            <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
-          </button>
+          <a class="btn btn-xs btn-danger" ng-click="deleteArticle(article.id)">
+            <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
+            删除
+          </a>
+          <a class="btn btn-xs btn-success" ng-click="pushArticle(article.id)">
+            <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
+            推送此文章
+          </a>
         </div>
       </td>
     </tr>

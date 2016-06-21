@@ -18,6 +18,7 @@ public class CommentController extends BaseController{
      * 获取所有评论
      * @return
      */
+    @Security.Authenticated(AdminSecured.class)
     public static Result getAllComments() {
         initPageing();
         Comment comment = new Comment();

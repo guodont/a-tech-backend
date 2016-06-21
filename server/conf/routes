@@ -71,6 +71,8 @@ GET         /api/v1/article/:id                     controllers.ArticleControlle
 PUT         /api/v1/article/:id                     controllers.ArticleController.updateArticle(id: Long)
 # delete article
 DELETE      /api/v1/article/:id                     controllers.ArticleController.deleteArticle(id: Long)
+# push article
+POST        /api/v1/article/push/:id                controllers.ArticleController.pushArticle(id: Long)
 # get article comments
 GET         /api/v1/article/:id/comments            controllers.ArticleController.getComments(id: Long)
 # post comment

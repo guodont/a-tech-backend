@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import models.enums.TradeState;
 import org.joda.time.DateTime;
 import play.db.ebean.Model;
 import javax.persistence.*;
@@ -27,6 +28,12 @@ public class Comment extends BaseModel {
     @Column(columnDefinition = "TEXT")
     public String content;
 
+    /**
+     * 审核状态
+     */
+    @Enumerated(EnumType.STRING)
+    public TradeState auditState;
+
     public static final Finder<Long, Comment> find = new Finder<Long, Comment>(
             Long.class, Comment.class);
 
@@ -39,6 +46,7 @@ public class Comment extends BaseModel {
         return find
                 .where()
                 .eq("article", article)
+                .eq("auditState", TradeState.AUDITED)
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
