@@ -142,6 +142,20 @@ angular.module('clientApp')
         });
     };
 
+
+   $scope.pushArticle = function (id) {
+      articleService.pushArticle({
+          id: id
+        },
+        function (res) {
+          alertService.add('success', res.data.success.message);
+          console.log("文章推送成功");
+          $scope.getArticles();
+        }, function (res) {
+          alertService.add('error', res.data.error.message);
+        });
+    };
+
     $scope.getCategories = function (type) {
       categoryService.getCategories(
         {

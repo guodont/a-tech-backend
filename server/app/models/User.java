@@ -89,6 +89,11 @@ public class User extends BaseModel {
     @Constraints.MaxLength(45)
     private String lastIp;
 
+    /**
+     * 微信openId
+     */
+    public String weChatOpenId;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
     public List<BlogPost> posts;

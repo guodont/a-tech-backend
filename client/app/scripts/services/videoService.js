@@ -16,7 +16,8 @@ angular.module('clientApp')
           name: params.name,
           description: params.description,
           path: params.path,
-          categoryId: params.categoryId
+          categoryId: params.categoryId,
+          thumbnail: params.thumbnail
         }
       })
         .then(function (res) {
@@ -40,7 +41,8 @@ angular.module('clientApp')
           name: params.name,
           description: params.description,
           path: params.path,
-          categoryId: params.categoryId
+          categoryId: params.categoryId,
+          thumbnail: params.thumbnail
         }
       })
         .then(function (res) {
