@@ -5,12 +5,7 @@
 # Home page
 GET         /                           controllers.Application.index
 OPTIONS     /*all                       controllers.Application.preflight(all)
-# Posts
-GET         /app/posts                  controllers.Application.getPosts
-POST        /app/post                   controllers.Post.addPost
-GET         /app/post/:id               controllers.Application.getPost(id: Long)
-GET         /app/userposts              controllers.Post.getUserPosts
-POST        /app/comment                controllers.Post.addComment
+
 
 POST        /api/v1/uploadImage         controllers.Application.uploadImage
 
@@ -147,6 +142,8 @@ DELETE      /api/v1/video/:id               controllers.VideoController.deleteVi
 
 # question
 GET         /api/v1/questions                       controllers.QuestionController.getQuestions
+# questions for admin
+GET         /api/v1/foradmin/questions              controllers.QuestionController.getQuestionsForAdmin
 # post question
 POST        /api/v1/question                        controllers.QuestionController.addQuestion
 # view question
@@ -176,6 +173,8 @@ GET         /api/v1/user/favorite/questions         controllers.QuestionControll
 
 # trade
 GET         /api/v1/trades                          controllers.TradeController.getTrades
+# trades for admin
+GET         /api/v1/foradmin/trades                 controllers.TradeController.getTradesForAdmin
 # post trade
 POST        /api/v1/trade                           controllers.TradeController.addTrade
 # view trade

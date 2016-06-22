@@ -186,6 +186,39 @@ public class Question extends BaseModel {
         return find
                 .where()
                 .eq("category", category)
+                .eq("questionAuditState", QuestionAuditState.AUDITED.getName())
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    /**
+     * 查找分类下的所有问题 for admin
+     *
+     * @param category
+     * @return
+     */
+    public static List<Question> findQuestionsByCategoryForadmin(final Category category, int page, int pageSize) {
+        return find
+                .where()
+                .eq("category", category)
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    /**
+     * 获取所有问题
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public static List<Question> findQuestionsForAdmin(int page, int pageSize) {
+        return find
+                .where()
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
@@ -202,6 +235,7 @@ public class Question extends BaseModel {
     public static List<Question> findQuestions(int page, int pageSize) {
         return find
                 .where()
+                .eq("questionAuditState", QuestionAuditState.AUDITED.getName())
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)

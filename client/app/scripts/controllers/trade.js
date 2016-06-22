@@ -11,7 +11,7 @@ angular.module('clientApp')
     $scope.getTrades = function () {
       $http({
         method: 'GET',
-        url: apiUrl + '/trades' + '?pageSize=20&page=' + $scope.curPage,
+        url: apiUrl + '/foradmin/trades' + '?pageSize=20&page=' + $scope.curPage,
         data: {
           // categoryType: params.type
         },

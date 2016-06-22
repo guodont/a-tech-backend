@@ -306,6 +306,27 @@ public class QuestionController extends BaseController {
     }
 
     /**
+     * 获取所有问题 for admin
+     *
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getQuestionsForAdmin() {
+        initPageing();
+        List<Question> questions = null;
+
+        if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
+            int categoryId = Integer.parseInt(request().getQueryString("category"));
+            Category category = Category.findCategoryById(categoryId);
+            questions = Question.findQuestionsByCategoryForadmin(category, page, pageSize);
+        } else {
+            questions = Question.findQuestionsForAdmin(page, pageSize);
+        }
+
+        return ok(Json.toJson(questions));
+    }
+
+    /**
      * 获取指派给专家的问题
      *
      * @param expertId

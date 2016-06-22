@@ -227,7 +227,7 @@ public class TradeController extends BaseController {
         if (request().getQueryString("category") != null) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            return ok(Json.toJson(Trade.findTradesByCategory(category, tradeType, page, pageSize)));
+            return ok(Json.toJson(Trade.findTradesByCategoryForAdmin(category, tradeType, page, pageSize)));
         } else {
             return ok(Json.toJson(Trade.findTradesForAdmin(page, pageSize)));
         }

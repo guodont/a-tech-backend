@@ -27,6 +27,7 @@ public class Article extends BaseModel {
     @Column(columnDefinition = "TEXT")
     @Constraints.Required
     public String content;
+
     /**
      * 关键字
      */
