@@ -94,9 +94,6 @@ public class User extends BaseModel {
      */
     public String weChatOpenId;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
-    public List<BlogPost> posts;
 
     private String authToken;
 
