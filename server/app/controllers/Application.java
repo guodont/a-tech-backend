@@ -390,18 +390,6 @@ public class Application extends BaseController {
         }
     }
 
-    public static Result getPosts() {
-        return ok(Json.toJson(BlogPost.find.findList()));
-    }
-
-    public static Result getPost(Long id) {
-        BlogPost blogPost = BlogPost.findBlogPostById(id);
-        if (blogPost == null) {
-            return notFound(new JsonResult("error", "Post not found").toJsonResponse());
-        }
-        return ok(Json.toJson(blogPost));
-    }
-
     /**
      * for CORS
      *

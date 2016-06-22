@@ -56,7 +56,7 @@ angular.module('clientApp')
     self.getQuestions = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/questions' + '?pageSize=20&page=' + params.curPage,
+        url: apiUrl + '/foradmin/questions' + '?pageSize=20&page=' + params.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
