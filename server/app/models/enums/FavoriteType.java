@@ -17,7 +17,7 @@ public enum  FavoriteType implements ViewEnum{
 
     @Override
     public String getName() {
-        return null;
+        return toString();
     }
 
     @Override

@@ -483,7 +483,7 @@ public class Application extends BaseController {
         // TODO=========
 
         if (result.equals("0")) {
-            return ok(new JsonResult("success", "验证短信发送成功").toJsonResponse());
+            return ok(new JsonResult("success", codeUuid).toJsonResponse());
         } else {
             return badRequest(new JsonResult("error", "验证短信发送失败").toJsonResponse());
         }
