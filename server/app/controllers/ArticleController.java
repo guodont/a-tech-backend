@@ -230,19 +230,6 @@ public class ArticleController extends BaseController {
         return ok(Json.toJson(article.findArticlesByUser(user, page, pageSize)));
     }
 
-    /**
-     * 获取所有专家的文章数据
-     *
-     * @param
-     * @return
-     */
-    public static Result getArticlesByExpert() {
-        initPageing();
-        Article article = new Article();
-        response().setHeader("CUR_PAGE", String.valueOf(page));
-        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(article.findArticlesByExpert(page, pageSize)));
-    }
 
     /**
      * 获取某专家的成果数据

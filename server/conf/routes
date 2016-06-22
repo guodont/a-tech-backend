@@ -208,7 +208,7 @@ POST        /api/v1/expert/trend                    controllers.ExpertInfoContro
 # get expert's question
 GET         /api/v1/expert/:id/questions            controllers.QuestionController.getQuestionsByExpert(id: Long)
 # get expert's articles
-GET         /api/v1/expert/:id/articles             controllers.ArticleController.getArticlesByExpert()
+GET         /api/v1/expert/:id/articles             controllers.ArticleController.getArticlesByExpert(id: Long)
 
 GET         /api/v1/expert/:id/results              controllers.ArticleController.getResultArticlesByExpert(id: Long)
 # add article for expert
