@@ -20,7 +20,7 @@ public enum MessageType implements ViewEnum{
 
     @Override
     public String getName() {
-        return null;
+        return toString();
     }
 
     @Override
