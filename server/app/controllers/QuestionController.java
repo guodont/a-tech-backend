@@ -441,6 +441,8 @@ public class QuestionController extends BaseController {
         public String content;      //  内容
 
         public String image;        //  配图
+
+        public String mediaId;        //  配图
     }
 
     /**

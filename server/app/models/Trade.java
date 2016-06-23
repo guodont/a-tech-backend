@@ -85,8 +85,10 @@ public class Trade extends BaseModel {
 
     public static final Finder<Long, Trade> find = new Finder<Long, Trade>(
             Long.class, Trade.class);
+
     /**
      * 查找分类下的所有交易
+     *
      * @param category
      * @return
      */
@@ -125,10 +127,11 @@ public class Trade extends BaseModel {
                 .findList();
     }
 
-    public static List<Trade> findTrades(int page, int pageSize) {
+    public static List<Trade> findTrades(String tradeType, int page, int pageSize) {
         return find
                 .where()
                 .eq("tradeState", TradeState.AUDITED.getName())
+                .eq("tradeType", tradeType)
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
@@ -146,6 +149,7 @@ public class Trade extends BaseModel {
 
     /**
      * 根据Id获取交易信息
+     *
      * @param tradeId
      * @return
      */

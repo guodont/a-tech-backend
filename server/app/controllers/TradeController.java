@@ -195,7 +195,7 @@ public class TradeController extends BaseController {
             Category category = Category.findCategoryById(categoryId);
             trades = Trade.findTradesByCategoryAndStatus(category, TradeState.AUDITED.getName(), tradeType, page, pageSize);
         } else {
-            trades = Trade.findTrades(page, pageSize);
+            trades = Trade.findTrades(tradeType, page, pageSize);
         }
         for (Trade trade : trades) {
             // 判断用户的收藏状态
