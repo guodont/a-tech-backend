@@ -51,6 +51,7 @@ public class QuestionController extends BaseController {
             question.questionAuditState = QuestionAuditState.WAIT_AUDITED;
             question.questionResolveState = QuestionResolveState.WAIT_RESOLVE;
             question.title = postForm.get().title;
+            question.mediaId = postForm.get().mediaId;
             question.category = category;
             question.user = getUser();
 
