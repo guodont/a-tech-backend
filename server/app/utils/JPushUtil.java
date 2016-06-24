@@ -139,6 +139,7 @@ public class JPushUtil {
     public static PushPayload buildPushObject_android_and_ios_for_all() {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android_ios())
+                .setAudience(Audience.all())
                 .setNotification(Notification.newBuilder()
                         .setAlert(msgContent)
                         .addPlatformNotification(AndroidNotification.newBuilder()

@@ -18,8 +18,12 @@
       <td>
         <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
           <a class="btn btn-xs btn-success" data-toggle="modal" data-target=".at-audit-comment"
-             ng-click="auditComment(comment)">
+             ng-click="auditWithPass(comment)">
             <i class="icon-edit bigger-120"></i>通过审核
+          </a>
+          <a class="btn btn-xs btn-danger" data-toggle="modal" data-target=".at-audit-comment"
+             ng-click="auditWithRefuse(comment)">
+            <i class="icon-edit bigger-120"></i>不通过审核
           </a>
           <button class="btn btn-xs btn-danger" ng-click="deleteComment(comment.id)">
             <a href="" style="color: #FFFFFF;"><i class="icon-trash bigger-120 "></i>删除</a>

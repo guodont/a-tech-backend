@@ -82,6 +82,10 @@ GET         /api/v1/comments                        controllers.CommentControlle
 # delete comment
 DELETE      /api/v1/comment/:id                     controllers.CommentController.deleteComment(id: Long)
 
+PUT         /api/v1/comment/:id/auditpass           controllers.CommentController.auditCommentWithAudited(id: Long)
+
+PUT         /api/v1/comment/:id/auditfail           controllers.CommentController.auditCommentWithFailed(id: Long)
+
 # user manage
 
 # get all users
