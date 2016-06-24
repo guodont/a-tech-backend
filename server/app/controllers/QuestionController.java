@@ -7,6 +7,7 @@ package controllers;
 
 import controllers.secured.AdminSecured;
 import controllers.secured.ExpertSecured;
+import controllers.secured.WeChatSecured;
 import models.*;
 import models.enums.*;
 import play.Play;
@@ -63,6 +64,60 @@ public class QuestionController extends BaseController {
             question.images = postForm.get().image;
             question.content = postForm.get().content;
             question.save();
+        }
+        return ok(new JsonResult("success", "Question added successfully").toJsonResponse());
+
+    }
+
+
+    /**
+     * 用户发布问题 for WeChat
+     *
+     * @return
+     */
+    @Security.Authenticated(WeChatSecured.class)
+    public static Result addQuestionForWeChat() {
+        Form<QuestionForm> postForm = Form.form(QuestionForm.class).bindFromRequest();
+
+        if (postForm.hasErrors()) {
+            return badRequest(postForm.errorsAsJson());
+        } else {
+
+            //  保存问题
+            Category category = Category.find.byId(postForm.get().categoryId);
+            Question question = new Question();
+            question.clickCount = 0L;
+            question.likeCount = 0L;
+            question.questionAuditState = QuestionAuditState.WAIT_AUDITED;
+            question.questionResolveState = QuestionResolveState.WAIT_RESOLVE;
+            question.title = postForm.get().title;
+            question.mediaId = postForm.get().mediaId;
+            question.category = category;
+            question.user = getWeChatUser();
+
+            User expert = User.findById(postForm.get().expertId);
+            if (expert != null)
+                question.expert = expert;
+
+            // TODO 保存图片路径 逗号隔开
+            question.images = postForm.get().image;
+            question.content = postForm.get().content;
+            question.save();
+
+            Message message = new Message();
+            message.setMessageType(MessageType.WECHAT);
+            message.setMarkRead(false);
+            message.setRelationId(question.getId());
+            message.setTitle("您从微信提交了一条问题");
+            message.setUser(question.user);
+            message.setRemark(question.title);
+            message.save();
+
+            HashMap<String, String> extras = new HashMap<String, String>();
+            extras.put("id", String.valueOf(question.getId()));
+            extras.put("type", MessageType.QUESTION.getName());
+            new JPushUtil("您从微信提交了一条问题", question.title, question.user.getPhone(), extras).sendPushWith();
+
         }
         return ok(new JsonResult("success", "Question added successfully").toJsonResponse());
 
@@ -429,7 +484,7 @@ public class QuestionController extends BaseController {
      */
     public static class QuestionForm {
 
-        @Constraints.Required
+//        @Constraints.Required
         public Long categoryId;     //  分类id
 
         public Long expertId;       //  专家id
@@ -441,9 +496,9 @@ public class QuestionController extends BaseController {
         @Constraints.Required
         public String content;      //  内容
 
-        public String image;        //  配图
+        public String image;        //  配图id
 
-        public String mediaId;        //  配图
+        public String mediaId;        //  语音资源id
     }
 
     /**
