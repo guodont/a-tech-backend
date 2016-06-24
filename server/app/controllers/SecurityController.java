@@ -14,6 +14,7 @@ public class SecurityController extends Controller {
 
     public final static String AUTH_TOKEN_HEADER = "X-AUTH-TOKEN";
     public final static String WECHAT_AUTH_TOKEN_HEADER = "WECHAT-AUTH-TOKEN";
+    public final static String WECHAT_OPEN_ID = "WECHAT-OPEN-ID";
     public static final String AUTH_TOKEN = "authToken";
 
 

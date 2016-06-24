@@ -16,24 +16,45 @@ import play.mvc.Security;
  */
 public class WeChatSecured extends Security.Authenticator {
 
-  @Override
-  public String getUsername(Context ctx) {
-    String[] authTokenHeaderValues = ctx.request().headers().get(SecurityController.WECHAT_AUTH_TOKEN_HEADER);
-    if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
+    @Override
+    public String getUsername(Context ctx) {
+//        String[] authTokenHeaderValues = ctx.request().headers().get(SecurityController.WECHAT_AUTH_TOKEN_HEADER);
+//        String[] authOpenIdHeaderValues = ctx.request().headers().get(SecurityController.WECHAT_OPEN_ID);
+//        if ((authTokenHeaderValues != null) && (authOpenIdHeaderValues != null) && (authTokenHeaderValues.length == 1)
+//                && (authOpenIdHeaderValues.length == 1)
+//                && (authTokenHeaderValues[0] != null)
+//                && (authOpenIdHeaderValues[0] != null)
+//                ) {
+//
+//            User user = User.findExpertByWeChatOpenId(authOpenIdHeaderValues[0]);
+//            if (user != null) {
+//                ctx.args.put("user", user);
+//                return user.name;
+//            }
+//
+//        }
+//
+//        return null;
+        // TODO TEST
+        String[] authOpenIdHeaderValues = ctx.request().headers().get(SecurityController.WECHAT_OPEN_ID);
+        if ((authOpenIdHeaderValues != null)
+                && (authOpenIdHeaderValues.length == 1)
+                && (authOpenIdHeaderValues[0] != null)
+                ) {
 
-      User user = User.findExpertByAuthToken(authTokenHeaderValues[0]);
-      if (user != null) {
-        ctx.args.put("user", user);
-        return "wechat";
-      }
+            User user = User.findExpertByWeChatOpenId(authOpenIdHeaderValues[0]);
+            if (user != null) {
+                ctx.args.put("user", user);
+                return user.name;
+            }
 
+        }
+
+        return null;
     }
 
-    return null;
-  }
-
-  @Override
-  public Result onUnauthorized(Context ctx) {
-    return unauthorized();
-  }
+    @Override
+    public Result onUnauthorized(Context ctx) {
+        return unauthorized();
+    }
 }

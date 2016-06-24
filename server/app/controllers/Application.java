@@ -190,12 +190,60 @@ public class Application extends BaseController {
      */
     public static Result bindWeChatAccount() {
 
-        // TODO 接收手机号/密码/微信openId/avatar/username
+        Form<BindWeChatAccountData> bindWeChatAccountDataForm = Form.form(BindWeChatAccountData.class).bindFromRequest();
 
-        // TODO 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 不保存密码
+        if (bindWeChatAccountDataForm.hasErrors()) {
+            return badRequest(bindWeChatAccountDataForm.errorsAsJson());
+        }
 
+        BindWeChatAccountData bindWeChatAccountData = bindWeChatAccountDataForm.get();
 
-        return ok();
+        // 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 不保存密码
+        if (User.findExpertByWeChatOpenId(bindWeChatAccountData.openId) != null) {
+
+            // 执行登录操作
+            User user = User.findByPhoneAndPassword(bindWeChatAccountData.phone, bindWeChatAccountData.password);
+
+            if (user == null) {
+
+                // 登录失败
+                return badRequest(new JsonResult("error", "Incorrect phone or password").toJsonResponse());
+
+            } else {
+
+                // 登录成功 绑定微信信息
+                user.setLastIp(request().remoteAddress());  //  保存最后登录ip
+                user.weChatOpenId = bindWeChatAccountData.openId;
+                user.update();
+
+                // 如果已经有token 则不重新生成token
+                String authToken = user.createToken();
+                ObjectNode authTokenJson = Json.newObject();
+                authTokenJson.put(AUTH_TOKEN, authToken);
+                return ok(authTokenJson);
+            }
+
+        } else {
+
+            // 注册新用户 并绑定微信号,保存密码
+            User user = new User();
+            user.setPassword(bindWeChatAccountData.password);
+            user.name = bindWeChatAccountData.userName;
+            user.setPhone(bindWeChatAccountData.phone);
+            user.setLastIp(request().remoteAddress());
+            user.userType = UserType.PUBLIC;
+            user.weChatOpenId = bindWeChatAccountData.openId;
+            user.avatar = bindWeChatAccountData.avatar;
+            user.save();
+
+            //  设置ToKen
+            String authToken = user.createToken();
+            ObjectNode authTokenJson = Json.newObject();
+            authTokenJson.put(AUTH_TOKEN, authToken);
+
+            return status(201, authTokenJson);
+
+        }
     }
 
     /**

@@ -9,6 +9,8 @@ OPTIONS     /*all                       controllers.Application.preflight(all)
 
 POST        /api/v1/uploadImage         controllers.Application.uploadImage
 
+POST        /api/v1/bindWeChat          controllers.Application.bindWeChatAccount
+
 POST        /api/v1/smsVerifyCode       controllers.Application.sendSMSVerifyCode
 
 GET         /api/v1/captcha             controllers.Application.captcha

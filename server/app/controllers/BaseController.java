@@ -54,4 +54,24 @@ public class BaseController extends Controller {
         }
     }
 
+    /**
+     * 获取当前微信会话用户
+     *
+     * @return
+     */
+    public static User getWeChatUser() {
+        // !!这里直接从请求头里获取token 再从数据库获取当前会话用户,否则普通不需权限的get动作就不能调用此方法了
+        String[] authTokenHeaderValues = request().headers().get(SecurityController.WECHAT_OPEN_ID);
+        if ((authTokenHeaderValues != null) && (authTokenHeaderValues.length == 1) && (authTokenHeaderValues[0] != null)) {
+            User user = models.User.findExpertByWeChatOpenId(authTokenHeaderValues[0]);
+            if (user != null) {
+                return user;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
 }

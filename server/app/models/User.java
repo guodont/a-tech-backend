@@ -135,6 +135,19 @@ public class User extends BaseModel {
         }
     }
 
+    public static User findExpertByWeChatOpenId(String openId) {
+        if (openId == null) {
+            return null;
+        }
+        try {
+            return find.where()
+                    .eq("weChatOpenId", openId)
+                    .findUnique();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public void setRealName(String realName) {
         this.realName = realName;
     }
