@@ -13,6 +13,8 @@ POST        /api/v1/bindWeChat          controllers.Application.bindWeChatAccoun
 
 POST        /api/v1/wechat/question     controllers.QuestionController.addQuestionForWeChat
 
+GET         /api/v1/wechat/my/questions controllers.QuestionController.getUserQuestionsForWechat
+
 POST        /api/v1/smsVerifyCode       controllers.Application.sendSMSVerifyCode
 
 GET         /api/v1/captcha             controllers.Application.captcha
