@@ -249,6 +249,30 @@ public class QuestionController extends BaseController {
         return ok(Json.toJson(questions));
     }
 
+    /**
+     * 获取某用户发布的问题 for WeChat
+     *
+     * @return
+     */
+    @Security.Authenticated(WeChatSecured.class)
+    public static Result getUserQuestionsForWechat() {
+        User user = getWeChatUser();
+        if (user == null) {
+            return badRequest(new JsonResult("error", "No such user").toJsonResponse());
+        }
+        initPageing();
+
+        List<Question> questions = null;
+
+        if (request().getQueryString("status") != null) {
+            questions = Question.findQuestionsByUserAndStatus(user, request().getQueryString("status"), page, pageSize);
+        } else {
+            questions = Question.findQuestionsByUserAndStatus(user, null, page, pageSize);
+        }
+
+        return ok(Json.toJson(questions));
+    }
+
 
     /**
      * 获取用户收藏的问题
