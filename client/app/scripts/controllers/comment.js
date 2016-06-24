@@ -8,7 +8,7 @@
  * 评论管理控制器
  */
 angular.module('clientApp')
-  .controller('CommentCtrl', function ($scope, $http, alertService, $location, commentService) {
+  .controller('CommentCtrl', function ($scope, $http, alertService, $location, commentService, apiUrl, $cookieStore) {
     $scope.selectType = '';
     $scope.getComments = function () {
       commentService.getComments(
@@ -36,7 +36,7 @@ angular.module('clientApp')
         });
     };
 
-    $scope.$watch($scope.selectType,$scope.getComments($scope.selectType))
+    $scope.$watch($scope.selectType, $scope.getComments($scope.selectType))
 
     // 审核问题
     $scope.auditComment = function (comment) {
