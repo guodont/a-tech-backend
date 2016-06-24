@@ -44,7 +44,7 @@ public class JPushUtilDemo {
         JPushClient jpushClient = new JPushClient(masterSecret, appKey, 3);
 
         // For push, all you need do is to build PushPayload object.
-        PushPayload payload = buildPushObject_all_all_alert();
+        PushPayload payload = buildPushObject_android_and_ios();
 
         try {
             PushResult result = jpushClient.sendPush(payload);
@@ -85,7 +85,7 @@ public class JPushUtilDemo {
     public static PushPayload buildPushObject_android_and_ios() {
         return PushPayload.newBuilder()
                 .setPlatform(Platform.android_ios())
-                .setAudience(Audience.tag("tag1"))
+                .setAudience(Audience.all())
                 .setNotification(Notification.newBuilder()
                         .setAlert("alert content")
                         .addPlatformNotification(AndroidNotification.newBuilder()
