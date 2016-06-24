@@ -186,6 +186,7 @@ public class Application extends BaseController {
 
     /**
      * 用户绑定微信号
+     *
      * @return
      */
     public static Result bindWeChatAccount() {
@@ -198,18 +199,16 @@ public class Application extends BaseController {
 
         BindWeChatAccountData bindWeChatAccountData = bindWeChatAccountDataForm.get();
 
-        // 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 不保存密码
-        if (User.findExpertByWeChatOpenId(bindWeChatAccountData.openId) != null) {
+        // 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 保存密码
+        User user = User.findByPhoneAndPassword(bindWeChatAccountData.phone, bindWeChatAccountData.password);
 
-            // 执行登录操作
-            User user = User.findByPhoneAndPassword(bindWeChatAccountData.phone, bindWeChatAccountData.password);
+        if (user != null) {
 
-            if (user == null) {
-
-                // 登录失败
-                return badRequest(new JsonResult("error", "Incorrect phone or password").toJsonResponse());
-
+            if (User.findExpertByWeChatOpenId(bindWeChatAccountData.openId) != null) {
+                // 已绑定
+                return ok();
             } else {
+                // 未绑定
 
                 // 登录成功 绑定微信信息
                 user.setLastIp(request().remoteAddress());  //  保存最后登录ip
@@ -226,18 +225,18 @@ public class Application extends BaseController {
         } else {
 
             // 注册新用户 并绑定微信号,保存密码
-            User user = new User();
-            user.setPassword(bindWeChatAccountData.password);
-            user.name = bindWeChatAccountData.userName;
-            user.setPhone(bindWeChatAccountData.phone);
-            user.setLastIp(request().remoteAddress());
-            user.userType = UserType.PUBLIC;
-            user.weChatOpenId = bindWeChatAccountData.openId;
-            user.avatar = bindWeChatAccountData.avatar;
-            user.save();
+            User user2 = new User();
+            user2.setPassword(bindWeChatAccountData.password);
+            user2.name = bindWeChatAccountData.userName;
+            user2.setPhone(bindWeChatAccountData.phone);
+            user2.setLastIp(request().remoteAddress());
+            user2.userType = UserType.PUBLIC;
+            user2.weChatOpenId = bindWeChatAccountData.openId;
+            user2.avatar = bindWeChatAccountData.avatar;
+            user2.save();
 
             //  设置ToKen
-            String authToken = user.createToken();
+            String authToken = user2.createToken();
             ObjectNode authTokenJson = Json.newObject();
             authTokenJson.put(AUTH_TOKEN, authToken);
 
