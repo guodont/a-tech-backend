@@ -15,8 +15,6 @@ POST        /api/v1/wechat/question     controllers.WeChatController.addQuestion
 
 GET         /api/v1/wechat/my/questions controllers.WeChatController.getUserQuestionsForWechat
 
-GET         /api/v1/wechat/my/test controllers.WeChatController.test
-
 POST        /api/v1/smsVerifyCode       controllers.Application.sendSMSVerifyCode
 
 GET         /api/v1/captcha             controllers.Application.captcha

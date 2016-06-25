@@ -171,15 +171,6 @@ public class WeChatController extends BaseController{
         return ok(Json.toJson(questions));
     }
 
-    public static Result test() {
-        new WeChatUtil("o451ewNvK3JukkMqr0BaXw_MnASI",
-                "K_kz-KlSLOR0MyPJTxgZdKMd6xCkzY-o1VCWcyRgmF0",
-                "http://wechat.workerhub.cn/question/92", "#FF0000")
-                .pushWeChatWithTemplateMsg();
-
-        return ok();
-    }
-
     /**
      * 绑定微信账号表单
      */
