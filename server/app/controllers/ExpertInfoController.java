@@ -57,10 +57,10 @@ public class ExpertInfoController extends BaseController {
      * @return
      */
     public static Result getTrends(long id) {
-        Expert expert = Expert.findExpertById(id);
+        User expert = User.findById(id);
         if (expert == null)
             return badRequest(new JsonResult("error", "没有此用户").toJsonResponse());
-        return ok(Json.toJson(Trend.findExpertsByUser(expert.user, page, pageSize)));
+        return ok(Json.toJson(Trend.findExpertsByUser(expert, page, pageSize)));
     }
 
     /**

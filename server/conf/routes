@@ -9,11 +9,13 @@ OPTIONS     /*all                       controllers.Application.preflight(all)
 
 POST        /api/v1/uploadImage         controllers.Application.uploadImage
 
-POST        /api/v1/bindWeChat          controllers.Application.bindWeChatAccount
+POST        /api/v1/bindWeChat          controllers.WeChatController.bindWeChatAccount
 
-POST        /api/v1/wechat/question     controllers.QuestionController.addQuestionForWeChat
+POST        /api/v1/wechat/question     controllers.WeChatController.addQuestionForWeChat
 
-GET         /api/v1/wechat/my/questions controllers.QuestionController.getUserQuestionsForWechat
+GET         /api/v1/wechat/my/questions controllers.WeChatController.getUserQuestionsForWechat
+
+GET         /api/v1/wechat/my/test controllers.WeChatController.test
 
 POST        /api/v1/smsVerifyCode       controllers.Application.sendSMSVerifyCode
 

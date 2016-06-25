@@ -259,7 +259,7 @@ create table user (
   real_name                 varchar(45),
   phone                     varchar(11) not null,
   name                      varchar(45) not null,
-  avatar                    varchar(45),
+  avatar                    varchar(255),
   industry                  varchar(45),
   scale                     varchar(45),
   last_ip                   varchar(45) not null,

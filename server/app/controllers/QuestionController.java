@@ -19,8 +19,10 @@ import play.mvc.Result;
 import play.mvc.Security;
 import utils.JPushUtil;
 import utils.JsonResult;
+import utils.WeChatUtil;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +32,10 @@ import java.util.List;
  *         问题控制器
  */
 public class QuestionController extends BaseController {
+
+    private static final String WECHAT_QUESTION_URL = "http://wechat.workerhub.cn/question/";
+
+    private static final String WECHAT_QUESTION_STATUS_TEMPLATE_ID = "K_kz-KlSLOR0MyPJTxgZdKMd6xCkzY-o1VCWcyRgmF0";
 
     /**
      * 用户发布问题
@@ -71,59 +77,6 @@ public class QuestionController extends BaseController {
 
 
     /**
-     * 用户发布问题 for WeChat
-     *
-     * @return
-     */
-    @Security.Authenticated(WeChatSecured.class)
-    public static Result addQuestionForWeChat() {
-        Form<QuestionForm> postForm = Form.form(QuestionForm.class).bindFromRequest();
-
-        if (postForm.hasErrors()) {
-            return badRequest(postForm.errorsAsJson());
-        } else {
-
-            //  保存问题
-            Category category = Category.find.byId(postForm.get().categoryId);
-            Question question = new Question();
-            question.clickCount = 0L;
-            question.likeCount = 0L;
-            question.questionAuditState = QuestionAuditState.WAIT_AUDITED;
-            question.questionResolveState = QuestionResolveState.WAIT_RESOLVE;
-            question.title = postForm.get().title;
-            question.mediaId = postForm.get().mediaId;
-            question.category = category;
-            question.user = getWeChatUser();
-
-            User expert = User.findById(postForm.get().expertId);
-            if (expert != null)
-                question.expert = expert;
-
-            // TODO 保存图片路径 逗号隔开
-            question.images = postForm.get().image;
-            question.content = postForm.get().content;
-            question.save();
-
-            Message message = new Message();
-            message.setMessageType(MessageType.WECHAT);
-            message.setMarkRead(false);
-            message.setRelationId(question.getId());
-            message.setTitle("您从微信提交了一条问题");
-            message.setUser(question.user);
-            message.setRemark(question.title);
-            message.save();
-
-            HashMap<String, String> extras = new HashMap<String, String>();
-            extras.put("id", String.valueOf(question.getId()));
-            extras.put("type", MessageType.QUESTION.getName());
-            new JPushUtil("您从微信提交了一条问题", question.title, question.user.getPhone(), extras).sendPushWith();
-
-        }
-        return ok(new JsonResult("success", "Question added successfully").toJsonResponse());
-
-    }
-
-    /**
      * 审核问题-通过审核
      *
      * @param questionId
@@ -148,6 +101,20 @@ public class QuestionController extends BaseController {
         extras.put("id", String.valueOf(question.getId()));
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题已通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
+
+        // Wechat
+        if (question.user.weChatOpenId != "") {
+            new WeChatUtil(question.user.weChatOpenId, WECHAT_QUESTION_STATUS_TEMPLATE_ID,
+                    WECHAT_QUESTION_URL + question.getId(),
+                    "#FF0000",
+                    "您的问题已通过审核",
+                    question.category.name,
+                    String.valueOf(question.getWhenCreated()),
+                    "问题已审核",
+                    String.valueOf(question.getWhenUpdated()),
+                    "详细结果请点击“详情”查看"
+            ).pushWeChatWithTemplateMsg();
+        }
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
@@ -177,6 +144,21 @@ public class QuestionController extends BaseController {
         extras.put("id", String.valueOf(question.getId()));
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题未通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
+
+
+        // Wechat
+        if (question.user.weChatOpenId != "") {
+            new WeChatUtil(question.user.weChatOpenId, WECHAT_QUESTION_STATUS_TEMPLATE_ID,
+                    WECHAT_QUESTION_URL + question.getId(),
+                    "#FF0000",
+                    "您的问题未通过审核",
+                    question.category.name,
+                    String.valueOf(question.getWhenCreated()),
+                    "问题审核失败",
+                    String.valueOf(question.getWhenUpdated()),
+                    "详细结果请点击“详情”查看"
+            ).pushWeChatWithTemplateMsg();
+        }
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
@@ -211,6 +193,20 @@ public class QuestionController extends BaseController {
         extras.put("type", MessageType.QUESTION.getName());
         new JPushUtil("您的问题已指派给专家,专家将尽快为您解决", question.title, question.user.getPhone(), extras).sendPushWith();
 
+        // Wechat
+        if (question.user.weChatOpenId != "") {
+            new WeChatUtil(question.user.weChatOpenId, WECHAT_QUESTION_STATUS_TEMPLATE_ID,
+                    WECHAT_QUESTION_URL + question.getId(),
+                    "#FF0000",
+                    "您的问题已指派给专家,专家将尽快为您解决",
+                    question.category.name,
+                    String.valueOf(question.getWhenCreated()),
+                    "问题已指派给" + question.expert.getRealName() + "专家",
+                    String.valueOf(question.getWhenUpdated()),
+                    "详细结果请点击“详情”查看"
+            ).pushWeChatWithTemplateMsg();
+        }
+
         // 发消息给专家
         Message message2 = new Message();
         message2.setMessageType(MessageType.QUESTION);
@@ -220,7 +216,7 @@ public class QuestionController extends BaseController {
         message2.setUser(expert);
         message2.setRemark(question.title);
         message2.save();
-        new JPushUtil("您有新的待回答问题,请及时回复", question.title,expert.getPhone(), extras).sendPushWith();
+        new JPushUtil("您有新的待回答问题,请及时回复", question.title, expert.getPhone(), extras).sendPushWith();
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
@@ -233,30 +229,6 @@ public class QuestionController extends BaseController {
     @Security.Authenticated(Secured.class)
     public static Result getUserQuestions() {
         User user = getUser();
-        if (user == null) {
-            return badRequest(new JsonResult("error", "No such user").toJsonResponse());
-        }
-        initPageing();
-
-        List<Question> questions = null;
-
-        if (request().getQueryString("status") != null) {
-            questions = Question.findQuestionsByUserAndStatus(user, request().getQueryString("status"), page, pageSize);
-        } else {
-            questions = Question.findQuestionsByUserAndStatus(user, null, page, pageSize);
-        }
-
-        return ok(Json.toJson(questions));
-    }
-
-    /**
-     * 获取某用户发布的问题 for WeChat
-     *
-     * @return
-     */
-    @Security.Authenticated(WeChatSecured.class)
-    public static Result getUserQuestionsForWechat() {
-        User user = getWeChatUser();
         if (user == null) {
             return badRequest(new JsonResult("error", "No such user").toJsonResponse());
         }
@@ -310,16 +282,31 @@ public class QuestionController extends BaseController {
             message2.setMessageType(MessageType.QUESTION);
             message2.setMarkRead(false);
             message2.setRelationId(question.getId());
-            message2.setTitle("问题:"+question.title+",已被回答");
+            message2.setTitle("问题:" + question.title + ",已被回答");
             message2.setUser(question.user);
             message2.setRemark(question.answer);
             message2.save();
 
 
+            // JPush
             HashMap<String, String> extras = new HashMap<String, String>();
             extras.put("id", String.valueOf(question.getId()));
             extras.put("type", MessageType.QUESTION.getName());
-            new JPushUtil("问题:"+question.title+",已被回答", question.title,question.user.getPhone(), extras).sendPushWith();
+            new JPushUtil("问题:" + question.title + ",已被回答", question.title, question.user.getPhone(), extras).sendPushWith();
+
+            // Wechat
+            if (question.user.weChatOpenId != "") {
+                new WeChatUtil(question.user.weChatOpenId, WECHAT_QUESTION_STATUS_TEMPLATE_ID,
+                        WECHAT_QUESTION_URL + question.getId(),
+                        "#FF0000",
+                        "您的提问已有回答",
+                        question.category.name,
+                        String.valueOf(question.getWhenCreated()),
+                        "专家已回答",
+                        String.valueOf(question.getWhenUpdated()),
+                        "详细结果请点击“详情”查看"
+                ).pushWeChatWithTemplateMsg();
+            }
 
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
         }
@@ -508,7 +495,7 @@ public class QuestionController extends BaseController {
      */
     public static class QuestionForm {
 
-//        @Constraints.Required
+        //        @Constraints.Required
         public Long categoryId;     //  分类id
 
         public Long expertId;       //  专家id
