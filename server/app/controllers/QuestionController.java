@@ -97,10 +97,6 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<String, String>();
-        extras.put("id", String.valueOf(question.getId()));
-        extras.put("type", MessageType.QUESTION.getName());
-        new JPushUtil("您的问题已通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
 
         // Wechat
         if (question.user.weChatOpenId != "") {
@@ -115,6 +111,11 @@ public class QuestionController extends BaseController {
                     "详细结果请点击“详情”查看"
             ).pushWeChatWithTemplateMsg();
         }
+
+        HashMap<String, String> extras = new HashMap<String, String>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题已通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
@@ -140,11 +141,6 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<String, String>();
-        extras.put("id", String.valueOf(question.getId()));
-        extras.put("type", MessageType.QUESTION.getName());
-        new JPushUtil("您的问题未通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
-
 
         // Wechat
         if (question.user.weChatOpenId != "") {
@@ -159,6 +155,11 @@ public class QuestionController extends BaseController {
                     "详细结果请点击“详情”查看"
             ).pushWeChatWithTemplateMsg();
         }
+
+        HashMap<String, String> extras = new HashMap<String, String>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题未通过审核", question.title, question.user.getPhone(), extras).sendPushWith();
 
         return ok(new JsonResult("success", "handl success").toJsonResponse());
     }
@@ -188,10 +189,6 @@ public class QuestionController extends BaseController {
         message.setRemark(question.title);
         message.save();
 
-        HashMap<String, String> extras = new HashMap<String, String>();
-        extras.put("id", String.valueOf(question.getId()));
-        extras.put("type", MessageType.QUESTION.getName());
-        new JPushUtil("您的问题已指派给专家,专家将尽快为您解决", question.title, question.user.getPhone(), extras).sendPushWith();
 
         // Wechat
         if (question.user.weChatOpenId != "") {
@@ -206,6 +203,12 @@ public class QuestionController extends BaseController {
                     "详细结果请点击“详情”查看"
             ).pushWeChatWithTemplateMsg();
         }
+
+        HashMap<String, String> extras = new HashMap<String, String>();
+        extras.put("id", String.valueOf(question.getId()));
+        extras.put("type", MessageType.QUESTION.getName());
+        new JPushUtil("您的问题已指派给专家,专家将尽快为您解决", question.title, question.user.getPhone(), extras).sendPushWith();
+
 
         // 发消息给专家
         Message message2 = new Message();
@@ -287,13 +290,6 @@ public class QuestionController extends BaseController {
             message2.setRemark(question.answer);
             message2.save();
 
-
-            // JPush
-            HashMap<String, String> extras = new HashMap<String, String>();
-            extras.put("id", String.valueOf(question.getId()));
-            extras.put("type", MessageType.QUESTION.getName());
-            new JPushUtil("问题:" + question.title + ",已被回答", question.title, question.user.getPhone(), extras).sendPushWith();
-
             // Wechat
             if (question.user.weChatOpenId != "") {
                 new WeChatUtil(question.user.weChatOpenId, WECHAT_QUESTION_STATUS_TEMPLATE_ID,
@@ -307,6 +303,12 @@ public class QuestionController extends BaseController {
                         "详细结果请点击“详情”查看"
                 ).pushWeChatWithTemplateMsg();
             }
+
+            // JPush
+            HashMap<String, String> extras = new HashMap<String, String>();
+            extras.put("id", String.valueOf(question.getId()));
+            extras.put("type", MessageType.QUESTION.getName());
+            new JPushUtil("问题:" + question.title + ",已被回答", question.title, question.user.getPhone(), extras).sendPushWith();
 
             return status(201, new JsonResult("success", "Answer added successfully").toJsonResponse());
         }
