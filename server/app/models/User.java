@@ -69,7 +69,7 @@ public class User extends BaseModel {
     /**
      * 用户头像
      */
-    @Column(length = 45)
+    @Column(length = 255)
     public String avatar;
     /**
      * 用户经营的产业
