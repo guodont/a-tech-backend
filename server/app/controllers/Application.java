@@ -89,7 +89,7 @@ public class Application extends BaseController {
         return ok();
     }
 
-    /**
+       /**
      * 用户注册第一步
      *
      * @return
@@ -138,6 +138,56 @@ public class Application extends BaseController {
                 response().setCookie(AUTH_TOKEN, authToken);
 
                 return status(201, authTokenJson);
+//
+            } else {
+                return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
+            }
+        }
+    }
+
+
+    /**
+     * 找回密码
+     *
+     * @return
+     */
+    public static Result findPassword() {
+
+        Form<FindPassData> findPassDataForm = Form.form(FindPassData.class).bindFromRequest();
+
+        if (findPassDataForm.hasErrors()) {
+            return badRequest(findPassDataForm.errorsAsJson());
+        }
+
+        FindPassData findPassData = findPassDataForm.get();
+
+        User existingUser = User.findByPhone(findPassData.phone);
+
+        if (existingUser == null) {
+            //  用户不存在
+            return badRequest(new JsonResult("error", "User not found").toJsonResponse());
+
+        } else {
+//
+            //判断cache code
+            String verifyUuid = request().getHeader("VERIFY_UUID");
+
+            if (!Cache.get(verifyUuid).toString().split(",")[1].equals(findPassData.phone)) {
+                return badRequest(new JsonResult("error", "非法请求").toJsonResponse());
+            }
+
+            if (Cache.get(verifyUuid) != null && Cache.get(verifyUuid).toString().split(",")[0].equals(findPassData.verifyCode)) {
+
+                existingUser.setPassword(findPassData.password);    // 更新密码
+                existingUser.update();
+
+                //  设置ToKen
+                String authToken = existingUser.createToken();
+                ObjectNode authTokenJson = Json.newObject();
+                authTokenJson.put(AUTH_TOKEN, authToken);
+                response().setCookie(AUTH_TOKEN, authToken);
+
+                return status(200, authTokenJson);
 //
             } else {
                 return badRequest(new JsonResult("error", "验证码错误").toJsonResponse());
@@ -586,6 +636,25 @@ public class Application extends BaseController {
         @Constraints.Required
         @Constraints.MinLength(3)
         public String userName; //  用户名
+
+        @Constraints.Required
+        public String verifyCode; //  验证码
+
+    }
+
+    /**
+     * 忘记密码表单数据
+     */
+    public static class FindPassData {
+
+        @Constraints.Required
+        @Constraints.MinLength(6)
+        public String password; //  新密码
+
+        @Constraints.Required
+        @Constraints.MinLength(11)
+        @Constraints.MaxLength(11)
+        public String phone;    //  手机号
 
         @Constraints.Required
         public String verifyCode; //  验证码
