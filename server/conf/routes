@@ -132,6 +132,8 @@ POST         /api/v1/signup/two         controllers.Application.signUpTwoStep
 POST         /api/v1/login              controllers.Application.login
 # user logout
 GET          /api/v1/logout             controllers.Application.logout
+# find password
+POST          /api/v1/findPassword      controllers.Application.findPassword
 # islogin
 GET          /api/v1/isauthenticated    controllers.Application.isAuthenticated
 # curinfo
