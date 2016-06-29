@@ -387,9 +387,17 @@ public class QuestionController extends BaseController {
         if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            questions = Question.findQuestionsByCategoryForadmin(category, page, pageSize);
+            if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
+                questions = Question.findQuestionsByCategoryForadmin(category, request().getQueryString("status"), page, pageSize);
+            } else {
+                questions = Question.findQuestionsByCategoryForadmin(category, null, page, pageSize);
+            }
         } else {
-            questions = Question.findQuestionsForAdmin(page, pageSize);
+            if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
+                questions = Question.findQuestionsForAdmin(request().getQueryString("status"), page, pageSize);
+            } else {
+                questions = Question.findQuestionsForAdmin(null, page, pageSize);
+            }
         }
 
         return ok(Json.toJson(questions));

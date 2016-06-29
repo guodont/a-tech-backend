@@ -5,6 +5,8 @@
 angular.module('clientApp')
   .controller('QuestionCtrl', function ($scope, $routeParams, $rootScope, $http, alertService, $location, questionService, apiUrl, $cookieStore, categoryService) {
 
+    $scope.status = $location.search().status ? $location.search().status : '';
+
     $scope.getCategories = function (type) {
       categoryService.getCategories(
         {
@@ -30,6 +32,18 @@ angular.module('clientApp')
           console.log(value);
           $('#categoryId').attr("value", value);
           $scope.categoryId = value;
+        }
+      })
+    ;
+
+    $('.ui.assignExpertId')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          $('#assignExpertId').attr("value", value);
+          console.log("选择专家:");
+          console.log(value);
+          $scope.assignExpertId = value;
         }
       })
     ;
@@ -75,7 +89,8 @@ angular.module('clientApp')
     $scope.getQuestions = function () {
       questionService.getQuestions(
         {
-          curPage: $scope.curPage
+          curPage: $scope.curPage,
+          status: $scope.status
         },
         function (res) {
           console.log(res.data);
@@ -170,10 +185,39 @@ angular.module('clientApp')
         });
     };
 
-    // 指派给问题
+    // 指派给问题 /api/v1/question/:id/assign/:expertId
     $scope.assignToexpert = function (question) {
-      // TODO
       console.log("指派给问题");
+
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/question/' + question.id + '/assign/' + $scope.assignExpertId,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          console.log(res.data);
+          alertService.add('success', res.data.success.message);
+          $scope.getQuestions();
+        }, function (res) {
+          console.log(res.data);
+          alertService.add('error', res.data.success.message);
+        });
     };
+
+    $scope.loadExperts = function () {
+      $http({
+        method: 'GET',
+        url: apiUrl + '/experts' + '?pageSize=10000&page=1',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          $scope.experts = res.data;
+          console.log($scope.experts);
+        }, function (res) {
+        });
+    };
+
+
+    $scope.loadExperts();
 
   });

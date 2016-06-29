@@ -258,7 +258,18 @@ DELETE      /api/v1/link/:id                        controllers.LinkController.d
 
 # messages
 GET         /api/v1/messages                        controllers.MessageController.getMessages
+# get all messages for admin
+GET         /api/v1/foradmin/messages               controllers.MessageController.getMessagesForAdmin
 
 GET         /api/v1/messages/unReadcount            controllers.MessageController.getUnReadMessageCount
 
 PUT         /api/v1/message/:id                     controllers.MessageController.readMarkMessage(id: Long)
+
+# app
+GET         /api/v1/app/logs                        controllers.AppUpdateController.getAppUpdateLogs
+
+GET         /api/v1/app/latest                      controllers.AppUpdateController.getLatestVersionForAndroid
+
+GET         /api/v1/app/checkUpdate                 controllers.AppUpdateController.getLatestVersionForAndroid2
+
+POST        /api/v1/app/logs                        controllers.AppUpdateController.addNewVersionApp

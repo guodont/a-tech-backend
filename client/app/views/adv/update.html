@@ -1,45 +1,52 @@
-<form name="postForm" ng-submit="updateAdv()" novalidate>
-  <div class="field">
-    <label for="name">广告名称</label>
-    <input name="name" class="form-control" type="subject" id="name" placeholder="Subject"
-           ng-model="name">
-  </div>
-  <div class="field">
-    <label for="description">广告描述</label>
+<header></header>
+<div class="main-content">
+  <div class="" style="margin: 10px">
+
+    <form name="postForm" ng-submit="updateAdv()" novalidate>
+      <div class="field">
+        <label for="name">广告名称</label>
+        <input name="name" class="form-control" type="subject" id="name" placeholder="Subject"
+               ng-model="name">
+      </div>
+      <div class="field">
+        <label for="description">广告描述</label>
     <textarea id="editor" ng-model="description" id="description" placeholder="在此编辑描述" style="width: 100% ;"
               autofocus></textarea>
-  </div>
+      </div>
 
-  <div class="field">
-    <label for="url">广告链接</label>
-    <input name="url" class="form-control" type="subject" id="url" placeholder="输入广告链接"
-           ng-model="url">
-  </div>
-  <div class="field">
-    <label for="position">所在位置</label>
-    <input type="hiden" ng-hide="true" ng-model="position" id="position">
-    <div class="ui search selection dropdown  remote example">
-      <i class="dropdown icon"></i>
-      <div class="menu">
-        <div ng-repeat="category in categories" class="item" data-value="{{ category.id }}">
-          {{ category.name }}
+      <div class="field">
+        <label for="url">广告链接</label>
+        <input name="url" class="form-control" type="subject" id="url" placeholder="输入广告链接"
+               ng-model="url">
+      </div>
+      <div class="field">
+        <label for="position">所在位置</label>
+        <input type="hiden" ng-hide="true" ng-model="position" id="position">
+        <div class="ui search selection dropdown  remote example">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div ng-repeat="category in categories" class="item" data-value="{{ category.id }}">
+              {{ category.name }}
+            </div>
+          </div>
+          <div class="default text">选择位置</div>
         </div>
       </div>
-      <div class="default text">选择位置</div>
-    </div>
+      <div class="field">
+        <label>文章配图(选择上传图片)</label>
+        <div class="upload-container" id="upload-container">
+          <input type="file" id="pickfiles" name="image">
+        </div>
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">保存</button>
+    </form>
+    <script type="text/javascript">
+      var editor = new Simditor({
+        textarea: $('#editor')
+        //optional options
+      });
+    </script>
   </div>
-  <div class="field">
-    <label>文章配图(选择上传图片)</label>
-    <div class="upload-container" id="upload-container">
-      <input type="file" id="pickfiles" name="image">
-    </div>
-  </div>
-  <br>
-  <button type="submit" class="btn btn-primary">保存</button>
-</form>
-<script type="text/javascript">
-  var editor = new Simditor({
-    textarea: $('#editor')
-    //optional options
-  });
-</script>
+</div>
+<footer></footer>

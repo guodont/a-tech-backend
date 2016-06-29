@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('clientApp')
-  .service('questionService', ['$http', '$cookies', 'apiUrl','$cookieStore','ToKenHeader', function ( $http, $cookies, apiUrl,$cookieStore,ToKenHeader) {
+  .service('questionService', ['$http', '$cookies', 'apiUrl', '$cookieStore', 'ToKenHeader', function ($http, $cookies, apiUrl, $cookieStore, ToKenHeader) {
 
     var self = this;
 
@@ -33,7 +33,7 @@ angular.module('clientApp')
           }
         });
     };
-    
+
     // 更新问题
     self.getQuestion = function (params, success, error) {
       $http({
@@ -56,7 +56,7 @@ angular.module('clientApp')
     self.getQuestions = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/foradmin/questions' + '?pageSize=20&page=' + params.curPage,
+        url: apiUrl + '/foradmin/questions' + '?pageSize=20&page=' + params.curPage + '&status=' + params.status,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {

@@ -8,10 +8,14 @@ angular.module('clientApp')
 
     $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
 
+    $scope.tradeType = $location.search().tradeType ? $location.search().tradeType : '';
+
+    $scope.status = $location.search().status ? $location.search().status : '';
+
     $scope.getTrades = function () {
       $http({
         method: 'GET',
-        url: apiUrl + '/foradmin/trades' + '?pageSize=20&page=' + $scope.curPage,
+        url: apiUrl + '/foradmin/trades' + '?pageSize=20&page=' + $scope.curPage + '&tradeType=' + $scope.tradeType + '&status=' + $scope.status,
         data: {
           // categoryType: params.type
         },
@@ -52,11 +56,13 @@ angular.module('clientApp')
       $scope.getTradeInfo();
     }
 
-    $scope.deleteTrade = function (id) {
-      videoService.deleteTrade({
-          tradeId: id
-        },
-        function (res) {
+    $scope.deleteTrade = function (trade) {
+      $http({
+        method: 'DELETE',
+        url: apiUrl + '/trade/' + trade.id,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
           alertService.add('success', res.data.success.message);
           $scope.getTrades();
         }, function (res) {

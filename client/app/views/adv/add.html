@@ -1,42 +1,48 @@
-<form name="postForm" ng-submit="addAdv()" novalidate>
-  <div class="field">
-    <label for="name">广告名称</label>
-    <input name="name" class="form-control" type="subject" id="name" placeholder="输入广告名称"
-           ng-model="name">
-  </div>
-  <div class="field">
-    <label for="description">广告描述</label>
+<header></header>
+<div class="main-content">
+  <div class="" style="margin: 10px">
+    <form name="postForm" ng-submit="addAdv()" novalidate>
+      <div class="field">
+        <label for="name">广告名称</label>
+        <input name="name" class="form-control" type="subject" id="name" placeholder="输入广告名称"
+               ng-model="name">
+      </div>
+      <div class="field">
+        <label for="description">广告描述</label>
     <textarea id="editor" ng-model="description" id="description" placeholder="在此输入广告描述" style="width: 100% ;"
               autofocus></textarea>
-  </div>
-  <div class="field">
-    <label for="url">广告链接</label>
-    <br>
-    <div class="ui labeled input">
-      <div class="ui label">http://</div>
-      <input id="url" type="text" ng-model="url" placeholder="mysite.com">
-    </div>
-  </div>
-  <div class="field">
-    <label for="position">广告位置</label>
-    <input type="hiden" ng-hide="true" ng-model="position" id="position">
-    <div class="ui search selection dropdown form-control">
-      <i class="dropdown icon"></i>
-      <div class="menu">
-        <div class="item" data-value="FLOAT">首页轮播图</div>
-        <div class="item" data-value="TOP">网站顶部</div>
-        <div class="item" data-value="AMONG">首页板块中间</div>
       </div>
-      <div class="default text">请选择广告位置</div>
-    </div>
+      <div class="field">
+        <label for="url">广告链接</label>
+        <br>
+        <div class="ui labeled input">
+          <div class="ui label">http://</div>
+          <input id="url" type="text" ng-model="url" placeholder="mysite.com">
+        </div>
+      </div>
+      <div class="field">
+        <label for="position">广告位置</label>
+        <input type="hiden" ng-hide="true" ng-model="position" id="position">
+        <div class="ui search selection dropdown form-control">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item" data-value="FLOAT">首页轮播图</div>
+            <div class="item" data-value="TOP">网站顶部</div>
+            <div class="item" data-value="AMONG">首页板块中间</div>
+          </div>
+          <div class="default text">请选择广告位置</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>广告配图(选择上传图片)</label>
+        <div class="upload-container" id="upload-container">
+          <input type="file" id="pickfiles" name="image">
+        </div>
+      </div>
+      <img style="max-width: 500px" src="{{ cateImage }}">
+      <br>
+      <button type="submit" class="btn btn-primary">发布此广告</button>
+    </form>
   </div>
-  <div class="field">
-    <label>广告配图(选择上传图片)</label>
-    <div class="upload-container" id="upload-container">
-      <input type="file" id="pickfiles" name="image">
-    </div>
-  </div>
-  <img style="max-width: 500px" src="{{ cateImage }}">
-  <br>
-  <button type="submit" class="btn btn-primary">发布此广告</button>
-</form>
+</div>
+<footer></footer>
