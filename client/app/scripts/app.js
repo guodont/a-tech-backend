@@ -24,10 +24,10 @@ angular
     'ui.bootstrap',
     'ui.router'
   ])
-  .constant('apiUrl', 'http://localhost:9000/api/v1')
-  // .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
-  .constant('hostUrl', 'http://localhost:9000')
-  // .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  // .constant('apiUrl', 'http://localhost:9000/api/v1')
+  .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
+  // .constant('hostUrl', 'http://localhost:9000')
+  .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .constant('cloudUrl', 'http://storage.workerhub.cn/')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider, $stateProvider, $locationProvider) {
@@ -316,9 +316,15 @@ angular
     };
   }])
   .filter('replaceHtml', function () {
-
     return function (input) {
       return input.replace(/<\/?[^>]*>/g, "").substr(0, 255) + "...";
+    }
+
+  })
+  .filter('resourceUrl',function () {
+
+    return function (input) {
+      return "http://storage.workerhub.cn/"+ input;
     }
 
   })
@@ -370,12 +376,10 @@ function runBlock($http, $cookies, $location, $cookieStore) {
     'Accept': 'application/json'
   };
 
-  if ($cookieStore.get("isLoggedIn") == '0') {
+  if ($cookieStore.get("isLoggedIn") == '1') {
+    console.log("已登录");
+  } else {
     console.log("未登录");
     $location.path("/login");
-
-  } else {
-    console.log("已登录");
-
   }
 }

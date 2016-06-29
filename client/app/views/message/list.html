@@ -16,6 +16,7 @@
         <tbody>
         <tr ng-repeat="message in messages">
           <td>{{ message.id }}</td>
+          <td>{{ message.user.name }}</td>
           <td>{{ message.title }}</td>
           <td>{{ message.remark }}</td>
           <td>{{ message.whenCreated | date:'yyyy-MM-dd HH:mm' }}</td>

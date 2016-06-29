@@ -23,8 +23,8 @@
         <tr ng-repeat="log in logs">
           <td>{{ log.id }}</td>
           <td>{{ log.apkVersionName }}</td>
-          <td>{{ log.apkversion }}</td>
-          <td>{{ log.apkPath }}</td>
+          <td>{{ log.apkVersion }}</td>
+          <td><a href="{{ log.apkPath | resourceUrl}}" target="_blank">{{ log.apkPath}}</a></td>
           <td>{{ log.appType }}</td>
           <td>{{ log.whenCreated | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ log.admin.name }}</td>
