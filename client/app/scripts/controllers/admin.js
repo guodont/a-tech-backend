@@ -33,7 +33,7 @@ angular.module('clientApp')
       })
         .then(function (res) {
           alertService.add('success', res.data.success.message);
-          $scope.getCategories('');
+          $scope.getAdmins('');
         }, function (res) {
           alertService.add('success', res.data.error.message);
         });

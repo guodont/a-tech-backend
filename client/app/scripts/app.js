@@ -24,10 +24,10 @@ angular
     'ui.bootstrap',
     'ui.router'
   ])
-  // .constant('apiUrl', 'http://localhost:9000/api/v1')
-  .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
-  // .constant('hostUrl', 'http://localhost:9000')
-  .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
+  .constant('apiUrl', 'http://localhost:9000/api/v1')
+  // .constant('apiUrl', 'http://sxnk110.workerhub.cn:9000/api/v1')
+  .constant('hostUrl', 'http://localhost:9000')
+  // .constant('hostUrl', 'http://sxnk110.workerhub.cn:9000')
   .constant('cloudUrl', 'http://storage.workerhub.cn/')
   .constant('ToKenHeader', 'X-AUTH-TOKEN')
   .config(function ($routeProvider, $stateProvider, $locationProvider) {
@@ -80,10 +80,6 @@ angular
       .when('/', {
         templateUrl: 'views/welcome.html',
         controller: 'MainCtrl'
-      })
-      .when('/signup', {
-        templateUrl: 'views/signup.html',
-        controller: 'SignupCtrl'
       })
       .when('/dashboard', {
         templateUrl: 'views/dashboard.html',
@@ -216,6 +212,18 @@ angular
         templateUrl: 'views/admin/list.html',
         controller: 'AdminCtrl'
       })
+      .when('/message/list', {
+        templateUrl: 'views/message/list.html',
+        controller: 'MessageCtrl'
+      })
+      .when('/app/list', {
+        templateUrl: 'views/app/list.html',
+        controller: 'AppCtrl'
+      })
+      .when('/app/upload', {
+        templateUrl: 'views/app/upload.html',
+        controller: 'AppCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
@@ -277,6 +285,22 @@ angular
       'last': '尾页',
     }
   })
+  .directive('header', function () {
+    return {
+      restrict: 'E',
+      transclude: true,
+      scope: {title: '@'},
+      templateUrl: 'include/header.html'
+    };
+  })
+  .directive('footer', function () {
+    return {
+      restrict: 'E',
+      transclude: true,
+      scope: {title: '@'},
+      templateUrl: 'include/footer.html'
+    };
+  })
   .filter('trustHtml', function ($sce) {
 
     return function (input) {
@@ -286,6 +310,11 @@ angular
     }
 
   })
+  .filter("trustUrl", ['$sce', function ($sce) {
+    return function (recordingUrl) {
+      return $sce.trustAsResourceUrl(recordingUrl);
+    };
+  }])
   .filter('replaceHtml', function () {
 
     return function (input) {
@@ -323,7 +352,7 @@ angular
   })
   .run(runBlock);
 
-function runBlock($http) {
+function runBlock($http, $cookies, $location, $cookieStore) {
   $http.defaults.headers.get = {
     // "Access-Control-Allow-Origin": "*",
     // "Access-Control-Allow-Headers": "X-Requested-With,Content-Type,Accept",
@@ -340,4 +369,13 @@ function runBlock($http) {
     'Content-Type': 'application/json;charset=utf-8',
     'Accept': 'application/json'
   };
+
+  if ($cookieStore.get("isLoggedIn") == '0') {
+    console.log("未登录");
+    $location.path("/login");
+
+  } else {
+    console.log("已登录");
+
+  }
 }

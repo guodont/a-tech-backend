@@ -59,6 +59,24 @@ create table answer (
   constraint pk_answer primary key (id))
 ;
 
+create table app_update_log (
+  id                        bigint auto_increment not null,
+  app_type                  varchar(7),
+  admin_id                  bigint,
+  description               TEXT,
+  remark                    varchar(255),
+  apk_version_name          varchar(255),
+  apk_version               integer,
+  apk_path                  varchar(255),
+  is_public                 tinyint(1) default 0,
+  is_push                   tinyint(1) default 0,
+  version                   bigint not null,
+  when_created              datetime not null,
+  when_updated              datetime not null,
+  constraint ck_app_update_log_app_type check (app_type in ('ANDROID','IOS')),
+  constraint pk_app_update_log primary key (id))
+;
+
 create table article (
   id                        bigint auto_increment not null,
   title                     varchar(255),
@@ -296,50 +314,52 @@ alter table answer add constraint fk_answer_question_2 foreign key (question_id)
 create index ix_answer_question_2 on answer (question_id);
 alter table answer add constraint fk_answer_user_3 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_answer_user_3 on answer (user_id);
-alter table article add constraint fk_article_category_4 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_article_category_4 on article (category_id);
-alter table article add constraint fk_article_admin_5 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
-create index ix_article_admin_5 on article (admin_id);
-alter table article add constraint fk_article_user_6 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_article_user_6 on article (user_id);
-alter table comment add constraint fk_comment_article_7 foreign key (article_id) references article (id) on delete restrict on update restrict;
-create index ix_comment_article_7 on comment (article_id);
-alter table comment add constraint fk_comment_user_8 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_comment_user_8 on comment (user_id);
-alter table expert add constraint fk_expert_user_9 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_expert_user_9 on expert (user_id);
-alter table expert add constraint fk_expert_category_10 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_expert_category_10 on expert (category_id);
-alter table favorite add constraint fk_favorite_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_favorite_user_11 on favorite (user_id);
-alter table favorite_question add constraint fk_favorite_question_question_12 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_favorite_question_question_12 on favorite_question (question_id);
-alter table favorite_question add constraint fk_favorite_question_user_13 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_favorite_question_user_13 on favorite_question (user_id);
-alter table favorite_trade add constraint fk_favorite_trade_trade_14 foreign key (trade_id) references trade (id) on delete restrict on update restrict;
-create index ix_favorite_trade_trade_14 on favorite_trade (trade_id);
-alter table favorite_trade add constraint fk_favorite_trade_user_15 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_favorite_trade_user_15 on favorite_trade (user_id);
-alter table image add constraint fk_image_user_16 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_image_user_16 on image (user_id);
-alter table message add constraint fk_message_user_17 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_message_user_17 on message (user_id);
-alter table question add constraint fk_question_category_18 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_question_category_18 on question (category_id);
-alter table question add constraint fk_question_expert_19 foreign key (expert_id) references user (id) on delete restrict on update restrict;
-create index ix_question_expert_19 on question (expert_id);
-alter table question add constraint fk_question_user_20 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_question_user_20 on question (user_id);
-alter table trade add constraint fk_trade_user_21 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_trade_user_21 on trade (user_id);
-alter table trade add constraint fk_trade_category_22 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_trade_category_22 on trade (category_id);
-alter table trend add constraint fk_trend_user_23 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_trend_user_23 on trend (user_id);
-alter table video add constraint fk_video_admin_24 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
-create index ix_video_admin_24 on video (admin_id);
-alter table video add constraint fk_video_category_25 foreign key (category_id) references category (id) on delete restrict on update restrict;
-create index ix_video_category_25 on video (category_id);
+alter table app_update_log add constraint fk_app_update_log_admin_4 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
+create index ix_app_update_log_admin_4 on app_update_log (admin_id);
+alter table article add constraint fk_article_category_5 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_article_category_5 on article (category_id);
+alter table article add constraint fk_article_admin_6 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
+create index ix_article_admin_6 on article (admin_id);
+alter table article add constraint fk_article_user_7 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_article_user_7 on article (user_id);
+alter table comment add constraint fk_comment_article_8 foreign key (article_id) references article (id) on delete restrict on update restrict;
+create index ix_comment_article_8 on comment (article_id);
+alter table comment add constraint fk_comment_user_9 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_comment_user_9 on comment (user_id);
+alter table expert add constraint fk_expert_user_10 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_expert_user_10 on expert (user_id);
+alter table expert add constraint fk_expert_category_11 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_expert_category_11 on expert (category_id);
+alter table favorite add constraint fk_favorite_user_12 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_favorite_user_12 on favorite (user_id);
+alter table favorite_question add constraint fk_favorite_question_question_13 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_favorite_question_question_13 on favorite_question (question_id);
+alter table favorite_question add constraint fk_favorite_question_user_14 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_favorite_question_user_14 on favorite_question (user_id);
+alter table favorite_trade add constraint fk_favorite_trade_trade_15 foreign key (trade_id) references trade (id) on delete restrict on update restrict;
+create index ix_favorite_trade_trade_15 on favorite_trade (trade_id);
+alter table favorite_trade add constraint fk_favorite_trade_user_16 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_favorite_trade_user_16 on favorite_trade (user_id);
+alter table image add constraint fk_image_user_17 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_image_user_17 on image (user_id);
+alter table message add constraint fk_message_user_18 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_message_user_18 on message (user_id);
+alter table question add constraint fk_question_category_19 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_question_category_19 on question (category_id);
+alter table question add constraint fk_question_expert_20 foreign key (expert_id) references user (id) on delete restrict on update restrict;
+create index ix_question_expert_20 on question (expert_id);
+alter table question add constraint fk_question_user_21 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_question_user_21 on question (user_id);
+alter table trade add constraint fk_trade_user_22 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_trade_user_22 on trade (user_id);
+alter table trade add constraint fk_trade_category_23 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_trade_category_23 on trade (category_id);
+alter table trend add constraint fk_trend_user_24 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_trend_user_24 on trend (user_id);
+alter table video add constraint fk_video_admin_25 foreign key (admin_id) references admin (id) on delete restrict on update restrict;
+create index ix_video_admin_25 on video (admin_id);
+alter table video add constraint fk_video_category_26 foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_video_category_26 on video (category_id);
 
 
 
@@ -354,6 +374,8 @@ drop table advertisement;
 drop table album;
 
 drop table answer;
+
+drop table app_update_log;
 
 drop table article;
 

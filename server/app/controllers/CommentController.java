@@ -1,10 +1,7 @@
 package controllers;
 
 import controllers.secured.AdminSecured;
-import models.Article;
-import models.Comment;
-import models.Message;
-import models.Question;
+import models.*;
 import models.enums.MessageType;
 import models.enums.QuestionAuditState;
 import models.enums.TradeState;
@@ -15,6 +12,7 @@ import utils.JPushUtil;
 import utils.JsonResult;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by llz on 2016/6/19.
@@ -29,11 +27,15 @@ public class CommentController extends BaseController{
     @Security.Authenticated(AdminSecured.class)
     public static Result getAllComments() {
         initPageing();
-        Comment comment = new Comment();
-        response().setHeader("TOTAL_SIZE", String.valueOf(Comment.find.findRowCount()));
-        response().setHeader("CUR_PAGE", String.valueOf(page));
-        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(comment.findAllComments(page, pageSize)));
+        List<Comment> comments = null;
+
+        if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
+            comments = Comment.findAllComments(request().getQueryString("status"), page, pageSize);
+        } else {
+            comments = Comment.findAllComments(null, page, pageSize);
+        }
+
+        return ok(Json.toJson(comments));
     }
 
     /**

@@ -1,42 +1,48 @@
-<div class="table-responsive">
-  <table id="sample-table-1" class="table table-striped table-bordered table-hover">
-    <thead>
-    <tr>
-      <th>编号</th>
-      <th>标题</th>
-      <th>分类</th>
-      <th>点击数</th>
-      <th>评论数</th>
-      <th>发布者</th>
-      <th>操作</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="article in articles">
-      <td>{{ article.id }}</td>
-      <td>{{ article.title }}</td>
-      <td>{{ article.category.name }}</td>
-      <td>{{ article.clickCount }}</td>
-      <td>{{ article.commentCount }}</td>
-      <td>{{ article.admin.name }}</td>
-      <td>
-        <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-          <a class="btn btn-xs btn-info" href="#/article/{{ article.id }}/update">
-            <i class="icon-edit bigger-120"></i>
-            编辑
-          </a>
-          <a class="btn btn-xs btn-danger" ng-click="deleteArticle(article.id)">
-            <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
-            删除
-          </a>
-          <a class="btn btn-xs btn-success" ng-click="pushArticle(article.id)">
-            <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
-            推送此文章
-          </a>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <observe></observe>
+<header></header>
+<div class="main-content">
+  <div class="" style="margin: 10px">
+    <div class="table-responsive">
+      <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+          <th>编号</th>
+          <th>标题</th>
+          <th>分类</th>
+          <th>点击数</th>
+          <th>评论数</th>
+          <th>发布者</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="article in articles">
+          <td>{{ article.id }}</td>
+          <td>{{ article.title }}</td>
+          <td>{{ article.category.name }}</td>
+          <td>{{ article.clickCount }}</td>
+          <td>{{ article.commentCount }}</td>
+          <td>{{ article.admin.name }}</td>
+          <td>
+            <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+              <a class="btn btn-xs btn-info" href="#/article/{{ article.id }}/update">
+                <i class="icon-edit bigger-120"></i>
+                编辑
+              </a>
+              <a class="btn btn-xs btn-danger" ng-click="deleteArticle(article.id)">
+                <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
+                删除
+              </a>
+              <a class="btn btn-xs btn-success" ng-click="pushArticle(article.id)">
+                <i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i>
+                推送此文章
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <observe></observe>
+    </div>
+  </div>
 </div>
+<footer></footer>

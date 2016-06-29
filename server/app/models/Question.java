@@ -199,14 +199,25 @@ public class Question extends BaseModel {
      * @param category
      * @return
      */
-    public static List<Question> findQuestionsByCategoryForadmin(final Category category, int page, int pageSize) {
-        return find
-                .where()
-                .eq("category", category)
-                .setOrderBy("whenCreated desc")
-                .setFirstRow((page - 1) * pageSize)
-                .setMaxRows(pageSize)
-                .findList();
+    public static List<Question> findQuestionsByCategoryForadmin(final Category category, final String state, int page, int pageSize) {
+        if (state != null) {
+            return find
+                    .where()
+                    .eq("category", category)
+                    .eq("questionAuditState", state)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .eq("category", category)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
     }
 
     /**
@@ -216,13 +227,24 @@ public class Question extends BaseModel {
      * @param pageSize
      * @return
      */
-    public static List<Question> findQuestionsForAdmin(int page, int pageSize) {
-        return find
-                .where()
-                .setOrderBy("whenCreated desc")
-                .setFirstRow((page - 1) * pageSize)
-                .setMaxRows(pageSize)
-                .findList();
+    public static List<Question> findQuestionsForAdmin(final String state, int page, int pageSize) {
+        if (state != null) {
+            return find
+                    .where()
+                    .eq("questionAuditState", state)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
+
     }
 
     /**

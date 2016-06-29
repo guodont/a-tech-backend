@@ -1,10 +1,12 @@
 package controllers;
 
+import controllers.secured.AdminSecured;
 import models.Message;
 import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,22 @@ import java.util.List;
  * Created by guodont on 16/6/5.
  */
 public class MessageController extends BaseController {
+
+    /**
+     * 获取消息 for admin
+     *
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getMessagesForAdmin() {
+
+        List<Message> messages = null;
+        initPageing();
+
+        messages = Message.getAllMessagesForAdmin(page, pageSize);
+
+        return ok(Json.toJson(messages));
+    }
 
     /**
      * 获取消息

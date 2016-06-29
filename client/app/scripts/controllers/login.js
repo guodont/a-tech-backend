@@ -71,7 +71,9 @@ angular.module('clientApp')
             $cookieStore.put('isLoggedIn', 1);
             $cookieStore.put('authToken', data.authToken);
             // userService.username = data.success.user;
-            $location.path('/whelcome');
+            // $location.path('/whelcome');
+            $scope.isAuthenticated();
+
           }
           console.log($cookieStore.get("authToken"));
         });

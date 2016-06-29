@@ -116,15 +116,28 @@ public class Trade extends BaseModel {
                 .findList();
     }
 
-    public static List<Trade> findTradesByCategoryForAdmin(final Category category, String tradeType, int page, int pageSize) {
-        return find
-                .where()
-                .eq("category", category)
-                .eq("tradeType", tradeType)
-                .setOrderBy("whenCreated desc")
-                .setFirstRow((page - 1) * pageSize)
-                .setMaxRows(pageSize)
-                .findList();
+    public static List<Trade> findTradesByCategoryForAdmin(String state, final Category category, String tradeType, int page, int pageSize) {
+        if (state != null) {
+            return find
+                    .where()
+                    .eq("category", category)
+                    .eq("tradeType", tradeType)
+                    .eq("tradeState", state)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+            return find
+                    .where()
+                    .eq("category", category)
+                    .eq("tradeType", tradeType)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
+
     }
 
     public static List<Trade> findTrades(String tradeType, int page, int pageSize) {
@@ -138,13 +151,27 @@ public class Trade extends BaseModel {
                 .findList();
     }
 
-    public static List<Trade> findTradesForAdmin(int page, int pageSize) {
-        return find
-                .where()
-                .setOrderBy("whenCreated desc")
-                .setFirstRow((page - 1) * pageSize)
-                .setMaxRows(pageSize)
-                .findList();
+    public static List<Trade> findTradesForAdmin(String state, String tradeType, int page, int pageSize) {
+        if (state != null) {
+
+            return find
+                    .where()
+                    .eq("tradeType", tradeType)
+                    .eq("tradeState", state)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        } else {
+
+            return find
+                    .where()
+                    .eq("tradeType", tradeType)
+                    .setOrderBy("whenCreated desc")
+                    .setFirstRow((page - 1) * pageSize)
+                    .setMaxRows(pageSize)
+                    .findList();
+        }
     }
 
     /**

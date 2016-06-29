@@ -216,21 +216,38 @@ public class TradeController extends BaseController {
      */
     @Security.Authenticated(AdminSecured.class)
     public static Result getTradesForAdmin() {
+
         initPageing();
         String tradeType = TradeType.DEMAND.getName();
+        List<Trade> trades = null;
+
         if (request().getQueryString("tradeType") != null && !request().getQueryString("tradeType").equals("")) {
             if (request().getQueryString("tradeType").equals("DEMAND"))
                 tradeType = "DEMAND";
             else
                 tradeType = "SUPPLY";
         }
-        if (request().getQueryString("category") != null) {
+        if (request().getQueryString("category") != null && !request().getQueryString("category").equals("")) {
             int categoryId = Integer.parseInt(request().getQueryString("category"));
             Category category = Category.findCategoryById(categoryId);
-            return ok(Json.toJson(Trade.findTradesByCategoryForAdmin(category, tradeType, page, pageSize)));
+
+            if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
+                trades = Trade.findTradesByCategoryForAdmin(request().getQueryString("status"),category, tradeType, page, pageSize);
+            } else {
+                trades = Trade.findTradesByCategoryForAdmin(null,category, tradeType, page, pageSize);
+            }
+
         } else {
-            return ok(Json.toJson(Trade.findTradesForAdmin(page, pageSize)));
+
+            if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
+                trades = Trade.findTradesForAdmin(request().getQueryString("status"),tradeType, page, pageSize);
+            } else {
+                trades = Trade.findTradesForAdmin(null,tradeType, page, pageSize);
+            }
         }
+
+        return ok(Json.toJson(trades));
+
     }
 
 

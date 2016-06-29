@@ -156,6 +156,20 @@ public class Message extends BaseModel {
                 .findList();
     }
 
+    /**
+     * 获取所有消息
+     *
+     * @return
+     */
+    public static List<Message> getAllMessagesForAdmin(int page, int pageSize) {
+        return find
+                .where()
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
     public static Message findByIdAndUser(long id, final User user) {
         return find
                 .where()

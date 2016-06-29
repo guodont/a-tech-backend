@@ -10,8 +10,16 @@
 angular.module('clientApp')
   .controller('CommentCtrl', function ($scope, $http, alertService, $location, commentService, apiUrl, $cookieStore) {
     $scope.selectType = '';
+
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
+    $scope.status = $location.search().status ? $location.search().status : '';
+
     $scope.getComments = function () {
       commentService.getComments(
+        {
+          curPage: $scope.curPage,
+          status: $scope.status
+        },
         function (res) {
           console.log(res.data);
           $scope.comments = res.data;

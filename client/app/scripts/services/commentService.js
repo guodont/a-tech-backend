@@ -10,10 +10,10 @@ angular.module('clientApp')
     var self = this;
 
     // 获取所有评论
-    self.getComments = function (success, error) {
+    self.getComments = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/comments',
+        url: apiUrl + '/comments?pageSize=20&page=' + params.curPage + '&status=' + params.status,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
