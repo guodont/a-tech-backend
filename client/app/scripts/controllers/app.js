@@ -35,6 +35,8 @@ angular.module('clientApp')
           remark: $scope.remark,
           apkVersionName: $scope.apkVersionName,
           apkVersion: $scope.apkVersion,
+          isPublic: 1,
+          isPush: 1,
           apkPath: $scope.apkPath
         }
       })

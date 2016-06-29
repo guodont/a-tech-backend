@@ -74,11 +74,6 @@ angular.module('clientApp')
           alertService.add('success', res.data.error.message);
         });
     };
-
-    $scope.$watch($scope.selectType,$scope.getCategories($scope.selectType))
-
-    function changeType() {
-      console.log("123");
-    }
+    
 
   });
