@@ -200,6 +200,12 @@ public class ArticleController extends BaseController {
         return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName(), page, pageSize)));
     }
 
+    public static Result searchArticles(String keyWord) {
+        initPageing();
+        Article article = new Article();
+        return ok(Json.toJson(article.findArticlesByKeyWord(keyWord, page, pageSize)));
+    }
+
     /**
      * 获取某专家的文章数据
      *

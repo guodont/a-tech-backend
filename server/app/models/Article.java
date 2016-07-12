@@ -2,6 +2,7 @@ package models;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.Expr;
 import com.avaje.ebean.PagingList;
 import models.enums.ArticlePushState;
 import models.enums.ArticleState;
@@ -107,6 +108,16 @@ public class Article extends BaseModel {
                 .where()
                 .eq("articleType", articleType)
 //                .eq("articleState", ArticleState.AUDITED.getName())
+                .setOrderBy("whenCreated desc , sort desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<Article> findArticlesByKeyWord(String keyWord, int page, int pageSize) {
+        return find
+                .where()
+                .or(Expr.like("title", keyWord + "%"), Expr.like("tag", keyWord + "%"))
                 .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
