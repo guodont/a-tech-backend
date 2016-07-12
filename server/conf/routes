@@ -63,6 +63,8 @@ DELETE      /api/v1/category/:id                    controllers.CategoryControll
 # get all articles
 GET         /api/v1/articles                        controllers.ArticleController.getArticles()
 # get article by category
+GET         /api/v1/articles/search/:keyWord        controllers.ArticleController.searchArticles(keyWord: string)
+
 GET         /api/v1/articles/:cateId                controllers.ArticleController.getArticlesByCategory(cateId: Long)
 # post article
 POST        /api/v1/article                         controllers.ArticleController.addArticle

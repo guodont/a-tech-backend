@@ -117,6 +117,7 @@ angular.module('clientApp')
           $scope.tag = question.tag;
           $scope.sort = question.sort;
           $scope.image = question.image;
+          $scope.images = question.image.split(',');
           $scope.categoryId = question.category.id;
         },
         function (res) {
