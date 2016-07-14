@@ -200,10 +200,10 @@ public class ArticleController extends BaseController {
         return ok(Json.toJson(article.findArticlesByType(ArticleType.WEB.getName(), page, pageSize)));
     }
 
-    public static Result searchArticles(String keyWord) {
+    public static Result searchArticles() {
         initPageing();
         Article article = new Article();
-        return ok(Json.toJson(article.findArticlesByKeyWord(keyWord, page, pageSize)));
+        return ok(Json.toJson(article.findArticlesByKeyWord(request().getQueryString("keyWord"), page, pageSize)));
     }
 
     /**
