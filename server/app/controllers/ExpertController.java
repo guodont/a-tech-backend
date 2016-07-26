@@ -65,7 +65,7 @@ public class ExpertController extends BaseController {
     /**
      * 获取所有专家
      */
-    @Security.Authenticated(AdminSecured.class)
+//    @Security.Authenticated(AdminSecured.class)
     public static Result getExpertsForAdmin() {
         return ok(Json.toJson(Expert.findAllExperts()));
     }
