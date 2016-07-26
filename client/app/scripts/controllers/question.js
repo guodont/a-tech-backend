@@ -208,7 +208,7 @@ angular.module('clientApp')
     $scope.loadExperts = function () {
       $http({
         method: 'GET',
-        url: apiUrl + '/admin/experts',
+        url: apiUrl + '/foradmin/experts',
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
