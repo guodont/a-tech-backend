@@ -63,6 +63,13 @@ public class ExpertController extends BaseController {
     }
 
     /**
+     * 获取所有专家
+     */
+    public static Result getExpertsForAdmin() {
+        return ok(Json.toJson(Expert.findAllExperts()));
+    }
+
+    /**
      * 通过专家id获取专家信息
      *
      * @return

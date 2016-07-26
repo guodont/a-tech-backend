@@ -233,6 +233,9 @@ GET         /api/v1/expert/:id                      controllers.ExpertInfoContro
 PUT         /api/v1/expert                          controllers.ExpertController.updateExpertForExpert
 #expert getexperts
 GET         /api/v1/experts                         controllers.ExpertController.getExperts
+
+#expert getexperts for admin
+GET         /api/v1/admin/experts                   controllers.ExpertController.getExpertsForAdmin
 # add expert
 POST        /api/v1/user/:id/experts                controllers.ExpertController.addExpert(id: Long)
 

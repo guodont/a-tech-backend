@@ -9,6 +9,7 @@ import controllers.secured.AdminSecured;
 import controllers.secured.ExpertSecured;
 import models.*;
 import models.enums.*;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.libs.Json;
@@ -29,6 +30,7 @@ public class ArticleController extends BaseController {
 
     /**
      * 推送文章
+     *
      * @param id
      * @return
      */
@@ -201,9 +203,14 @@ public class ArticleController extends BaseController {
     }
 
     public static Result searchArticles() {
+
+
+        String keyWord = request().getQueryString("keyWord");
+
         initPageing();
         Article article = new Article();
-        return ok(Json.toJson(article.findArticlesByKeyWord(request().getQueryString("keyWord"), page, pageSize)));
+        return ok(Json.toJson(article.findArticlesByKeyWord(keyWord, page, pageSize)));
+
     }
 
     /**
@@ -334,6 +341,16 @@ public class ArticleController extends BaseController {
 
         @Constraints.Required
         public String comment;      //  评论内容
+
+    }
+
+    /**
+     * 搜索表单数据
+     */
+    public static class SearchForm {
+
+        @Constraints.Required
+        public String keyWord;
 
     }
 

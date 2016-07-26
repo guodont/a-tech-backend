@@ -48,25 +48,33 @@ public class WeChatController extends BaseController{
 
         // 判断是否存在对应的用户,存在则绑定,不存在则注册新用户 保存密码
         User user = User.findByPhoneAndPassword(bindWeChatAccountData.phone, bindWeChatAccountData.password);
+        User user3 = User.findByPhone(bindWeChatAccountData.phone);
 
-        if (user != null) {
+        if (user3 != null) {
 
-            if (User.findExpertByWeChatOpenId(bindWeChatAccountData.openId) != null) {
-                // 已绑定
-                return ok();
+            if(user != null) {  // 用户名密码正确
+
+                if (User.findExpertByWeChatOpenId(bindWeChatAccountData.openId) != null) {
+                    // 已绑定
+                    return ok();
+                } else {
+                    // 未绑定
+
+                    // 登录成功 绑定微信信息
+                    user.setLastIp(request().remoteAddress());  //  保存最后登录ip
+                    user.weChatOpenId = bindWeChatAccountData.openId;
+                    user.update();
+
+                    // 如果已经有token 则不重新生成token
+                    String authToken = user.createToken();
+                    ObjectNode authTokenJson = Json.newObject();
+                    authTokenJson.put(AUTH_TOKEN, authToken);
+                    return ok(authTokenJson);
+                }
+
             } else {
-                // 未绑定
-
-                // 登录成功 绑定微信信息
-                user.setLastIp(request().remoteAddress());  //  保存最后登录ip
-                user.weChatOpenId = bindWeChatAccountData.openId;
-                user.update();
-
-                // 如果已经有token 则不重新生成token
-                String authToken = user.createToken();
-                ObjectNode authTokenJson = Json.newObject();
-                authTokenJson.put(AUTH_TOKEN, authToken);
-                return ok(authTokenJson);
+                // 错误的密码
+                return badRequest(new JsonResult("error", "用户名或者密码错误").toJsonResponse());
             }
 
         } else {

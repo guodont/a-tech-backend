@@ -117,7 +117,7 @@ public class Article extends BaseModel {
     public static List<Article> findArticlesByKeyWord(String keyWord, int page, int pageSize) {
         return find
                 .where()
-                .or(Expr.like("title", keyWord + "%"), Expr.like("tag", keyWord + "%"))
+                .or(Expr.like("title", "%" + keyWord + "%"), Expr.like("tag", "%" + keyWord + "%"))
                 .setOrderBy("whenCreated desc , sort desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)
