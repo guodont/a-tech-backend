@@ -204,13 +204,11 @@ public class ArticleController extends BaseController {
 
     public static Result searchArticles() {
 
-
         String keyWord = request().getQueryString("keyWord");
 
         initPageing();
         Article article = new Article();
         return ok(Json.toJson(article.findArticlesByKeyWord(keyWord, page, pageSize)));
-
     }
 
     /**

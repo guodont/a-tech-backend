@@ -57,6 +57,8 @@ POST        /api/v1/category                        controllers.CategoryControll
 GET         /api/v1/categories                      controllers.CategoryController.getCategories()
 # delete category
 DELETE      /api/v1/category/:id                    controllers.CategoryController.deleteCategory(id: Long)
+# update category
+PUT         /api/v1/category/:id                    controllers.CategoryController.updateCategory(id: Long)
 
 # article
 
@@ -106,6 +108,8 @@ GET         /api/v1/user/:id                        controllers.UserController.g
 PUT         /api/v1/user/:id                        controllers.UserController.updateUser(id: Long)
 # update password
 PUT         /api/v1/my/password                     controllers.UserController.updateUserPassword
+# set password for admin
+PUT         /api/v1/foradmin/user/password          controllers.UserController.updateUserPasswordForAdmin
 # delete user
 DELETE      /api/v1/user/:id                        controllers.UserController.deleteUser(id: Long)
 
@@ -231,6 +235,8 @@ POST        /api/v1/expert/article                  controllers.ArticleControlle
 GET         /api/v1/expert/:id                      controllers.ExpertInfoController.getExpertInformation(id: Long)
 # expert profile
 PUT         /api/v1/expert                          controllers.ExpertController.updateExpertForExpert
+# edit user profile for admin
+PUT         /api/v1/foradmin/expert/:id             controllers.ExpertController.updateExpertForAdmin(id: Long)
 #expert getexperts
 GET         /api/v1/experts                         controllers.ExpertController.getExperts
 

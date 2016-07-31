@@ -73,22 +73,41 @@ public class CategoryController extends BaseController {
 
     }
 
+
+    @Security.Authenticated(AdminSecured.class)
+    public static Result updateCategory(long id) {
+
+        Form<CategoryForm> postForm = Form.form(CategoryForm.class).bindFromRequest();
+
+        if (postForm.hasErrors()) {
+            return badRequest(postForm.errorsAsJson());
+        } else {
+            Category category = new Category();
+
+            category.name = postForm.get().name;
+            category.image = postForm.get().image;
+            category.sort = postForm.get().sort;
+            category.update();
+            return ok(new JsonResult("success", "Category update successfully").toJsonResponse());
+        }
+    }
+
     /**
-        * 根据分类类型获取分类
-                *
-        * @return
-        */
-        public static Result getCategories() {
-            String categoryType = CategoryType.ARTICLE.getName();
-            List<Category> categories = null;
+     * 根据分类类型获取分类
+     *
+     * @return
+     */
+    public static Result getCategories() {
+        String categoryType = CategoryType.ARTICLE.getName();
+        List<Category> categories = null;
 
-            if (request().getQueryString("categoryType") != null) {
-                categoryType = request().getQueryString("categoryType");
-            }
+        if (request().getQueryString("categoryType") != null) {
+            categoryType = request().getQueryString("categoryType");
+        }
 
-            if (request().getQueryString("parentId") != null && !request().getQueryString("parentId").equals("")) {
-            if(Category.findCategoryById(Long.parseLong(request().getQueryString("parentId"))) != null) {
-                categories = Category.findCategoriesByParentAndType(Long.parseLong(request().getQueryString("parentId")),categoryType);
+        if (request().getQueryString("parentId") != null && !request().getQueryString("parentId").equals("")) {
+            if (Category.findCategoryById(Long.parseLong(request().getQueryString("parentId"))) != null) {
+                categories = Category.findCategoriesByParentAndType(Long.parseLong(request().getQueryString("parentId")), categoryType);
             }
         } else {
             categories = Category.findCategoriesByType(categoryType);

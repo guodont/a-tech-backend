@@ -75,6 +75,8 @@ angular.module('clientApp')
     $scope.auditTrade = function (trade) {
       $scope.curTrade = trade;
       console.log("审核交易");
+      // $('.at-audit-trade').modal('show');
+      // $('.modal-backdrop').show();
     };
 
     // 拒绝审核
@@ -90,6 +92,8 @@ angular.module('clientApp')
           console.log(res.data);
           alertService.add('success', res.data.success.message);
           $scope.getTrades();
+          $('.at-audit-trade').modal('hide');
+          $('.modal-backdrop').hide();
         }, function (res) {
           console.log(res.data);
           alertService.add('error', res.data.success.message);
@@ -109,6 +113,8 @@ angular.module('clientApp')
           console.log(res.data);
           alertService.add('success', res.data.success.message);
           $scope.getTrades();
+          $('.at-audit-trade').modal('hide');
+          $('.modal-backdrop').hide();
         }, function (res) {
           console.log(res.data);
           alertService.add('error', res.data.success.message);

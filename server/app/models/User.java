@@ -6,6 +6,7 @@
 package models;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.UnsupportedEncodingException;
@@ -252,6 +253,28 @@ public class User extends BaseModel {
     public static List<User> findUsers(int page, int pageSize) {
         return find
                 .where()
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<User> findUsersByRealName(String realName,int page, int pageSize) {
+        return find
+                .where()
+                .like("realName","%" + realName + "%")
+//                .or(Expr.like("realName", "%" + realName + "%"), Expr.like("realName", "%" + realName + "%"))
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<User> findUsersByUserName(String userName,int page, int pageSize) {
+        return find
+                .where()
+                .like("name","%" + userName + "%")
+//                .or(Expr.like("realName", "%" + realName + "%"), Expr.like("realName", "%" + realName + "%"))
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)

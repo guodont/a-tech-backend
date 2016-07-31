@@ -33,6 +33,7 @@ public class ExpertController extends BaseController {
             //保存用户类型
             User user = User.findById(id);
             user.userType = UserType.EXPERT;
+            user.avatar  = postForm.get().avatar;
             user.update();
 
             if (Expert.findExpertByUser(user) != null)
@@ -42,6 +43,7 @@ public class ExpertController extends BaseController {
             Expert expert = new Expert();
             expert.user = user;
             expert.category = category;
+
             expert.professional = postForm.get().professional;
             expert.duty = postForm.get().duty;
             expert.service = postForm.get().service;
@@ -112,6 +114,7 @@ public class ExpertController extends BaseController {
             Category category = Category.find.byId(expertInfoFormForm.get().categoryId);
             Expert expert = Expert.findExpertByUser(getUser());
             expert.category = category;
+            expert.user.avatar  = expertInfoFormForm.get().avatar;
             expert.professional = expertInfoFormForm.get().professional;
             expert.duty = expertInfoFormForm.get().duty;
             expert.service = expertInfoFormForm.get().service;
@@ -139,6 +142,7 @@ public class ExpertController extends BaseController {
             Category category = Category.find.byId(expertInfoFormForm.get().categoryId);
             Expert expert = Expert.findExpertById(id);
             expert.category = category;
+            expert.user.avatar  = expertInfoFormForm.get().avatar;
             expert.professional = expertInfoFormForm.get().professional;
             expert.duty = expertInfoFormForm.get().duty;
             expert.service = expertInfoFormForm.get().service;
@@ -165,6 +169,8 @@ public class ExpertController extends BaseController {
         public String introduction;        //  简介
 
         public String service;        //  服务项目
+
+        public String avatar;        //  头像
 
         @Constraints.MaxLength(255)
         public String company;        //  所在单位
