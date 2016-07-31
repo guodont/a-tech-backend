@@ -93,7 +93,6 @@ public class Expert extends BaseModel {
      */
     public static List<Expert> findAllExperts() {
         return find
-                .where()
                 .findList();
     }
 

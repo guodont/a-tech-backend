@@ -18,6 +18,8 @@ import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
+import java.util.List;
+
 import static controllers.Application.AUTH_TOKEN;
 
 /**
@@ -36,10 +38,28 @@ public class UserController extends BaseController {
     @Security.Authenticated(AdminSecured.class)
     public static Result getAllUsers() {
         initPageing();
-        response().setHeader("TOTAL_SIZE", String.valueOf(User.find.findRowCount()));
-        response().setHeader("CUR_PAGE", String.valueOf(page));
-        response().setHeader("PAGE_SIZE", String.valueOf(pageSize));
-        return ok(Json.toJson(User.findUsers2(page, pageSize)));
+        List<User> userList = null;
+        // 搜索
+        // 根据手机号
+        String phone = request().getQueryString("phone");
+
+        // 根据姓名
+        String realName = request().getQueryString("realName");
+
+        // 根据用户名
+        String userName = request().getQueryString("userName");
+
+        if (phone != null && !phone.equals("")) {
+            userList.add(User.findByPhone(phone));
+        } else if (realName != null && !realName.equals("")) {
+            userList = User.findUsersByRealName(realName, page, pageSize);
+        } else if (userName != null && !userName.equals("")) {
+            userList = User.findUsersByUserName(userName, page, pageSize);
+        } else {
+            userList = User.findUsers2(page, pageSize);
+        }
+
+        return ok(Json.toJson(userList));
     }
 
     /**
@@ -130,6 +150,33 @@ public class UserController extends BaseController {
         }
     }
 
+    @Security.Authenticated(AdminSecured.class)
+    public static Result updateUserPasswordForAdmin() {
+        Form<AdminChangePasswordForm> adminChangePasswordFormForm = Form.form(AdminChangePasswordForm.class).bindFromRequest();
+
+        if (adminChangePasswordFormForm.hasErrors()) {
+            return badRequest(adminChangePasswordFormForm.errorsAsJson());
+        } else {
+
+            User user = User.findById(adminChangePasswordFormForm.get().userId);
+            if (user != null) {
+
+                //  更新用户密码信息
+                user.setPassword(adminChangePasswordFormForm.get().newPassword);
+                //  更新token
+                String authToken = user.createToken();
+                user.update();
+
+                return ok(new JsonResult("success", "update success").toJsonResponse());
+
+            } else {
+
+                return badRequest(new JsonResult("error", "User not exist").toJsonResponse());
+            }
+        }
+    }
+
+
     /**
      * 删除用户
      *
@@ -180,6 +227,20 @@ public class UserController extends BaseController {
         @Constraints.MaxLength(255)
         public String oldPassword;      //  旧密码
 
+        @Constraints.MaxLength(255)
+        public String newPassword;      //  新密码
+
+    }
+
+    /**
+     * 管理呀修改用户密码表单数据
+     */
+    public static class AdminChangePasswordForm {
+
+        @Constraints.Required
+        public Long userId;
+
+        @Constraints.Required
         @Constraints.MaxLength(255)
         public String newPassword;      //  新密码
 

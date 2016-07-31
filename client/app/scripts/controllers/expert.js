@@ -3,7 +3,9 @@
  * 专家管理控制器
  */
 angular.module('clientApp')
-  .controller('ExpertCtrl', function ($scope, $http, alertService, $location, categoryService, apiUrl, $cookieStore,expertService) {
+  .controller('ExpertCtrl', function ($scope, $http, alertService, $location, categoryService, apiUrl, $cookieStore, expertService) {
+
+    $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
 
     $scope.getCategories = function (type) {
       categoryService.getCategories(
@@ -69,12 +71,12 @@ angular.module('clientApp')
         }
       );
     };
-    
+
     $scope.getExperts = function () {
 
       $http({
         method: 'GET',
-        url: apiUrl + '/experts',
+        url: apiUrl + '/experts' + '?pageSize=20&page=' + $scope.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
@@ -96,8 +98,8 @@ angular.module('clientApp')
           professional: $scope.professional,
           duty: $scope.duty,
           introduction: $scope.introduction,
-          service:$scope.service,
-          company:$scope.company
+          service: $scope.service,
+          company: $scope.company
         },
         function (res) {
           $scope.subject = '';
