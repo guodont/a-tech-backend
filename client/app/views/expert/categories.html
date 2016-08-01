@@ -11,7 +11,7 @@
                 aria-hidden="true">&times;</span></button>
               <h4 class="modal-title" id="gridSystemModalLabel">添加专家分类</h4>
             </div>
-            <form name="postForm" ng-submit="addCategory()" novalidate>
+            <form name="postForm"  novalidate>
               <div class="modal-body">
                 <div class="field">
                   <label for="name">名称</label>
@@ -52,7 +52,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">保存分类</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-click="addCategory()">保存分类</button>
               </div>
             </form>
           </div>

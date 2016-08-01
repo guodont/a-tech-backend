@@ -143,6 +143,7 @@ public class ExpertController extends BaseController {
             Expert expert = Expert.findExpertById(id);
             expert.category = category;
             expert.user.avatar  = expertInfoFormForm.get().avatar;
+            expert.user.setRealName(expertInfoFormForm.get().name);
             expert.professional = expertInfoFormForm.get().professional;
             expert.duty = expertInfoFormForm.get().duty;
             expert.service = expertInfoFormForm.get().service;
@@ -171,6 +172,8 @@ public class ExpertController extends BaseController {
         public String service;        //  服务项目
 
         public String avatar;        //  头像
+
+        public String name;        //  名字
 
         @Constraints.MaxLength(255)
         public String company;        //  所在单位

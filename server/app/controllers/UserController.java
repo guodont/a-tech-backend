@@ -18,6 +18,7 @@ import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static controllers.Application.AUTH_TOKEN;
@@ -38,7 +39,7 @@ public class UserController extends BaseController {
     @Security.Authenticated(AdminSecured.class)
     public static Result getAllUsers() {
         initPageing();
-        List<User> userList = null;
+        List<User> userList = new ArrayList<User>();
         // 搜索
         // 根据手机号
         String phone = request().getQueryString("phone");

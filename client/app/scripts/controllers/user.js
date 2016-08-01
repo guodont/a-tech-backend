@@ -8,11 +8,36 @@ angular.module('clientApp')
     $scope.selectType = '';
     $scope.curPage = $location.search().currentPage ? $location.search().currentPage : 1;
 
+    $scope.searchType ='phone';
+    $scope.searchPhone ='';
+    $scope.searchUserName = '';
+    $scope.searchRealName = '';
+    $scope.searchValue = '';
 
+    $('.ui.selection.dropdown')
+      .dropdown({
+        // action: 'hide',
+        onChange: function (value, text, $selectedItem) {
+          console.log(value);
+          // $('#categoryId').attr("value", value);
+          $scope.searchType = value;
+        }
+      })
+    ;
     $scope.getUsers = function (type) {
+
+      console.log($scope.searchType);
+      if($scope.searchType=='phone') {
+        $scope.searchPhone = $scope.searchValue;
+      } else if($scope.searchType=='userName') {
+        $scope.searchUserName = $scope.searchValue;
+      } else if($scope.searchType=='realName') {
+        $scope.searchRealName = $scope.searchValue;
+      }
+
       $http({
         method: 'GET',
-        url: apiUrl + '/users' + '?pageSize=20&page=' + $scope.curPage,
+        url: apiUrl + '/users' + '?pageSize=20&page=' + $scope.curPage + '&phone=' + $scope.searchPhone + '&userName=' + $scope.searchUserName + '&realName=' + $scope.searchRealName ,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
@@ -25,24 +50,24 @@ angular.module('clientApp')
 
     $scope.getUsers('');
 
-    $scope.updateUser = function () {
-      articleService.updateUser(
-        {
-          userId: $routeParams.id,
-          name: $scope.name,
-          realName: $scope.realName,
-          phone: $scope.phone,
-          industry: $scope.industry,
-          scale: $scope.scale,
-        },
-        function (res) {
-          $scope.subject = '';
-          $scope.content = '';
-          alertService.add('success', res.data.success.message);
-          $location.path('/user/list');
-        }
-      );
-    };
+    // $scope.updateUser = function () {
+    //   articleService.updateUser(
+    //     {
+    //       userId: $routeParams.id,
+    //       name: $scope.name,
+    //       realName: $scope.realName,
+    //       phone: $scope.phone,
+    //       industry: $scope.industry,
+    //       scale: $scope.scale,
+    //     },
+    //     function (res) {
+    //       $scope.subject = '';
+    //       $scope.content = '';
+    //       alertService.add('success', res.data.success.message);
+    //       $location.path('/user/list');
+    //     }
+    //   );
+    // };
 
 
     $scope.deleteUser = function (id) {
@@ -84,12 +109,118 @@ angular.module('clientApp')
           console.log(value);
           $('#categoryId').attr("value", value);
           $scope.categoryId = value;
+          $scope.searchType = value;
+
         }
       })
     ;
 
+    $scope.getUploadToken = function () {
+      $http({
+        method: 'GET',
+        url: apiUrl + '/admin/uploadToken',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
+      })
+        .then(function (res) {
+          $scope.uploadToken = res.data.success.message;
+          console.log($scope.uploadToken);
+          $scope.initUpload();
+        }, function (res) {
+          console.log("uploadToken获取失败");
+        });
+    };
+
+    $scope.getUploadToken();
+
+    $scope.initUpload = function () {
+      var uploader = Qiniu.uploader({
+        runtimes: 'html5,flash,html4',
+        browse_button: 'pickfiles',
+        uptoken: $scope.uploadToken,
+        get_new_uptoken: false,
+        unique_names: true,
+        save_key: false,
+        domain: 'http://storage.workerhub.cn/',     // bucket 域名，下载资源时用到，**必需**
+        container: 'upload-container',             // 上传区域 DOM ID，默认是 browser_button 的父元素，
+        max_file_size: '100mb',             // 最大文件体积限制
+        flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入 flash,相对路径
+        max_retries: 3,                     // 上传失败最大重试次数
+        dragdrop: true,                     // 开启可拖曳上传
+        drop_element: 'container',          // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
+        chunk_size: '4mb',                  // 分块上传时，每块的体积
+        auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+        init: {
+          'FilesAdded': function (up, files) {
+            plupload.each(files, function (file) {
+              // 文件添加进队列后,处理相关的事情
+            });
+          },
+          'BeforeUpload': function (up, file) {
+            // 每个文件上传前,处理相关的事情
+            console.log("每个文件上传前,处理相关的事情");
+          },
+          'UploadProgress': function (up, file) {
+            // 每个文件上传时,处理相关的事情
+
+            console.log(up);
+          },
+          'FileUploaded': function (up, file, info) {
+            console.log(info);
+            var domain = up.getOption('domain');
+            var res = JSON.parse(info);
+            var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+
+            $scope.cateImage = sourceLink;
+            $scope.avatar = res.key;
+
+            console.log($scope.cateImage);
+            $scope.$apply();
+
+          },
+          'Error': function (up, err, errTip) {
+            //上传出错时,处理相关的事情
+            console.log(errTip);
+          },
+          'UploadComplete': function () {
+            //队列文件处理完毕后,处理相关的事情
+          },
+          'Key': function (up, file) {
+            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+            // 该配置必须要在 unique_names: false , save_key: false 时才生效
+            var key = "";
+            // do something with key here
+            return key
+          }
+        }
+      });
+    };
     $scope.toAddExpert = function (user) {
       $scope.curUserid = user.id;
+    };
+
+
+    $scope.toChangePass = function (user) {
+      $scope.curUserid = user.id;
+    };
+
+    $scope.changePass = function () {
+
+      $scope.changePass = function (id) {
+        $http({
+          method: 'PUT',
+          url: apiUrl + '/foradmin/user/password',
+          headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
+          data :{
+            userId: $scope.curUserid,
+            newPassword: $scope.password
+          }
+        })
+          .then(function (res) {
+            alertService.add('success', res.data.success.message);
+          }, function (res) {
+            alertService.add('error', res.data.error.message);
+          });
+      };
     };
 
     $scope.addExpert = function () {
@@ -102,7 +233,8 @@ angular.module('clientApp')
           duty: $scope.duty,
           introduction: $scope.introduction,
           service: $scope.service,
-          company: $scope.company
+          company: $scope.company,
+          avatar: $scope.avatar
         },
         function (res) {
           $scope.subject = '';
