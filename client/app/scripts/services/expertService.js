@@ -38,7 +38,36 @@ angular.module('clientApp')
           duty: params.duty,
           introduction: params.introduction,
           service: params.service,
-          company: params.company
+          company: params.company,
+          avatar: params.avatar
+        }
+      })
+        .then(function (res) {
+          if (typeof (success) === 'function') {
+            success(res);
+          }
+        }, function (res) {
+          if (typeof (error) === 'function') {
+            error(res);
+          }
+        });
+    };
+
+    // 更新专家信息
+    self.updateExpert = function (params, success, error) {
+      $http({
+        method: 'PUT',
+        url: apiUrl + '/foradmin/expert/' + params.userId,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
+        data: {
+          name: params.name,
+          categoryId: params.categoryId,
+          professional: params.professional,
+          duty: params.duty,
+          introduction: params.introduction,
+          service: params.service,
+          company: params.company,
+          avatar: params.avatar
         }
       })
         .then(function (res) {

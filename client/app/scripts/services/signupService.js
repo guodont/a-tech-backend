@@ -13,6 +13,7 @@ angular.module('clientApp')
       $http({
         method: 'POST',
         url: apiUrl + '/admin/signup',
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: params
       })
         .then(function (res) {

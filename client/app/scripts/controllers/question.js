@@ -158,11 +158,9 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
-          console.log(res.data);
           alertService.add('success', res.data.success.message);
           $scope.getQuestions();
         }, function (res) {
-          console.log(res.data);
           alertService.add('error', res.data.success.message);
         });
     };
@@ -177,11 +175,9 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
-          console.log(res.data);
           alertService.add('success', res.data.success.message);
           $scope.getQuestions();
         }, function (res) {
-          console.log(res.data);
           alertService.add('error', res.data.success.message);
         });
     };
@@ -196,11 +192,9 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")}
       })
         .then(function (res) {
-          console.log(res.data);
           alertService.add('success', res.data.success.message);
           $scope.getQuestions();
         }, function (res) {
-          console.log(res.data);
           alertService.add('error', res.data.success.message);
         });
     };
@@ -213,7 +207,6 @@ angular.module('clientApp')
       })
         .then(function (res) {
           $scope.experts = res.data;
-          console.log($scope.experts);
         }, function (res) {
         });
     };

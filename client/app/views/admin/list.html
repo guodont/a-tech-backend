@@ -43,7 +43,7 @@
               </div>
               <div class="modal-footer">
                 <a type="button" class="btn btn-default" data-dismiss="modal">取消</a>
-                <input type="submit" class="btn btn-primary" value="确定">
+                <input type="submit" class="btn btn-primary" value="确定"  data-dismiss="modal" ng-click="signup()">
               </div>
             </form>
 
@@ -73,8 +73,8 @@
           <td>{{ user.whenCreated | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>
             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
-              <button class="btn btn-xs btn-danger" ng-click="deleteAdmin(user.id)">
-                <a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>
+              <button class="btn btn-xs btn-danger">
+                <a href="" style="color:white">查看工作记录</a>
               </button>
             </div>
           </td>
