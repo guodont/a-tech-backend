@@ -16,7 +16,7 @@
                 <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()">{{ alert.msg }}</alert>
               </div>
             </div>
-            <form name="postForm"  novalidate>
+            <form name="postForm" novalidate>
 
               <div class="modal-body">
                 <div class="field">
@@ -88,7 +88,7 @@
                 <div class="field">
                   <label for="introduction">简介</label>
                   <textarea name="introduction" class="form-control" type="subject" id="introduction" placeholder="输入简介"
-                         ng-model="introduction" />
+                            ng-model="introduction"></textarea>
                 </div>
                 <div class="field">
                   <label for="service">服务项目</label>
@@ -147,16 +147,18 @@
           <td>
             <div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
               <!--<a class="btn btn-xs btn-info" href="#/user/{{ user.id }}/update">-->
-                <!--<i class="icon-edit bigger-120"></i>-->
+              <!--<i class="icon-edit bigger-120"></i>-->
               <!--</a>-->
               <!--<button class="btn btn-xs btn-danger" ng-click="deleteUser(user.id)">-->
-                <!--<a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>-->
+              <!--<a href=""><i class="icon-trash bigger-120 " style="color: #FFFFFF;"></i></a>-->
               <!--</button>-->
-              <a ng-show="user.userType == 'PUBLIC'" class="btn btn-xs btn-default" data-toggle="modal" data-target=".at-post-expert"
+              <a ng-show="user.userType == 'PUBLIC'" class="btn btn-xs btn-default" data-toggle="modal"
+                 data-target=".at-post-expert"
                  ng-click="toAddExpert(user)">
                 <i class="icon-edit bigger-120"></i>指定为专家
               </a>
-              <a ng-show="user.userType == 'EXPERT'" class="btn btn-xs btn-default" data-toggle="modal" data-target=".at-post-pass"
+              <a ng-show="user.userType == 'EXPERT'" class="btn btn-xs btn-default" data-toggle="modal"
+                 data-target=".at-post-pass"
                  ng-click="toChangePass(user)">
                 <i class="icon-edit bigger-120"></i>重置密码
               </a>
