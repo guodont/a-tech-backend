@@ -1,5 +1,6 @@
 package models;
 
+import com.avaje.ebean.Expr;
 import models.enums.QuestionAuditState;
 import models.enums.QuestionResolveState;
 import play.data.validation.Constraints;
@@ -118,6 +119,15 @@ public class Question extends BaseModel {
                 .findList();
     }
 
+    public static List<Question> findQuestionsByKeyWord(String keyWord, int page, int pageSize) {
+        return find
+                .where()
+                .or(Expr.like("title", "%" + keyWord + "%"), Expr.like("content", "%" + keyWord + "%"))
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
     /**
      * 查找指派给专家的问题
      *

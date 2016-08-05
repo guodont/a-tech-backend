@@ -160,6 +160,9 @@ DELETE      /api/v1/video/:id               controllers.VideoController.deleteVi
 
 # question
 GET         /api/v1/questions                       controllers.QuestionController.getQuestions
+
+GET         /api/v1/questions/search                 controllers.QuestionController.searchQuestions
+
 # questions for admin
 GET         /api/v1/foradmin/questions              controllers.QuestionController.getQuestionsForAdmin
 # post question

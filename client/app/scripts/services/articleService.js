@@ -16,6 +16,7 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           title: params.title,
+          subTitle: params.subTitle,
           content: params.content,
           tag: params.tag,
           sort: params.sort,
@@ -42,6 +43,7 @@ angular.module('clientApp')
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
         data: {
           title: params.title,
+          subTitle: params.subTitle,
           content: params.content,
           tag: params.tag,
           sort: params.sort,
@@ -82,7 +84,7 @@ angular.module('clientApp')
     self.getArticles = function (params, success, error) {
       $http({
         method: 'GET',
-        url: apiUrl + '/articles' + '?pageSize=10&page=' + params.curPage,
+        url: apiUrl + '/articles' + '?pageSize=20&page=' + params.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
@@ -113,7 +115,7 @@ angular.module('clientApp')
           }
         });
     };
-    
+
     // 推送文章
     self.pushArticle = function (params, success, error) {
       $http({

@@ -37,6 +37,16 @@ public class QuestionController extends BaseController {
 
     private static final String WECHAT_QUESTION_STATUS_TEMPLATE_ID = "K_kz-KlSLOR0MyPJTxgZdKMd6xCkzY-o1VCWcyRgmF0";
 
+
+    public static Result searchQuestions() {
+
+        String keyWord = request().getQueryString("keyWord");
+
+        initPageing();
+        Question question = new Question();
+        return ok(Json.toJson(question.findQuestionsByKeyWord(keyWord, page, pageSize)));
+    }
+
     /**
      * 用户发布问题
      *

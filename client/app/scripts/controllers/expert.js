@@ -232,7 +232,8 @@ angular.module('clientApp')
           introduction: $scope.introduction,
           service: $scope.service,
           company: $scope.company,
-          avatar: $scope.avatar
+          avatar: $scope.avatar,
+          remark: $scope.remark
         },
         function (res) {
           $scope.subject = '';

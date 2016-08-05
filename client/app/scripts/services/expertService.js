@@ -67,7 +67,8 @@ angular.module('clientApp')
           introduction: params.introduction,
           service: params.service,
           company: params.company,
-          avatar: params.avatar
+          avatar: params.avatar,
+          remark: params.remark
         }
       })
         .then(function (res) {

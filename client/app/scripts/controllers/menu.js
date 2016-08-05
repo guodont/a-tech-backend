@@ -34,14 +34,14 @@ angular.module('clientApp')
         });
     };
 
-    $scope.$watch('user.username', function (newVal) {
-      if (newVal === '') {
-        $scope.isLoggedIn = false;
-      } else {
-        $scope.username = newVal;
-        $scope.isLoggedIn = true;
-      }
-    });
+    // $scope.$watch('user.username', function (newVal) {
+    //   if (newVal === '') {
+    //     $scope.isLoggedIn = false;
+    //   } else {
+    //     $scope.username = newVal;
+    //     $scope.isLoggedIn = true;
+    //   }
+    // });
 
     if ($cookieStore.get("isLoggedIn") == '0') {
       console.log("未登录");
