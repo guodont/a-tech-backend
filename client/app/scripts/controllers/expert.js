@@ -215,6 +215,7 @@ angular.module('clientApp')
       $scope.professional = expert.professional;
       $scope.duty = expert.duty;
       $scope.introduction = expert.introduction;
+      $scope.remark = expert.remark;
       $scope.service = expert.service;
       $scope.company = expert.company;
       $scope.avatar = expert.user.avatar;

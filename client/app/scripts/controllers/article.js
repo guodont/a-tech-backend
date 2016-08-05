@@ -99,6 +99,7 @@ angular.module('clientApp')
         {
           articleId: $routeParams.id,
           title: $scope.title,
+          subTitle: $scope.subTitle,
           content: editor.getValue(),
           tag: $scope.tag,
           sort: $scope.sort,
