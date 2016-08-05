@@ -4,8 +4,13 @@
     <form name="postForm" ng-submit="updateArticle()" novalidate>
       <div class="field">
         <label for="title">标题</label>
-        <input name="title" class="form-control" type="subject" id="title" placeholder="Subject"
+        <input name="title" class="form-control" type="subject" id="title" placeholder="标题"
                ng-model="title">
+      </div>
+      <div class="field">
+        <label for="subTitle">副标题</label>
+        <input name="subTitle" class="form-control" type="subject" id="subTitle" placeholder="输入文章副标题(可以为空)"
+               ng-model="subTitle">
       </div>
       <div class="field">
         <label for="content">内容</label>

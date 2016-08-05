@@ -45,6 +45,7 @@ public class ExpertController extends BaseController {
             expert.category = category;
 
             expert.professional = postForm.get().professional;
+            expert.remark = postForm.get().remark;
             expert.duty = postForm.get().duty;
             expert.service = postForm.get().service;
             expert.introduction = postForm.get().introduction;
@@ -145,6 +146,7 @@ public class ExpertController extends BaseController {
             expert.user.avatar  = expertInfoFormForm.get().avatar;
             expert.user.setRealName(expertInfoFormForm.get().name);
             expert.professional = expertInfoFormForm.get().professional;
+            expert.remark = expertInfoFormForm.get().remark;
             expert.duty = expertInfoFormForm.get().duty;
             expert.service = expertInfoFormForm.get().service;
             expert.introduction = expertInfoFormForm.get().introduction;
@@ -166,8 +168,9 @@ public class ExpertController extends BaseController {
         @Constraints.MaxLength(45)
         public String duty;             //  职务
 
-        @Constraints.MaxLength(255)
         public String introduction;        //  简介
+
+        public String remark;        //  备注
 
         public String service;        //  服务项目
 

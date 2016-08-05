@@ -39,14 +39,19 @@ public class Expert extends BaseModel {
     /**
      * 简介
      */
-    @Column(length = 255)
-    @Constraints.MaxLength(255)
+    @Column(columnDefinition = "TEXT")
     public String introduction;
     /**
      * 服务项目
      */
     @Column(columnDefinition = "TEXT")
     public String service;
+
+    /**
+     * 备注
+     */
+    @Column(columnDefinition = "TEXT")
+    public String remark;
     /**
      * 所在单位
      */

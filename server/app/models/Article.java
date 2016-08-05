@@ -23,6 +23,11 @@ public class Article extends BaseModel {
      */
     public String title;
     /**
+     * 副标题
+     */
+    @Column(length = 255)
+    public String subTitle;
+    /**
      * 内容
      */
     @Column(columnDefinition = "TEXT")

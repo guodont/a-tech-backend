@@ -35,6 +35,7 @@ angular.module('clientApp')
           console.log(res.data);
           var article = res.data;
           $scope.title = article.title;
+          $scope.subTitle = article.subTitle;
           $scope.content = article.content;
           editor.setValue(article.content);
           $scope.tag = article.tag;
@@ -58,6 +59,7 @@ angular.module('clientApp')
       articleService.addArticle(
         {
           title: $scope.title,
+          subTitle: $scope.subTitle,
           // content: $scope.content,
           content: editor.getValue(),
           tag: $scope.tag,

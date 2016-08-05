@@ -68,6 +68,7 @@ public class ArticleController extends BaseController {
             article.clickCount = 0L;
             article.commentCount = 0L;
             article.title = postForm.get().title;
+            article.subTitle = postForm.get().subTitle;
             article.category = category;
             article.tag = postForm.get().tag;
             article.sort = postForm.get().sort;
@@ -285,6 +286,7 @@ public class ArticleController extends BaseController {
 
             Article article = Article.findArticleById(id);
             article.title = postForm.get().title;
+            article.subTitle = postForm.get().subTitle;
             article.category = category;
             article.tag = postForm.get().tag;
             article.sort = postForm.get().sort;
@@ -317,6 +319,8 @@ public class ArticleController extends BaseController {
         @Constraints.Required
         @Constraints.MaxLength(255)
         public String title;        //  文章题目
+
+        public String subTitle;        //  文章题目
 
         @Constraints.MaxLength(255)
         public String tag;          //  标签
