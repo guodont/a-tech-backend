@@ -18,10 +18,11 @@ import java.util.List;
  * Created by llz on 2016/6/19.
  */
 
-public class CommentController extends BaseController{
+public class CommentController extends BaseController {
 
     /**
      * 获取所有评论
+     *
      * @return
      */
     @Security.Authenticated(AdminSecured.class)
@@ -39,7 +40,23 @@ public class CommentController extends BaseController{
     }
 
     /**
+     * 获取所有新发评论
+     *
+     * @return
+     */
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getAllNewComments() {
+        initPageing();
+        List<Comment> comments = null;
+
+        comments = Comment.findNewComments(page, pageSize);
+
+        return ok(Json.toJson(comments));
+    }
+
+    /**
      * 删除评论
+     *
      * @param id
      * @return
      */

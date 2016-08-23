@@ -89,6 +89,8 @@ GET         /api/v1/article/:id/recommends          controllers.ArticleControlle
 
 # get all comments
 GET         /api/v1/comments                        controllers.CommentController.getAllComments()
+
+GET         /api/v1/new/comments                    controllers.CommentController.getAllNewComments()
 # delete comment
 DELETE      /api/v1/comment/:id                     controllers.CommentController.deleteComment(id: Long)
 
@@ -161,6 +163,8 @@ DELETE      /api/v1/video/:id               controllers.VideoController.deleteVi
 # question
 GET         /api/v1/questions                       controllers.QuestionController.getQuestions
 
+GET         /api/v1/new/questions                   controllers.QuestionController.getNewQuestions
+
 GET         /api/v1/questions/search                 controllers.QuestionController.searchQuestions
 
 # questions for admin
@@ -194,6 +198,8 @@ GET         /api/v1/user/favorite/questions         controllers.QuestionControll
 
 # trade
 GET         /api/v1/trades                          controllers.TradeController.getTrades
+
+GET         /api/v1/new/trades                      controllers.TradeController.getNewTrades
 # trades for admin
 GET         /api/v1/foradmin/trades                 controllers.TradeController.getTradesForAdmin
 # post trade
