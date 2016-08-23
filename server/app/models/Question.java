@@ -6,6 +6,8 @@ import models.enums.QuestionResolveState;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,6 +130,7 @@ public class Question extends BaseModel {
                 .setMaxRows(pageSize)
                 .findList();
     }
+
     /**
      * 查找指派给专家的问题
      *
@@ -268,6 +271,17 @@ public class Question extends BaseModel {
         return find
                 .where()
                 .eq("questionAuditState", QuestionAuditState.AUDITED.getName())
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<Question> findNewQuestions(int page, int pageSize) {
+        return find
+                .where()
+                .between("whenCreated", new Timestamp(System.currentTimeMillis() - 5 * 60 * 1000), new Timestamp(System.currentTimeMillis()))
+                .eq("questionAuditState", QuestionAuditState.WAIT_AUDITED.getName())
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)

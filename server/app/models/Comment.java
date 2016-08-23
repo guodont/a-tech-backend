@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -49,6 +50,17 @@ public class Comment extends BaseModel {
                 .where()
                 .eq("article", article)
                 .eq("auditState", TradeState.AUDITED)
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
+    public static List<Comment> findNewComments(int page, int pageSize) {
+        return find
+                .where()
+                .between("whenCreated", new Timestamp(System.currentTimeMillis() - 5 * 60 * 1000), new Timestamp(System.currentTimeMillis()))
+                .eq("auditState", TradeState.WAIT_AUDITED)
                 .setOrderBy("whenCreated desc")
                 .setFirstRow((page - 1) * pageSize)
                 .setMaxRows(pageSize)

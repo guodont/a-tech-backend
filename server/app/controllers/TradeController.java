@@ -232,19 +232,33 @@ public class TradeController extends BaseController {
             Category category = Category.findCategoryById(categoryId);
 
             if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
-                trades = Trade.findTradesByCategoryForAdmin(request().getQueryString("status"),category, tradeType, page, pageSize);
+                trades = Trade.findTradesByCategoryForAdmin(request().getQueryString("status"), category, tradeType, page, pageSize);
             } else {
-                trades = Trade.findTradesByCategoryForAdmin(null,category, tradeType, page, pageSize);
+                trades = Trade.findTradesByCategoryForAdmin(null, category, tradeType, page, pageSize);
             }
 
         } else {
 
             if (request().getQueryString("status") != null && !request().getQueryString("status").equals("")) {
-                trades = Trade.findTradesForAdmin(request().getQueryString("status"),tradeType, page, pageSize);
+                trades = Trade.findTradesForAdmin(request().getQueryString("status"), tradeType, page, pageSize);
             } else {
-                trades = Trade.findTradesForAdmin(null,tradeType, page, pageSize);
+                trades = Trade.findTradesForAdmin(null, tradeType, page, pageSize);
             }
         }
+
+        return ok(Json.toJson(trades));
+
+    }
+
+    @Security.Authenticated(AdminSecured.class)
+    public static Result getNewTrades() {
+
+        initPageing();
+
+        List<Trade> trades = null;
+
+
+        trades = Trade.findNewTrades(page, pageSize);
 
         return ok(Json.toJson(trades));
 

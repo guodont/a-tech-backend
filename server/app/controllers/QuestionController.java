@@ -413,6 +413,16 @@ public class QuestionController extends BaseController {
         return ok(Json.toJson(questions));
     }
 
+//    @Security.Authenticated(AdminSecured.class)
+    public static Result getNewQuestions() {
+        initPageing();
+        List<Question> questions = null;
+
+        questions = Question.findNewQuestions(page, pageSize);
+
+        return ok(Json.toJson(questions));
+    }
+
     /**
      * 获取指派给专家的问题
      *

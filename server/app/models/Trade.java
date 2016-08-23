@@ -198,6 +198,16 @@ public class Trade extends BaseModel {
                 .findList();
     }
 
+    public static List<Trade> findNewTrades(int page, int pageSize) {
+        return find
+                .where()
+                .between("whenCreated", new Timestamp(System.currentTimeMillis() - 5 * 60 * 1000), new Timestamp(System.currentTimeMillis()))
+                .setOrderBy("whenCreated desc")
+                .setFirstRow((page - 1) * pageSize)
+                .setMaxRows(pageSize)
+                .findList();
+    }
+
     public static List<Trade> findTradesByUserAndStatus(final User user, String tradeState, int page, int pageSize) {
 
         if (tradeState != null) {
