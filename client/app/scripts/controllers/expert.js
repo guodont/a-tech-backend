@@ -76,7 +76,7 @@ angular.module('clientApp')
 
       $http({
         method: 'GET',
-        url: apiUrl + '/experts' + '?pageSize=20&page=' + $scope.curPage,
+        url: apiUrl + '/experts' + '?categoryId=&pageSize=20&page=' + $scope.curPage,
         headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
       })
         .then(function (res) {
