@@ -15,6 +15,9 @@ import play.mvc.Result;
 import play.mvc.Security;
 import utils.JsonResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by j on 2016/6/4.
  */
@@ -62,7 +65,17 @@ public class ExpertController extends BaseController {
      */
     public static Result getExperts() {
         initPageing();
-        return ok(Json.toJson(Expert.findExperts(page, pageSize)));
+
+        List<Expert> experts = null;
+
+        if(!request().getQueryString("categoryId").equals("")) {
+            Category category = Category.find.byId(Long.valueOf(request().getQueryString("categoryId")));
+            experts = Expert.findExpertsByCategory(category,page, pageSize);
+        }else {
+            experts = Expert.findExperts(page, pageSize);
+        }
+
+        return ok(Json.toJson(experts));
     }
 
     /**
