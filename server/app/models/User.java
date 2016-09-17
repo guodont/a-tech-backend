@@ -67,6 +67,11 @@ public class User extends BaseModel {
      */
     @Column(length = 45, unique = true, nullable = false)
     public String name;
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     /**
      * 用户头像
      */

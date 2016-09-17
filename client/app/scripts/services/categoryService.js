@@ -54,6 +54,27 @@ angular.module('clientApp')
           }
         });
     };
+    
+    // 分类
+    self.getCategory = function (params, success, error) {
+      $http({
+        data: {
+        },
+        method: 'GET',
+        url: apiUrl + '/category/' + params.categoryId,
+        headers: {'X-AUTH-TOKEN': $cookieStore.get("authToken")},
+
+      })
+        .then(function (res) {
+          if (typeof (success) === 'function') {
+            success(res);
+          }
+        }, function (res) {
+          if (typeof (error) === 'function') {
+            error(res);
+          }
+        });
+    };
 
     // 获取所有分类
     self.getCategories = function (params, success, error) {

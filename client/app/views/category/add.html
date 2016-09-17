@@ -1,17 +1,17 @@
 <header></header>
 <div class="main-content">
   <div class="" style="margin: 10px">
-    <form name="postForm" ng-submit="addCategory()" novalidate>
+    <form name="postForm" ng-submit="updateCategory()" novalidate>
       <div class="field">
         <label for="name">名称</label>
         <input name="name" class="form-control" type="subject" id="name" placeholder="输入分类名称,不超过24字"
                ng-model="name">
       </div>
-      <div class="field">
-        <label for="categoryId">所属父分类</label>
-        <input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类,若为父级分类请输入0"
-               ng-model="categoryId">
-      </div>
+      <!--<div class="field">-->
+        <!--<label for="categoryId">所属父分类</label>-->
+        <!--<input name="categoryId" class="form-control" type="subject" id="categoryId" placeholder="选择分类,若为父级分类请输入0"-->
+               <!--ng-model="categoryId">-->
+      <!--</div>-->
       <div class="field">
         <label for="sort">排序</label>
         <input name="sort" class="form-control" type="subject" id="sort" placeholder="排序值为: 1-255"
