@@ -134,6 +134,7 @@ public class ExpertController extends BaseController {
             expert.service = expertInfoFormForm.get().service;
             expert.introduction = expertInfoFormForm.get().introduction;
             expert.company = expertInfoFormForm.get().company;
+            expert.user.update();
             expert.update();
         }
         return ok(new JsonResult("success", "Article updated").toJsonResponse());
@@ -164,6 +165,7 @@ public class ExpertController extends BaseController {
             expert.service = expertInfoFormForm.get().service;
             expert.introduction = expertInfoFormForm.get().introduction;
             expert.company = expertInfoFormForm.get().company;
+            expert.user.update();
             expert.update();
         }
         return ok(new JsonResult("success", "Article updated").toJsonResponse());
