@@ -93,7 +93,7 @@ public class AppUpdateLog extends BaseModel {
                 .where()
                 .eq("isPublic", true)
                 .setOrderBy("whenCreated desc")
-                .findList()[0];
+                .findList().get(0);
     }
 
     /**
@@ -107,7 +107,7 @@ public class AppUpdateLog extends BaseModel {
                 .eq("appType", AppType.ANDROID.getName())
                 .eq("isPublic", true)
                 .setOrderBy("whenCreated desc")
-                .findList()[0];
+                .findList().get(0);
     }
 
     /**
