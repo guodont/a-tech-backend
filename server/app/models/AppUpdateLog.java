@@ -91,8 +91,9 @@ public class AppUpdateLog extends BaseModel {
     public static AppUpdateLog findLatestLog() {
         return find
                 .where()
+                .eq("isPublic", true)
                 .setOrderBy("whenCreated desc")
-                .findUnique();
+                .findList()[0];
     }
 
     /**
@@ -104,8 +105,9 @@ public class AppUpdateLog extends BaseModel {
         return find
                 .where()
                 .eq("appType", AppType.ANDROID.getName())
+                .eq("isPublic", true)
                 .setOrderBy("whenCreated desc")
-                .findUnique();
+                .findList()[0];
     }
 
     /**

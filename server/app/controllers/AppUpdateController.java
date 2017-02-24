@@ -44,11 +44,11 @@ public class AppUpdateController extends BaseController {
             appUpdateLog.apkVersionName = postForm.get().apkVersionName;
             appUpdateLog.remark = postForm.get().remark;
 
-            if (postForm.get().isPublic == "1") {
+//            if (postForm.get().isPublic == "1") {
                 appUpdateLog.isPublic = true;
-            } else {
-                appUpdateLog.isPublic = false;
-            }
+//            } else {
+//                appUpdateLog.isPublic = false;
+//            }
 
             if (postForm.get().isPush == "1") {
                 appUpdateLog.isPush = true;
